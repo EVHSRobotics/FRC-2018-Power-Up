@@ -20,7 +20,7 @@ You may create additional branches when nessisary, but be sure to clean up
 <br>
 Required libraries are in the lib folder. Make sure to put these in C:\Users\YOURUSER\wpilib\user\java\lib, and restart eclipse
 <br>
-Read the game manuel: <a href="https://firstfrc.blob.core.windows.net/frc2018/Manual/2018FRCGameSeasonManual.pdf" /a>
+<a href="https://firstfrc.blob.core.windows.net/frc2018/Manual/2018FRCGameSeasonManual.pdf"> Read the game manuel </a>
 </p>
 
 <h2>
