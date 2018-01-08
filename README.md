@@ -17,6 +17,8 @@ Note to team: Please only use your assigned branch.
 Palani or Zheng will deal with merges to master.
 <b>DO NOT mess with other people's branches.</b> Treat your branch as master.
 You may create additional branches when nessisary, but be sure to clean up
+<br>
+Required libraries are in the lib folder. Make sure to put these in C:\Users\YOURUSER\wpilib\user\java\lib, and restart eclipse
 </p>
 
 <h2>
