@@ -6,15 +6,15 @@ import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
 import com.ctre.CANTalon;
-import com.team2854.mapauto.Driveable;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  *
  */
-public class DriveTrain extends Driveable{
+public class DriveTrain extends Drivable{
 
 	// Put methods for controlling this subsyWstem
 	// here. Call these from Commands.
