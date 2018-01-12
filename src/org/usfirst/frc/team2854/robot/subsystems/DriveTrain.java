@@ -6,6 +6,8 @@ import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
 import com.ctre.CANTalon;
+import com.ctre.CANTalon.FeedbackDevice;
+import com.ctre.CANTalon.TalonControlMode;
 import com.team2854.mapauto.Driveable;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -39,6 +41,17 @@ public class DriveTrain extends Driveable{
 
 		rightT2 = new CANTalon(RobotMap.rightTalonID2);
 		rightT2.setInverted(!side);
+		
+		
+		
+		rightT2.setEncPosition(0);
+		rightT2.setEncPosition(0);
+		
+		
+		rightT2.changeControlMode(TalonControlMode.Position);
+		leftT2.changeControlMode(TalonControlMode.Position);
+		
+		
 
 	}
 
@@ -60,6 +73,16 @@ public class DriveTrain extends Driveable{
 
 	public double getEncoder() {
 		return (leftT1.getEncPosition() + rightT1.getEncPosition())/2d;
+	}
+
+
+	public CANTalon getLeftT2() {
+		return leftT2;
+	}
+
+
+	public CANTalon getRightT2() {
+		return rightT2;
 	}
 
 }

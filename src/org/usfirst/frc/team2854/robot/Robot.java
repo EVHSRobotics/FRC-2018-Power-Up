@@ -2,6 +2,8 @@
 package org.usfirst.frc.team2854.robot;
 
 import java.util.HashMap;
+
+import org.usfirst.frc.team2854.robot.commands.RunAllTalons;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -10,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,7 +39,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("STARTING");
 		subsystems = new HashMap<SubsystemNames, Subsystem>();
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
-
+		
 	}
 	/**
 	 * This function is called once each time the robot enters Disabled mode. You
@@ -87,6 +90,12 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		//OI.buttonA.whenPressed(new RunAllTalons());
+		DriveTrain drive = (DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN);
+		SmartDashboard.putNumber("left enocder 1", drive.getLeftT1().getEncPosition());
+		SmartDashboard.putNumber("left enocder 2", drive.getLeftT2().getEncPosition());
+		SmartDashboard.putNumber("right enocder 1", drive.getRightT1().getEncPosition());
+		SmartDashboard.putNumber("right enocder 2", drive.getRightT2().getEncPosition());
 
 		Scheduler.getInstance().run();
 	}

@@ -15,10 +15,10 @@ public class RobotMap {
 	 //2 rightMotor not inverted
 	 //3  leftMotor, inverted
 	
-	public static int leftTalonID1 = 0;
-	public static int leftTalonID2 = 3;
-	public static int rightTalonID1 = 1;
-	public static int rightTalonID2 = 2;
+	public static int leftTalonID1 = 1;
+	public static int leftTalonID2 = 2;
+	public static int rightTalonID1 = 0;
+	public static int rightTalonID2 = 3;
 	
 	public static int shifterUp = 3;     //     4 2 6
 	public static int shifterDown = 4;   //     3 1 5
