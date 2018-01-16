@@ -1,7 +1,5 @@
 # FRC-2018-Power-Up
 
-[![Build Status](https://travis-ci.org/EVHSRobotics/FRC-2018-Power-Up.svg?branch=master)](https://travis-ci.org/EVHSRobotics/FRC-2018-Power-Up)
-
 <h2>
 
 This is the code base for Team 2854, The Prototypes, code base for FIRST Power Up
