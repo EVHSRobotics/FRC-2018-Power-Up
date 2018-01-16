@@ -43,7 +43,6 @@ public class Vision implements Runnable {
 	}
 	
 	public Mat convertToHsv(Mat img) {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		Mat hsvImg = new Mat();
 
 		Imgproc.cvtColor(source, output, Imgproc.COLOR_RGB2HSV);
@@ -108,7 +107,7 @@ public class Vision implements Runnable {
 		return distance;
 	}
 	
-	private double getDistance() {
+	public double getDistance() {
 		return distance;
 	}
 }
