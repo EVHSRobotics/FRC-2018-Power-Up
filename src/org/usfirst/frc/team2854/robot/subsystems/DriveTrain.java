@@ -1,21 +1,30 @@
 package org.usfirst.frc.team2854.robot.subsystems;
 
+import java.util.ArrayList;
+
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
 import com.ctre.CANTalon;
-
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import com.team2854.mapauto.Driveable;
 
 /**
  *
  */
-public class DriveTrain extends Drivable{
-
+public class DriveTrain extends Driveable{
+	
 	// Put methods for controlling this subsyWstem
 	// here. Call these from Commands.
 
@@ -26,6 +35,8 @@ public class DriveTrain extends Drivable{
 	public void initDefaultCommand() {
 		setDefaultCommand(new JoystickDrive());
 	}
+		
+	
 
 	public DriveTrain() {
 		leftT1 = new CANTalon(RobotMap.leftTalonID1);
@@ -61,5 +72,9 @@ public class DriveTrain extends Drivable{
 	public double getEncoder() {
 		return (leftT1.getEncPosition() + rightT1.getEncPosition())/2d;
 	}
+	
+	
+	
+	
 
 }

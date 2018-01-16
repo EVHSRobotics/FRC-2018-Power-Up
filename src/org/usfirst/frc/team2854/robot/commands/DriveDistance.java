@@ -1,21 +1,37 @@
 package org.usfirst.frc.team2854.robot.commands;
 
+import java.util.ArrayList;
 import java.util.function.DoubleFunction;
 import java.util.function.Supplier;
 
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
 import com.team2854.mapauto.Driveable;
+
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 
 /**
  *A generic drive forward command using encoders, which can use a default, parameterized, or user supplied function to determine speed
  */
-public class DriveDistance extends DriveCommand {
+public class DriveDistance extends DriveCommand{
 
 	private Driveable drive;
 	private double theshDistance;
 	private Supplier<Double> encoders;
 	private DoubleFunction<Double> speedOpp;
 	private double startingDist;
-		
 	
 	/**
 	 * 
@@ -39,8 +55,7 @@ public class DriveDistance extends DriveCommand {
     	this.theshDistance = threshHoldDistance;
     }
 
-	/**
-	 * 
+	/** 
 	 * Make sure your subsystem that is used for driving extends the <code>Drivable</code> class <br>
 	 * and implements the <code>drive</code> method<br>
 	 * Only tank drive is supported at the moment
@@ -58,7 +73,6 @@ public class DriveDistance extends DriveCommand {
     }
     
 	/**
-	 * 
 	 * Make sure your subsystem that is used for driving extends the <code>Drivable</code> class <br>
 	 * and implements the <code>drive</code> method<br>
 	 * Only tank drive is supported at the moment <br>
@@ -72,7 +86,7 @@ public class DriveDistance extends DriveCommand {
     public DriveDistance(Driveable drive, double target, Supplier<Double> gyro) {
     	this(drive, target, 1, 0, 0, gyro);
     }
-
+    
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		startingDist = encoders.get();
