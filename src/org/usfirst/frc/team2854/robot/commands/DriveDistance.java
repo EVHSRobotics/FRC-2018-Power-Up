@@ -21,17 +21,22 @@ import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *A generic drive forward command using encoders, which can use a default, parameterized, or user supplied function to determine speed
  */
-public class DriveDistance extends DriveCommand{
+
+public class DriveDistance extends Command {
+
 
 	private Driveable drive;
 	private double theshDistance;
 	private Supplier<Double> encoders;
 	private DoubleFunction<Double> speedOpp;
 	private double startingDist;
+	private double distance;
+		
 	
 	/**
 	 * 
@@ -47,8 +52,8 @@ public class DriveDistance extends DriveCommand{
 	 * The easiest way to pass in the gyro is the use the lambda expression () -> new Double(gyro.getValue()), where gyro.getValue() is your way of getting the acumelated angle from the gyro
 	 */
     public DriveDistance(Driveable drive, double targetDistance, DoubleFunction<Double> speedOpp, double threshHoldDistance, Supplier<Double> encoders) {
-    	super(targetDistance);
-    	requires(drive);
+       	requires(drive);
+    	this.distance = targetDistance;
     	this.drive = drive;
     	this.encoders = encoders;
     	this.speedOpp = speedOpp;

@@ -5,17 +5,19 @@ import java.util.function.Supplier;
 
 import com.team2854.mapauto.Driveable;
 
+import edu.wpi.first.wpilibj.command.Command;
+
 /**
  * A generic turn to angle using a gyro, which can use a default, parameterized, or user supplied function to determine speed
  */
-public class TurnToAngle extends TurnCommand {
+public class TurnToAngle extends Command {
 
 	private Driveable drive;
 	private double threshAngle;
 	private Supplier<Double> gyro;
 	private DoubleFunction<Double> speedOpp;
 	private double startingAngle;
-		
+	private double targetAngle;
 	
 	/**
 	 * 
