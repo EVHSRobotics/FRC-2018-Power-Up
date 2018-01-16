@@ -7,9 +7,11 @@ import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import com.team2854.mapauto.Driveable;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -54,6 +56,10 @@ public class DriveTrain extends Subsystem{
 
 		rightT2 = new TalonSRX(RobotMap.rightTalonID2);
 		rightT2.setInverted(!side);
+		
+	
+		
+		
 
 		
 		configureTalon(leftT2, side);
@@ -145,6 +151,7 @@ public class DriveTrain extends Subsystem{
 	public void stop() {
 		drive(0, 0, ControlMode.PercentOutput);
 	}
+
 
 
 }

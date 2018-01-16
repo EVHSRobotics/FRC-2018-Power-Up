@@ -40,8 +40,10 @@ public class Robot extends IterativeRobot {
 		System.out.println("STARTING");
 		subsystems = new HashMap<SubsystemNames, Subsystem>();
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
+
 		subsystems.put(SubsystemNames.SHIFTER, new Shifter());
 		sensors = new SensorBoard();
+
 	}
 	/**
 	 * This function is called once each time the robot enters Disabled mode. You
@@ -92,6 +94,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		//OI.buttonA.whenPressed(new RunAllTalons());
+
 
 		((DriveTrain)getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
 		double angle = sensors.getNavX().getAngle();

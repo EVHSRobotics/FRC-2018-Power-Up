@@ -5,7 +5,12 @@
 This is the code base for Team 2854, The Prototypes, code base for FIRST Power Up
 
 </h2>
-
+<p>
+  We moved the repo to our clubs organization. Git will work as it but if you want to avoid confusion, run <br>
+  git remote set-url origin https://github.com/EVHSRobotics/FRC-2018-Power-Up <br>
+  You don't need to do this, but if Git dies this might fix something
+ </p>
+  
 <h3>
 
 See a bug? Open an issue!
