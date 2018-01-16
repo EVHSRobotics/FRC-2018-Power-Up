@@ -57,11 +57,6 @@ public class DriveTrain extends Subsystem{
 		rightT2 = new TalonSRX(RobotMap.rightTalonID2);
 		rightT2.setInverted(!side);
 		
-	
-		
-		
-
-		
 		configureTalon(leftT2, side);
 		configureTalon(rightT2, !side);
 		
