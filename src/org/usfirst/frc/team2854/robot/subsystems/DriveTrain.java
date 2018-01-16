@@ -60,8 +60,8 @@ public class DriveTrain extends Subsystem{
 		configureTalon(leftT2, side);
 		configureTalon(rightT2, !side);
 		
-		
-		
+		leftT1.set(ControlMode.Follower, leftT2.getDeviceID());
+		rightT1.set(ControlMode.Follower, rightT2.getDeviceID());
 	}
 	
 	private void configureTalon(TalonSRX talon, boolean side) {
@@ -79,8 +79,8 @@ public class DriveTrain extends Subsystem{
 		
         talon.configNominalOutputForward(0, timeOutConstant);
         talon.configNominalOutputReverse(0, timeOutConstant);
-        talon.configPeakOutputForward(1, timeOutConstant);
-        talon.configPeakOutputReverse(-1, timeOutConstant);
+        talon.configPeakOutputForward(12 * Config.totalDriveSpeedMultiplier, timeOutConstant);
+        talon.configPeakOutputReverse(-12 * Config.totalDriveSpeedMultiplier, timeOutConstant);
         
 
         talon.config_kP(PIDIndex, P, timeOutConstant);
@@ -133,9 +133,8 @@ public class DriveTrain extends Subsystem{
 		}
 		
 		leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);	
-		leftT1.set(ControlMode.Follower, leftT2.getDeviceID());
 		rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);	
-		rightT1.set(ControlMode.Follower, rightT2.getDeviceID());
+
 	}
 	
 	public void drive(double left, double right) {
@@ -144,7 +143,7 @@ public class DriveTrain extends Subsystem{
 
 
 	public void stop() {
-		drive(0, 0, ControlMode.PercentOutput);
+		drive(0, 0);
 	}
 
 
