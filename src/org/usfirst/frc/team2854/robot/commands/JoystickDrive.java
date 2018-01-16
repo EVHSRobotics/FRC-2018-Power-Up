@@ -6,7 +6,10 @@ import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.SubsystemNames;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -24,9 +27,14 @@ public class JoystickDrive extends Command {
     	drive = (DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN);
     }
 
+    
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {	
-    	drive.drive(OI.joystick.getRawAxis(1) * Config.manuelSpeedMultiplier, OI.joystick.getRawAxis(5) * Config.manuelSpeedMultiplier);
+    	double speed = OI.joystick.getRawAxis(2) - OI.joystick.getRawAxis(3);
+    	double targetSpeed = speed * 1024 * 500.0 / 600d; 
+    	targetSpeed = speed;
+    	SmartDashboard.putNumber("target val", targetSpeed * Config.manuelSpeedMultiplier);
+    	drive.drive(targetSpeed * Config.manuelSpeedMultiplier, targetSpeed * Config.manuelSpeedMultiplier, ControlMode.PercentOutput);
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -2,7 +2,10 @@
 package org.usfirst.frc.team2854.robot;
 
 import java.util.HashMap;
+
+import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2854.robot.subsystems.Shifter;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -10,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,7 +28,7 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	private static HashMap<SubsystemNames, Subsystem> subsystems;
-
+	private SensorBoard sensors;
 
 
 	/**
@@ -36,7 +40,8 @@ public class Robot extends IterativeRobot {
 		System.out.println("STARTING");
 		subsystems = new HashMap<SubsystemNames, Subsystem>();
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
-
+		subsystems.put(SubsystemNames.SHIFTER, new Shifter());
+		sensors = new SensorBoard();
 	}
 	/**
 	 * This function is called once each time the robot enters Disabled mode. You
@@ -88,7 +93,15 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 
-		Scheduler.getInstance().run();
+		((DriveTrain)getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
+		double angle = sensors.getNavX().getAngle();
+		while(angle < 0) {
+			angle += 360;
+		}
+		SmartDashboard.putNumber("Gyro", angle % 360);
+		OI.rTrigger.whenPressed(new ToggleShift());
+		
+		Scheduler.getInstance().run();		
 	}
 
 	/**
@@ -101,6 +114,9 @@ public class Robot extends IterativeRobot {
 
 	public static Subsystem getSubsystem(SubsystemNames name) {
 		return subsystems.get(name);
+	}
+	public SensorBoard getSensors() {
+		return sensors;
 	}
 
 

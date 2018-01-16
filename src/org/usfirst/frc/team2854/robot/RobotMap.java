@@ -13,7 +13,7 @@ public class RobotMap {
 	 //0 leftMotor, inverted
 	 //1 rightMotor not inverted
 	 //2 rightMotor not inverted
-	 //3  leftMotor, inverted
+	 //3 leftMotor, inverted
 	
 	public static int leftTalonID1 = 0;
 	public static int leftTalonID2 = 3;
