@@ -31,8 +31,15 @@ public class JoystickDrive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {	
     	double speed = OI.joystick.getRawAxis(2) - OI.joystick.getRawAxis(3);
-    	SmartDashboard.putNumber("target val", speed * Config.manuelSpeedMultiplier);
-    	drive.drive(speed * Config.manuelSpeedMultiplier, speed * Config.manuelSpeedMultiplier, ControlMode.PercentOutput);
+    	//SmartDashboard.putNumber("target val", speed * Config.manuelSpeedMultiplier);
+    	speed *= 8400;
+    	//double left = (Math.abs(OI.joystick.getRawAxis(1)) < .1 ? 0 : OI.joystick.getRawAxis(1)) * 8400;
+    	//double right = (Math.abs(OI.joystick.getRawAxis(5)) < .1 ? 0 : OI.joystick.getRawAxis(5)) * 8400;
+    	
+    	
+    	drive.drive(speed * Config.manuelSpeedMultiplier, speed * Config.manuelSpeedMultiplier, ControlMode.Velocity);
+    	
+    	//drive.drive(OI.joystick.getRawAxis(1), OI.joystick.getRawAxis(5), ControlMode.PercentOutput);
     }
 
     // Make this return true when this Command no longer needs to run execute()

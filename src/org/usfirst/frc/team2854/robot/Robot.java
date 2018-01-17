@@ -3,6 +3,8 @@ package org.usfirst.frc.team2854.robot;
 
 import java.util.HashMap;
 
+import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
+import org.usfirst.frc.team2854.robot.commands.DriveThottle;
 import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.Shifter;
@@ -87,6 +89,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		//(new DriveThottle(.2)).start();
 	}
 
 	/**
@@ -94,7 +97,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		//OI.buttonA.whenPressed(new RunAllTalons());
+		OI.buttonA.whenPressed(new DriveMotionMagik());
+		OI.buttonB.whileHeld(new DriveThottle(.2));
 
 
 		((DriveTrain)getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
