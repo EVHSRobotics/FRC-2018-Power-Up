@@ -29,7 +29,7 @@ public class DriveThottle extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	System.out.println("Driving");
-    	drive.drive(8400 * percent, 8400 * percent, ControlMode.Velocity);
+    	drive.drive(percent, percent, ControlMode.Velocity);
     }
 
     // Make this return true when this Command no longer needs to run execute()

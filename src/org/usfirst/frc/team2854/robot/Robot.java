@@ -7,7 +7,7 @@ import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
 import org.usfirst.frc.team2854.robot.commands.DriveThottle;
 import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team2854.robot.subsystems.Shifter;
+import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -43,8 +43,13 @@ public class Robot extends IterativeRobot {
 		subsystems = new HashMap<SubsystemNames, Subsystem>();
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 
-		subsystems.put(SubsystemNames.SHIFTER, new Shifter());
 		sensors = new SensorBoard();
+		
+		for(Subsystem s : subsystems.values()) {
+			if(s instanceof Restartabale) {
+				((Restartabale) s).enable();
+			}
+		}
 
 	}
 	/**
@@ -54,7 +59,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-
+		for(Subsystem s : subsystems.values()) {
+			if(s instanceof Restartabale) {
+				((Restartabale) s).disable();
+			}
+		}
 	}
 
 	@Override
@@ -76,7 +85,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-
+		for(Subsystem s : subsystems.values()) {
+			if(s instanceof Restartabale) {
+				((Restartabale) s).enable();
+			}
+		}
 	}
 
 	/**
@@ -89,7 +102,16 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		//(new DriveThottle(.2)).start();
+		for(Subsystem s : subsystems.values()) {
+			if(s instanceof Restartabale) {
+				((Restartabale) s).enable();
+			}
+		}
+		
+		//OI.buttonA.whenPressed(new DriveMotionMagik());
+		OI.buttonB.whileHeld(new DriveThottle(.5));
+		
+		OI.rTrigger.whenPressed(new ToggleShift());
 	}
 
 	/**
@@ -97,8 +119,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		OI.buttonA.whenPressed(new DriveMotionMagik());
-		OI.buttonB.whileHeld(new DriveThottle(.2));
 
 
 		((DriveTrain)getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
@@ -107,7 +127,7 @@ public class Robot extends IterativeRobot {
 			angle += 360;
 		}
 		SmartDashboard.putNumber("Gyro", angle % 360);
-		OI.rTrigger.whenPressed(new ToggleShift());
+
 		
 		Scheduler.getInstance().run();		
 	}

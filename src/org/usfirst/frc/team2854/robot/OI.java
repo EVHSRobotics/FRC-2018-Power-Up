@@ -18,6 +18,7 @@ public class OI {
 	public static JoystickButton rTrigger = new JoystickButton(joystick, 6);
 
 
+
 	
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2854.robot.commands;
 
-import com.ctre.CANTalon;
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -21,6 +22,7 @@ public class RunAllTalons extends Command {
     protected void initialize() {
     }
 
+    
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	int i;
@@ -34,7 +36,9 @@ public class RunAllTalons extends Command {
     		} catch(Exception e) {
     			System.out.println("Talon #" + i + " died");
     		}
+    		
     	}
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
