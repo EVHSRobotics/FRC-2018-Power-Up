@@ -2,6 +2,8 @@ package org.usfirst.frc.team2854.robot.subsystems;
 
 import java.util.Random;
 
+import javax.xml.bind.ValidationEvent;
+
 import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.DummyPIDOutput;
 import org.usfirst.frc.team2854.robot.OI;
@@ -43,10 +45,16 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	private DoubleSolenoid shifter;
 
+	/**
+	 * Method that initializes the default command to JoyStickDrive.
+	 */
 	public void initDefaultCommand() {
 		setDefaultCommand(new JoystickDrive());
 	}
 
+	/** 
+	 * Method that enables the drive train.
+	 */
 	public void enable() {
 		System.out.println("Enabling drive train");
 		turnController.enable();
@@ -58,11 +66,17 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		shift(startingGear);
 	}
 
+	/** 
+	 * Method that disables the drive train.
+	 */
 	public void disable() {
 		System.out.println("Disableing drive train");
 		turnController.disable();
 	}
 
+	/**
+	 * Default constructor.
+	 */
 	public DriveTrain() {
 		leftT1 = new TalonSRX(RobotMap.leftTalonID1);
 		leftT1.setInverted(side);
@@ -97,7 +111,11 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		rightT1.set(ControlMode.Follower, rightT2.getDeviceID());
 
 	}
-
+	
+	/**
+	 * Method that sets the PID values on shift.
+	 * @param value - DoubleSolenoid.Value object
+	 */
 	public void shift(DoubleSolenoid.Value value) {
 
 		double P_Drive = .28;
@@ -120,9 +138,18 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		}
 		updatePID(rightT2, P_Drive, I_Drive, D_Drive, F_Drive);
 		updatePID(leftT2, P_Drive, I_Drive, D_Drive, F_Drive);
-
+		SmartDashboard.putBoolean("Low Gear", value.equals(Value.kForward));
 	}
+	//hypms
 
+	/**
+	 * Method that updates PID values
+	 * @param talon - Talon object
+	 * @param P - proportional gain
+	 * @param I - integral gain 
+	 * @param D - derivative gain
+	 * @param F - feed forward term
+	 */
 	private void updatePID(TalonSRX talon, double P, double I, double D, double F) {
 		final int timeOutConstant = 10;
 		final int PIDIndex = 0;
@@ -132,6 +159,15 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		talon.config_kF(PIDIndex, F, timeOutConstant);
 	}
 
+	/**
+	 * Method that configures a Talon to use specified PID values.
+	 * @param talon - Talon object
+	 * @param P - proportional gain
+	 * @param I - integral gain
+	 * @param D - derivative gain
+	 * @param F - feed forward term
+	 * @param side
+	 */
 	private void configureTalon(TalonSRX talon, double P, double I, double D, double F, boolean side) {
 
 		final int timeOutConstant = 10;
@@ -161,6 +197,13 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	}
 
+	/**
+	 * Method that initializes PID values when turning
+	 * @param P - proportional gain
+	 * @param I - integral gain
+	 * @param D - derivative gain
+	 * @param F - feed forward term
+	 */
 	public void initTurnPID(double P, double I, double D, double F) {
 		PIDSource turnSource = new PIDSource() {
 
@@ -196,6 +239,9 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	}
 
+	/**
+	 * Method that writes to SmartDashboard
+	 */
 	public void writeToDashBoard() {
 
 		SmartDashboard.putNumber("Left Velocity", leftT2.getSelectedSensorVelocity(0));
@@ -211,6 +257,9 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	}
 
+	/**
+	 * Method that shifts gears.
+	 */
 	public void toggleShift() {
 		if (shifter.get() == Value.kForward) {
 			shifter.set(Value.kReverse);
@@ -225,6 +274,12 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	}
 
+	/**
+	 * Method that drives.
+	 * @param left - input percentage
+	 * @param right - input percentage
+	 * @param mode - ControlMode object that specifies ControlMode
+	 */
 	public void drive(double left, double right, ControlMode mode) {
 
 		if(mode.equals(ControlMode.Velocity)) {
@@ -242,6 +297,12 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	}
 
+	/**
+	 * Method that drives straight.
+	 * @param left - input percentage
+	 * @param right - input percentage
+	 * @param mode - ControlMode object that specifies ControlMode
+	 */
 	public void driveStraight(double left, double right, ControlMode mode) {
 		double output = turnController.get();
 		System.out.println(output);
@@ -250,10 +311,18 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	}
 
+	/**
+	 * Method that drives at the PercentOutput Control Mode.
+	 * @param left - input percentage
+	 * @param right - input percentage
+	 */
 	public void drive(double left, double right) {
 		drive(left, right, ControlMode.PercentOutput);
 	}
 
+	/**
+	 * Method that stops.
+	 */
 	public void stop() {
 		drive(0, 0);
 	}

@@ -49,7 +49,7 @@ public class Robot extends IterativeRobot {
 			if(s instanceof Restartabale) {
 				((Restartabale) s).enable();
 			}
-		}
+		}	
 
 	}
 	/**
