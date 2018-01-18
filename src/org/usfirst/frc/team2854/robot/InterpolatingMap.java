@@ -1,13 +1,15 @@
 package org.usfirst.frc.team2854.robot;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
+import java.awt.List;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 public class InterpolatingMap{ 
 
 	private LinkedHashMap<Double, OutputValue> data;
+	private ArrayList<Double> sortedInputs;
+	private double minInput, maxInput;
 	
 	private class OutputValue {
 		int count = 0;
@@ -36,17 +38,36 @@ public class InterpolatingMap{
 		} else {
 			data.put(input, new OutputValue(output));
 		}
+		sortedInputs = new ArrayList<Double>(data.keySet());
+		Collections.sort(sortedInputs);
+		minInput = sortedInputs.get(0);
+		maxInput = sortedInputs.get(sortedInputs.size()-1);
 	}
 	
 	public double getValue(Double input) {
+		if(input < minInput || input > maxInput) {
+			throw new RuntimeException("Can not Extrapolate data! The value " + input + " must be in range [" + minInput + ", " + maxInput + "]" );
+		}
 		if(data.containsKey(input)) {
 			return data.get(input).value;
 		} else {
-			double closestMin, closestMax; //numbers that are closest but bigger and smaller than output
-			for(Double testInput : data.keySet()) {
-				
+			Double closestMinInput = 0d, closestMaxInput = 0d;
+			
+			
+			for(int i = 1; i < sortedInputs.size(); i++) { //TODO replcae with binary search for the effeciencies
+				if(sortedInputs.get(i) > input) {
+					closestMinInput = sortedInputs.get(i-1);
+					closestMaxInput = sortedInputs.get(i);
+					break;
+				}
 			}
-			return -1;
+			
+			Double closestMinOutput = data.get(closestMinInput).value;
+			Double closestMaxOutput = data.get(closestMinInput).value;
+
+			double slope = (closestMaxOutput - closestMinOutput)/(closestMaxInput - closestMinInput);
+			
+			return (input - closestMinInput) * slope + closestMinOutput;
 		}
 	}
 	
