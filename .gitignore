@@ -34,7 +34,6 @@ target/
 .classpath
 .project
 build.properties
-build.xml
 
 # NetBeans specific
 nbproject/private/
