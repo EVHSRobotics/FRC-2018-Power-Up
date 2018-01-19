@@ -12,6 +12,7 @@ Note to team: Please only use your assigned branch. PR will need Code Reviews to
 -------
 ### References:
 * [Game Manual](https://firstfrc.blob.core.windows.net/frc2018/Manual/2018FRCGameSeasonManual.pdf)
+* [Google Code Formatter](https://github.com/google/google-java-format/releases)
 
 ### Current Proposed Goals:
 * 3 box auto
