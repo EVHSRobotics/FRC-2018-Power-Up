@@ -9,21 +9,30 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Runs all the Talons.
  */
 public class RunAllTalons extends Command {
 
+    /**
+     * Default constructor
+     */
     public RunAllTalons() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
 
     // Called just before this Command runs the first time
+    /** 
+     * Initializes the Talons.
+     */
     protected void initialize() {
     }
 
     
     // Called repeatedly when this Command is scheduled to run
+    /** 
+     * Checks if Talon is functional.
+     */
     protected void execute() {
     	int i;
     	for(i = 0; i < 6; i++) {
@@ -42,6 +51,7 @@ public class RunAllTalons extends Command {
     }
 
     // Make this return true when this Command no longer needs to run execute()
+ 
     protected boolean isFinished() {
         return true;
     }

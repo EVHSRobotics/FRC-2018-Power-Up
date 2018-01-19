@@ -9,35 +9,51 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * Drives at a constant percent speed.
  */
 public class DriveThottle extends Command {
 
 	private double percent;
 	private DriveTrain drive;
 	
+    /**
+     * Paramter constructor.
+     * @param percent - percent speed to drive at.
+     */
     public DriveThottle(double percent) {
         requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
         this.percent = percent;
     }
 
     // Called just before this Command runs the first time
+    /** 
+     * Initializes the drive train.
+     */
     protected void initialize() {
     	drive = ((DriveTrain)Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
     }
 
     // Called repeatedly when this Command is scheduled to run
+    /**
+     * Drives the robot.
+     */
     protected void execute() {
     	System.out.println("Driving");
     	drive.drive(percent, percent, ControlMode.Velocity);
     }
 
     // Make this return true when this Command no longer needs to run execute()
+    /** 
+     * Stops drive train.
+     */
     protected boolean isFinished() {
         return false;
     }
 
     // Called once after isFinished returns true
+    /** 
+     * Stops driving.
+     */
     protected void end() {
     	System.out.println("Stopping");
     	drive.stop();
@@ -45,6 +61,9 @@ public class DriveThottle extends Command {
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
+    /** 
+     * Stops driving if interupted.
+     */
     protected void interrupted() {
     	System.out.println("Interupted");
     	drive.stop();

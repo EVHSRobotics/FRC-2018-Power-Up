@@ -16,7 +16,9 @@ public class SensorBoard {
 	private BuiltInAccelerometer builtInacc;
 	
 	
-	
+	/**
+	 * Default constructor.
+	 */
 	public SensorBoard() {
 		navX = new AHRS(I2C.Port.kMXP);
 		
@@ -28,6 +30,9 @@ public class SensorBoard {
 		
 	}
 	
+	/**
+	 * Calibrates gyro and forward accelerometer.
+	 */
 //	public void calibrate(long time) {
 //		long startTime = System.nanoTime();
 //		while(System.nanoTime() - startTime < time) {
@@ -37,27 +42,47 @@ public class SensorBoard {
 //		gyro.calibrate();
 //		forwardAccel.calibrate();
 //	}
-
+	/**
+	 * Gets the value of the gyro.
+	 * @return - value of the gyro
+	 */
 //	public double getGyroValue() {
 //		return gyro.calculateValue(spiGyro.getRate(), navX.getRate());
 //	}
-//
+	/**
+	 * Gets the value of the forward acceleration.
+	 * @return - value of the forward acceleration
+	 */
 //	public double getForwardAccelValue() {
 //		return forwardAccel.calculateValue(builtInacc.getX(), navX.getRawAccelY());
 //	}
-//
+	/**
+	 * Gets gyro.
+	 * @return - gyro
+	 */
 //	public DualSensor getGyro() {
 //		return gyro;
 //	}
-//
+	/**
+	 * Gets the forward acceleration.
+	 * @return - forward acceleration.
+	 */
 //	public DualSensor getForwardAccel() {
 //		return forwardAccel;
 //	}
 
+	/**
+	 * Getter method for the Accelerometer.
+	 * @return - built in accelerometer.
+	 */
 	public BuiltInAccelerometer getAccelerometer() {
 		return builtInacc;
 	}
 
+	/**
+	 * Getter method for NavX object.
+	 * @return - NavX object
+	 */
 	public AHRS getNavX() {
 		return navX;
 	}

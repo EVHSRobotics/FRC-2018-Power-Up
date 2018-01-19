@@ -46,14 +46,14 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	private DoubleSolenoid shifter;
 
 	/**
-	 * Method that initializes the default command to JoyStickDrive.
+	 * Initializes the default command to JoyStickDrive.
 	 */
 	public void initDefaultCommand() {
 		setDefaultCommand(new JoystickDrive());
 	}
 
 	/** 
-	 * Method that enables the drive train.
+	 * Enables the drive train.
 	 */
 	public void enable() {
 		System.out.println("Enabling drive train");
@@ -67,7 +67,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	/** 
-	 * Method that disables the drive train.
+	 * Disables the drive train.
 	 */
 	public void disable() {
 		System.out.println("Disableing drive train");
@@ -113,7 +113,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 	
 	/**
-	 * Method that sets the PID values on shift.
+	 * Sets the PID values on shift.
 	 * @param value - DoubleSolenoid.Value object
 	 */
 	public void shift(DoubleSolenoid.Value value) {
@@ -143,7 +143,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	//hypms
 
 	/**
-	 * Method that updates PID values
+	 * Updates PID values
 	 * @param talon - Talon object
 	 * @param P - proportional gain
 	 * @param I - integral gain 
@@ -160,7 +160,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	/**
-	 * Method that configures a Talon to use specified PID values.
+	 * Configures a Talon to use specified PID values.
 	 * @param talon - Talon object
 	 * @param P - proportional gain
 	 * @param I - integral gain
@@ -198,7 +198,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	/**
-	 * Method that initializes PID values when turning
+	 * Initializes PID values when turning
 	 * @param P - proportional gain
 	 * @param I - integral gain
 	 * @param D - derivative gain
@@ -240,7 +240,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	/**
-	 * Method that writes to SmartDashboard
+	 * Writes to SmartDashboard
 	 */
 	public void writeToDashBoard() {
 
@@ -258,7 +258,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	/**
-	 * Method that shifts gears.
+	 * Shifts the gears on the robot.
 	 */
 	public void toggleShift() {
 		if (shifter.get() == Value.kForward) {
@@ -275,7 +275,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	/**
-	 * Method that drives.
+	 * Method that drives the robot at the specified ControlMode.
 	 * @param left - input percentage
 	 * @param right - input percentage
 	 * @param mode - ControlMode object that specifies ControlMode
@@ -298,7 +298,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	/**
-	 * Method that drives straight.
+	 * Drives the robot straight.
 	 * @param left - input percentage
 	 * @param right - input percentage
 	 * @param mode - ControlMode object that specifies ControlMode
@@ -312,7 +312,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	/**
-	 * Method that drives at the PercentOutput Control Mode.
+	 * Drives the robot at the PercentOutput Control Mode.
 	 * @param left - input percentage
 	 * @param right - input percentage
 	 */
@@ -321,7 +321,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	/**
-	 * Method that stops.
+	 * Stops the robot.
 	 */
 	public void stop() {
 		drive(0, 0);

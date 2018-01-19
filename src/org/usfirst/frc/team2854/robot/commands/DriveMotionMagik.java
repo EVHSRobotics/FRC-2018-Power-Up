@@ -8,9 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
- *
- */
+
 public class DriveMotionMagik extends Command {
 
 	private DriveTrain drive;
