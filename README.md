@@ -8,6 +8,10 @@ Note to team: Please only use your assigned branch. PR will need Code Reviews to
 
 **Required libraries are in the lib folder. Make sure to put these in C:\Users\YOURUSER\wpilib\user\java\lib, and restart Eclipse!**
 
+If you are using IntelliJ (which I recommend anyway), install the [FRC plugin](https://plugins.jetbrains.com/plugin/9405-frc) and download WPLib from there. I especially recommend this if you are using a Mac - saves you lots of pain to get setup.
+
+**Don't forget to import project as Eclipse Project if you are using IntelliJ!**
+
 
 -------
 ### References:
