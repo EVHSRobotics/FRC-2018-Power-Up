@@ -2,25 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c52c2982-d4fa-4ca7-a11e-a7b55df8b572" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.travis.yml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/README.md" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/build.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/CTRLib.jar" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/mapApi.jar" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/lib/navx_frc.jar" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/Config.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/OI.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/Robot.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/RobotMap.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/SubsystemNames.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/commands/DriveCommand.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/commands/DriveDistance.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/commands/JoystickDrive.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/commands/RunAllTalons.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/commands/TurnCommand.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/commands/TurnToAngle.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/subsystems/DriveTrain.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,7 +13,18 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="101">
+              <caret line="38" column="22" lean-forward="false" selection-start-line="38" selection-start-column="22" selection-end-line="38" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -46,6 +39,7 @@
       <list>
         <option value="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/subsystems/DriveTrain.java" />
         <option value="$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/Robot.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -209,12 +203,12 @@
       <updated>1516407274087</updated>
       <workItem from="1516407278279" duration="287000" />
       <workItem from="1516407588803" duration="367000" />
-      <workItem from="1516407976869" duration="1494000" />
+      <workItem from="1516407976869" duration="1763000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2148000" />
+    <option name="totallyTimeSpent" value="2417000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="2048" height="1280" extended-state="6" />
@@ -298,14 +292,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/usfirst/frc/team2854/robot/commands/JoystickDrive.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -334,6 +320,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="657">
           <caret line="90" column="0" lean-forward="true" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="101">
+          <caret line="38" column="22" lean-forward="false" selection-start-line="38" selection-start-column="22" selection-end-line="38" selection-end-column="22" />
           <folding />
         </state>
       </provider>
