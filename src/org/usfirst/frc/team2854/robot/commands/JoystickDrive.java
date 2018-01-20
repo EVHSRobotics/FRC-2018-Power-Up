@@ -39,12 +39,16 @@ public class JoystickDrive extends Command {
     	double speed = OI.joystick.getRawAxis(2) - OI.joystick.getRawAxis(3);
     	//SmartDashboard.putNumber("target val", speed * Config.manuelSpeedMultiplier);
     	//speed *= Config.targetVel;
-    	//double left = (Math.abs(OI.joystick.getRawAxis(1)) < .1 ? 0 : OI.joystick.getRawAxis(1)) * 8400;
+    	double left = (Math.abs(OI.joystick.getRawAxis(1)) < .1 ? 0 : OI.joystick.getRawAxis(1));
     	//double right = (Math.abs(OI.joystick.getRawAxis(5)) < .1 ? 0 : OI.joystick.getRawAxis(5)) * 8400;
     	
-    	
-    	drive.drive(speed * Config.manuelSpeedMultiplier, speed * Config.manuelSpeedMultiplier, ControlMode.Velocity);
-    	
+    	if(Math.abs(OI.joystick.getRawAxis(1)) > .5) {
+        	drive.drive(left * Config.manuelSpeedMultiplier, left * Config.manuelSpeedMultiplier, ControlMode.PercentOutput);
+    	} else {
+        	drive.drive(speed * Config.manuelSpeedMultiplier, speed * Config.manuelSpeedMultiplier, ControlMode.Velocity);
+
+    	}
+
     	//drive.drive(speed, speed, ControlMode.PercentOutput);
     }
 
