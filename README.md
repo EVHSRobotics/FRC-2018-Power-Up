@@ -6,9 +6,14 @@
 #### See a bug? Open an issue!
 Note to team: Please only use your assigned branch. PR will need Code Reviews to be pushed to master. DO NOT mess with other people's branches. Treat your branch as master. You may create additional branches when necessary, but be sure to clean them up afterwards (**AKA DELETE THEM!**).
 
-**Required libraries are in the lib folder. Make sure to put these in C:\Users\YOURUSER\wpilib\user\java\lib, and restart Eclipse!**
+-------
 
-If you are using IntelliJ (which I recommend anyway), install the [FRC plugin](https://plugins.jetbrains.com/plugin/9405-frc) and download WPLib from there. I especially recommend this if you are using a Mac - saves you lots of pain to get setup.
+**Required libraries are in the lib folder. Make sure to put these in C:\Users\{USER-NAME}\wpilib\user\java\lib or /Users/{USER-NAME}/wpilib/, and restart Eclipse! Have a Mac? Follow instructions below.**
+
+-------
+
+
+If you are using IntelliJ (which I recommend anyway), install the [FRC plugin](https://plugins.jetbrains.com/plugin/9405-frc) and download WPILib from there. I especially recommend this if you are using a Mac - saves you lots of pain to get setup.
 
 **Don't forget to import project as Eclipse Project if you are using IntelliJ!**
 
