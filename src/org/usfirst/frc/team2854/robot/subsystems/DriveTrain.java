@@ -59,11 +59,11 @@ public class DriveTrain extends Driveable {
     return (leftT1.getEncPosition() + rightT1.getEncPosition()) / 2d;
   }
 
-  public CANTalon getLeftT2() {
+  public CANTalon getLeft() {
     return leftT2;
   }
 
-  public CANTalon getRightT2() {
+  public CANTalon getRight() {
     return rightT2;
   }
 }

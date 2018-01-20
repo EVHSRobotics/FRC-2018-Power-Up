@@ -72,10 +72,8 @@ public class Robot extends IterativeRobot {
   public void teleopPeriodic() {
     // OI.buttonA.whenPressed(new RunAllTalons());
     DriveTrain drive = (DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN);
-    SmartDashboard.putNumber("left enocder 1", drive.getLeftT1().getEncPosition());
-    SmartDashboard.putNumber("left enocder 2", drive.getLeftT2().getEncPosition());
-    SmartDashboard.putNumber("right enocder 1", drive.getRightT1().getEncPosition());
-    SmartDashboard.putNumber("right enocder 2", drive.getRightT2().getEncPosition());
+    SmartDashboard.putNumber("left enocder", drive.getLeft().getEncPosition());
+    SmartDashboard.putNumber("right enocder", drive.getRight().getEncPosition());
 
     Scheduler.getInstance().run();
   }
