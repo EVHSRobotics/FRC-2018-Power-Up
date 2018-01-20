@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2854.robot.commands;
 
 import com.team2854.mapauto.Driveable;
+import edu.wpi.first.wpilibj.command.Command;
 import java.util.function.DoubleFunction;
 import java.util.function.Supplier;
 
@@ -8,13 +9,14 @@ import java.util.function.Supplier;
  * A generic turn to angle using a gyro, which can use a default, parameterized, or user supplied
  * function to determine speed
  */
-public class TurnToAngle extends TurnCommand {
+public class TurnToAngle extends Command {
 
   private Driveable drive;
   private double threshAngle;
   private Supplier<Double> gyro;
   private DoubleFunction<Double> speedOpp;
   private double startingAngle;
+  private double targetAngle;
 
   /**
    * Make sure your subsystem that is used for driving extends the <code>Drivable</code> class <br>

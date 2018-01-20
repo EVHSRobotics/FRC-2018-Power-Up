@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2854.robot.commands;
 
 import com.team2854.mapauto.Driveable;
+import edu.wpi.first.wpilibj.command.Command;
 import java.util.function.DoubleFunction;
 import java.util.function.Supplier;
 
@@ -8,13 +9,14 @@ import java.util.function.Supplier;
  * A generic drive forward command using encoders, which can use a default, parameterized, or user
  * supplied function to determine speed
  */
-public class DriveDistance extends DriveCommand {
+public class DriveDistance extends Command {
 
   private Driveable drive;
   private double theshDistance;
   private Supplier<Double> encoders;
   private DoubleFunction<Double> speedOpp;
   private double startingDist;
+  private double distance;
 
   /**
    * Make sure your subsystem that is used for driving extends the <code>Drivable</code> class <br>
@@ -38,8 +40,8 @@ public class DriveDistance extends DriveCommand {
       DoubleFunction<Double> speedOpp,
       double threshHoldDistance,
       Supplier<Double> encoders) {
-    super(targetDistance);
     requires(drive);
+    this.distance = targetDistance;
     this.drive = drive;
     this.encoders = encoders;
     this.speedOpp = speedOpp;

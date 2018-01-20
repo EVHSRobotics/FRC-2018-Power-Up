@@ -8,7 +8,10 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.HashMap;
+import org.usfirst.frc.team2854.robot.commands.DriveThottle;
+import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,6 +25,7 @@ public class Robot extends IterativeRobot {
   Command autonomousCommand;
   SendableChooser<Command> chooser = new SendableChooser<>();
   private static HashMap<SubsystemNames, Subsystem> subsystems;
+  private SensorBoard sensors;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -32,13 +36,27 @@ public class Robot extends IterativeRobot {
     System.out.println("STARTING");
     subsystems = new HashMap<SubsystemNames, Subsystem>();
     subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
+
+    sensors = new SensorBoard();
+
+    for (Subsystem s : subsystems.values()) {
+      if (s instanceof Restartabale) {
+        ((Restartabale) s).enable();
+      }
+    }
   }
   /**
    * This function is called once each time the robot enters Disabled mode. You can use it to reset
    * any subsystem information you want to clear when the robot is disabled.
    */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    for (Subsystem s : subsystems.values()) {
+      if (s instanceof Restartabale) {
+        ((Restartabale) s).disable();
+      }
+    }
+  }
 
   @Override
   public void disabledPeriodic() {
@@ -56,7 +74,13 @@ public class Robot extends IterativeRobot {
    * additional strings & commands.
    */
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    for (Subsystem s : subsystems.values()) {
+      if (s instanceof Restartabale) {
+        ((Restartabale) s).enable();
+      }
+    }
+  }
 
   /** This function is called periodically during autonomous */
   @Override
@@ -65,15 +89,29 @@ public class Robot extends IterativeRobot {
   }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    for (Subsystem s : subsystems.values()) {
+      if (s instanceof Restartabale) {
+        ((Restartabale) s).enable();
+      }
+    }
+
+    // OI.buttonA.whenPressed(new DriveMotionMagik());
+    OI.buttonB.whileHeld(new DriveThottle(.5));
+
+    OI.rTrigger.whenPressed(new ToggleShift());
+  }
 
   /** s This function is called periodically during operator control */
   @Override
   public void teleopPeriodic() {
-    // OI.buttonA.whenPressed(new RunAllTalons());
-    DriveTrain drive = (DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN);
-    SmartDashboard.putNumber("left enocder", drive.getLeft().getEncPosition());
-    SmartDashboard.putNumber("right enocder", drive.getRight().getEncPosition());
+
+    ((DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
+    double angle = sensors.getNavX().getAngle();
+    while (angle < 0) {
+      angle += 360;
+    }
+    SmartDashboard.putNumber("Gyro", angle % 360);
 
     Scheduler.getInstance().run();
   }
@@ -86,5 +124,9 @@ public class Robot extends IterativeRobot {
 
   public static Subsystem getSubsystem(SubsystemNames name) {
     return subsystems.get(name);
+  }
+
+  public SensorBoard getSensors() {
+    return sensors;
   }
 }
