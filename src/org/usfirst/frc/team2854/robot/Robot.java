@@ -7,11 +7,12 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.util.HashMap;
 import org.usfirst.frc.team2854.robot.commands.DriveThottle;
 import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
+
+import java.util.HashMap;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,112 +22,119 @@ import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
  */
 public class Robot extends IterativeRobot {
 
-  public static OI oi;
-  Command autonomousCommand;
-  SendableChooser<Command> chooser = new SendableChooser<>();
-  private static HashMap<SubsystemNames, Subsystem> subsystems;
-  private SensorBoard sensors;
+    public static OI oi;
+    Command autonomousCommand;
+    SendableChooser<Command> chooser = new SendableChooser<>();
+    private static HashMap<SubsystemNames, Subsystem> subsystems;
+    private SensorBoard sensors;
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
-    System.out.println("STARTING");
-    subsystems = new HashMap<SubsystemNames, Subsystem>();
-    subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
+    /**
+     * This function is run when the robot is first started up and should be used for any
+     * initialization code.
+     */
+    @Override
+    public void robotInit() {
+        System.out.println("STARTING");
+        subsystems = new HashMap<SubsystemNames, Subsystem>();
+        subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 
-    sensors = new SensorBoard();
+        sensors = new SensorBoard();
 
-    for (Subsystem s : subsystems.values()) {
-      if (s instanceof Restartabale) {
-        ((Restartabale) s).enable();
-      }
-    }
-  }
-  /**
-   * This function is called once each time the robot enters Disabled mode. You can use it to reset
-   * any subsystem information you want to clear when the robot is disabled.
-   */
-  @Override
-  public void disabledInit() {
-    for (Subsystem s : subsystems.values()) {
-      if (s instanceof Restartabale) {
-        ((Restartabale) s).disable();
-      }
-    }
-  }
-
-  @Override
-  public void disabledPeriodic() {
-    Scheduler.getInstance().run();
-  }
-
-  /**
-   * This autonomous (along with the chooser code above) shows how to select between different
-   * autonomous modes using the dashboard. The sendable chooser code works with the Java
-   * SmartDashboard. If you prefer the LabVIEW Dashboard, remove all of the chooser code and
-   * uncomment the getString code to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional auto modes by adding additional commands to the chooser code above
-   * (like the commented example) or additional comparisons to the switch structure below with
-   * additional strings & commands.
-   */
-  @Override
-  public void autonomousInit() {
-    for (Subsystem s : subsystems.values()) {
-      if (s instanceof Restartabale) {
-        ((Restartabale) s).enable();
-      }
-    }
-  }
-
-  /** This function is called periodically during autonomous */
-  @Override
-  public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
-  }
-
-  @Override
-  public void teleopInit() {
-    for (Subsystem s : subsystems.values()) {
-      if (s instanceof Restartabale) {
-        ((Restartabale) s).enable();
-      }
+        for (Subsystem s : subsystems.values()) {
+            if (s instanceof Restartabale) {
+                ((Restartabale) s).enable();
+            }
+        }
     }
 
-    // OI.buttonA.whenPressed(new DriveMotionMagik());
-    OI.buttonB.whileHeld(new DriveThottle(.5));
-
-    OI.rTrigger.whenPressed(new ToggleShift());
-  }
-
-  /** s This function is called periodically during operator control */
-  @Override
-  public void teleopPeriodic() {
-
-    ((DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
-    double angle = sensors.getNavX().getAngle();
-    while (angle < 0) {
-      angle += 360;
+    /**
+     * This function is called once each time the robot enters Disabled mode. You can use it to reset
+     * any subsystem information you want to clear when the robot is disabled.
+     */
+    @Override
+    public void disabledInit() {
+        for (Subsystem s : subsystems.values()) {
+            if (s instanceof Restartabale) {
+                ((Restartabale) s).disable();
+            }
+        }
     }
-    SmartDashboard.putNumber("Gyro", angle % 360);
 
-    Scheduler.getInstance().run();
-  }
+    @Override
+    public void disabledPeriodic() {
+        Scheduler.getInstance().run();
+    }
 
-  /** This function is called periodically during test mode */
-  @Override
-  public void testPeriodic() {
-    LiveWindow.run();
-  }
+    /**
+     * This autonomous (along with the chooser code above) shows how to select between different
+     * autonomous modes using the dashboard. The sendable chooser code works with the Java
+     * SmartDashboard. If you prefer the LabVIEW Dashboard, remove all of the chooser code and
+     * uncomment the getString code to get the auto name from the text box below the Gyro
+     * <p>
+     * <p>You can add additional auto modes by adding additional commands to the chooser code above
+     * (like the commented example) or additional comparisons to the switch structure below with
+     * additional strings & commands.
+     */
+    @Override
+    public void autonomousInit() {
+        for (Subsystem s : subsystems.values()) {
+            if (s instanceof Restartabale) {
+                ((Restartabale) s).enable();
+            }
+        }
+    }
 
-  public static Subsystem getSubsystem(SubsystemNames name) {
-    return subsystems.get(name);
-  }
+    /**
+     * This function is called periodically during autonomous
+     */
+    @Override
+    public void autonomousPeriodic() {
+        Scheduler.getInstance().run();
+    }
 
-  public SensorBoard getSensors() {
-    return sensors;
-  }
+    @Override
+    public void teleopInit() {
+        for (Subsystem s : subsystems.values()) {
+            if (s instanceof Restartabale) {
+                ((Restartabale) s).enable();
+            }
+        }
+
+        // OI.buttonA.whenPressed(new DriveMotionMagik());
+        OI.buttonB.whileHeld(new DriveThottle(.5));
+
+        OI.rTrigger.whenPressed(new ToggleShift());
+    }
+
+    /**
+     * s This function is called periodically during operator control
+     */
+    @Override
+    public void teleopPeriodic() {
+
+        ((DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
+        double angle = sensors.getNavX().getAngle();
+        while (angle < 0) {
+            angle += 360;
+        }
+        SmartDashboard.putNumber("Gyro", angle % 360);
+
+        Scheduler.getInstance().run();
+    }
+
+    /**
+     * This function is called periodically during test mode
+     */
+    @Override
+    public void testPeriodic() {
+        LiveWindow.run();
+    }
+
+    public static Subsystem getSubsystem(SubsystemNames name) {
+        return subsystems.get(name);
+    }
+
+    public SensorBoard getSensors() {
+        return sensors;
+    }
 }
