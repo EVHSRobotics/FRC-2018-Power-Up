@@ -8,7 +8,7 @@ Note to team: Please only use your assigned branch. PR will need Code Reviews to
 
 -------
 
-**Required libraries are in the lib folder. Make sure to put these in C:\Users\{USER-NAME}\wpilib\user\java\lib or /Users/{USER-NAME}/wpilib/, and restart Eclipse! Have a Mac? Follow instructions below.**
+**Required libraries are in the lib folder. Make sure to put these in `C:\Users\{USER-NAME}\wpilib\user\java\lib\` on Windows or `/Users/{USER-NAME}/wpilib/user/java/lib/` on MacOS, and restart Eclipse! Have a Mac? Follow instructions below.**
 
 -------
 
