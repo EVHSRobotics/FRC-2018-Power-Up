@@ -1,6 +1,8 @@
 package org.usfirst.frc.team2854.robot;
 
-import java.nio.file.attribute.PosixFileAttributeView;
+import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
+import org.usfirst.frc.team2854.robot.commands.DriveThottle;
+import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -17,6 +19,11 @@ public class OI {
 	public static JoystickButton buttonB = new JoystickButton(joystick, 2);
 	public static JoystickButton rTrigger = new JoystickButton(joystick, 6);
 
+	static {
+		OI.buttonA.whenPressed(new DriveMotionMagik(100));
+		OI.buttonB.toggleWhenPressed(new DriveThottle(.5));
+		OI.rTrigger.whenPressed(new ToggleShift());
+	}
 
 
 	

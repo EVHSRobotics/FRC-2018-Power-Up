@@ -43,7 +43,7 @@ public class Robot extends IterativeRobot {
 		subsystems = new HashMap<SubsystemNames, Subsystem>();
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 
-		sensors = new SensorBoard();
+		//sensors = new SensorBoard();
 		
 		for(Subsystem s : subsystems.values()) {
 			if(s instanceof Restartabale) {
@@ -109,9 +109,7 @@ public class Robot extends IterativeRobot {
 		}
 		
 		//OI.buttonA.whenPressed(new DriveMotionMagik());
-		OI.buttonB.whileHeld(new DriveThottle(.5));
-		
-		OI.rTrigger.whenPressed(new ToggleShift());
+
 	}
 
 	/**
@@ -122,11 +120,11 @@ public class Robot extends IterativeRobot {
 
 
 		((DriveTrain)getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
-		double angle = sensors.getNavX().getAngle();
-		while(angle < 0) {
-			angle += 360;
-		}
-		SmartDashboard.putNumber("Gyro", angle % 360);
+//		double angle = sensors.getNavX().getAngle();
+//		while(angle < 0) {
+//			angle += 360;
+//		}
+//		SmartDashboard.putNumber("Gyro", angle % 360);
 
 		
 		Scheduler.getInstance().run();		
