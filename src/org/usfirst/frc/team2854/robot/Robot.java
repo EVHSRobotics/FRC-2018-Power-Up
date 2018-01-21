@@ -11,7 +11,7 @@ import java.util.HashMap;
 import org.usfirst.frc.team2854.robot.commands.DriveThottle;
 import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
+import org.usfirst.frc.team2854.robot.subsystems.Restartable;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -40,8 +40,8 @@ public class Robot extends IterativeRobot {
     sensors = new SensorBoard();
 
     for (Subsystem s : subsystems.values()) {
-      if (s instanceof Restartabale) {
-        ((Restartabale) s).enable();
+      if (s instanceof Restartable) {
+        ((Restartable) s).enable();
       }
     }
   }
@@ -52,8 +52,8 @@ public class Robot extends IterativeRobot {
   @Override
   public void disabledInit() {
     for (Subsystem s : subsystems.values()) {
-      if (s instanceof Restartabale) {
-        ((Restartabale) s).disable();
+      if (s instanceof Restartable) {
+        ((Restartable) s).disable();
       }
     }
   }
@@ -76,8 +76,8 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
     for (Subsystem s : subsystems.values()) {
-      if (s instanceof Restartabale) {
-        ((Restartabale) s).enable();
+      if (s instanceof Restartable) {
+        ((Restartable) s).enable();
       }
     }
   }
@@ -91,8 +91,8 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopInit() {
     for (Subsystem s : subsystems.values()) {
-      if (s instanceof Restartabale) {
-        ((Restartabale) s).enable();
+      if (s instanceof Restartable) {
+        ((Restartable) s).enable();
       }
     }
 

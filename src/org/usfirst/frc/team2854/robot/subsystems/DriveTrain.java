@@ -16,10 +16,10 @@ import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
 /** */
-public class DriveTrain extends Subsystem implements Restartabale {
+public class DriveTrain extends Subsystem implements Restartable {
 
-  // Put methods for controlling this subsyWstem
-  // here. Call these from Commands.
+	// Put methods for controlling this subsyWstem
+	// here. Call these from Commands.
 
   private TalonSRX leftT1, leftT2, rightT1, rightT2;
 
@@ -237,4 +237,5 @@ public class DriveTrain extends Subsystem implements Restartabale {
   public void stop() {
     drive(0, 0);
   }
+  
 }
