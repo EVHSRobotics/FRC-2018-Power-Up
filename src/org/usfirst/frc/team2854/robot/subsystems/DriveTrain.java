@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2854.robot.subsystems;
 
+<<<<<<< HEAD
 import java.util.TimerTask;
 
 import org.usfirst.frc.team2854.PID.DummyPIDOutput;
@@ -71,11 +72,22 @@ public class DriveTrain extends Subsystem implements Restartabale {
 			}
 		}
 	}
+=======
+import com.ctre.CANTalon;
+import com.ctre.CANTalon.TalonControlMode;
+import com.team2854.mapauto.Driveable;
+import org.usfirst.frc.team2854.robot.Config;
+import org.usfirst.frc.team2854.robot.RobotMap;
+import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
-	public void initDefaultCommand() {
-		setDefaultCommand(new JoystickDrive());
-	}
+/** */
+public class DriveTrain extends Driveable {
+>>>>>>> master
 
+  // Put methods for controlling this subsyWstem
+  // here. Call these from Commands.
+
+<<<<<<< HEAD
 	public DriveTrain() {
 		leftT1 = new TalonSRX(RobotMap.leftTalonID1);
 		leftT1.setInverted(side);
@@ -102,9 +114,23 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		rightT1.set(ControlMode.Follower, rightT2.getDeviceID());
 
 		// PIDConstant.startSmartDashboardInput(PIDConstant.highDrive, leftT2, rightT2);
+=======
+  private CANTalon leftT1, leftT2, rightT1, rightT2;
+  private boolean side = false;
 
-	}
+  public void initDefaultCommand() {
+    setDefaultCommand(new JoystickDrive());
+  }
 
+  public DriveTrain() {
+    leftT1 = new CANTalon(RobotMap.leftTalonID1);
+    leftT1.setInverted(side);
+>>>>>>> master
+
+    leftT2 = new CANTalon(RobotMap.leftTalonID2);
+    leftT2.setInverted(side);
+
+<<<<<<< HEAD
 	public void enable() {
 		System.out.println("Enabling drive train");
 		// turnController.enable();
@@ -261,5 +287,45 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	public double getAvgEncoder() {
 		return (rightT2.getSelectedSensorPosition(0)  + leftT2.getSelectedSensorPosition(0))/2d;
 	}
+=======
+    rightT1 = new CANTalon(RobotMap.rightTalonID1);
+    rightT1.setInverted(!side);
 
+    rightT2 = new CANTalon(RobotMap.rightTalonID2);
+    rightT2.setInverted(!side);
+
+    rightT2.setEncPosition(0);
+    rightT2.setEncPosition(0);
+
+    rightT2.changeControlMode(TalonControlMode.Position);
+    leftT2.changeControlMode(TalonControlMode.Position);
+  }
+
+  public void drive(double left, double right) {
+
+    leftT1.set(left * Config.totalDriveSpeedMultiplier);
+    leftT2.set(left * Config.totalDriveSpeedMultiplier);
+    rightT1.set(right * Config.totalDriveSpeedMultiplier);
+    rightT2.set(right * Config.totalDriveSpeedMultiplier);
+  }
+
+  public void stop() {
+    leftT1.set(0);
+    leftT2.set(0);
+    rightT1.set(0);
+    rightT2.set(0);
+  }
+
+  public double getEncoder() {
+    return (leftT1.getEncPosition() + rightT1.getEncPosition()) / 2d;
+  }
+
+  public CANTalon getLeft() {
+    return leftT2;
+  }
+>>>>>>> master
+
+  public CANTalon getRight() {
+    return rightT2;
+  }
 }
