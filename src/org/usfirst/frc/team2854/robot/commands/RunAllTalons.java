@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2854.robot.commands;
 
-import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -20,10 +21,10 @@ public class RunAllTalons extends Command {
     int i;
     for (i = 0; i < 6; i++) {
       try {
-        CANTalon talon = new CANTalon(i);
-        talon.set(1);
+        TalonSRX talon = new TalonSRX(i);
+        talon.set(ControlMode.PercentOutput, 1);
         Timer.delay(2);
-        talon.set(0);
+        talon.set(ControlMode.PercentOutput, 0);
         System.out.println("Talon #" + i + " alive");
       } catch (Exception e) {
         System.out.println("Talon #" + i + " died");
