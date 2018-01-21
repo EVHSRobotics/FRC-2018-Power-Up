@@ -1,7 +1,7 @@
 package org.usfirst.frc.team2854.robot.subsystems;
 
+import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -10,8 +10,11 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.TimerTask;
+import org.usfirst.frc.team2854.PID.DummyPIDOutput;
+import org.usfirst.frc.team2854.PID.PIDConstant;
+import org.usfirst.frc.team2854.PID.PIDUtil;
 import org.usfirst.frc.team2854.robot.Config;
-import org.usfirst.frc.team2854.robot.DummyPIDOutput;
 import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
@@ -30,23 +33,41 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
   private DoubleSolenoid shifter;
 
+  private GearState gear;
+
+  enum GearState {
+    LOW,
+    HIGH,
+    UNKNOWN;
+
+    public static Value gearToValue(GearState state) {
+      switch (state) {
+        case HIGH:
+          return Value.kForward;
+        case LOW:
+          return Value.kReverse;
+        case UNKNOWN:
+        default:
+          return Value.kOff;
+      }
+    }
+
+    public static GearState valueToGear(Value value) {
+      switch (value) {
+        case kReverse:
+          return GearState.LOW;
+        case kOff:
+          return GearState.UNKNOWN;
+        case kForward:
+          return GearState.HIGH;
+        default:
+          return GearState.UNKNOWN;
+      }
+    }
+  }
+
   public void initDefaultCommand() {
     setDefaultCommand(new JoystickDrive());
-  }
-
-  public void enable() {
-    System.out.println("Enabling drive train");
-    turnController.enable();
-
-    Value startingGear = Value.kForward;
-
-    shifter.set(startingGear);
-    shift(startingGear);
-  }
-
-  public void disable() {
-    System.out.println("Disableing drive train");
-    turnController.disable();
   }
 
   public DriveTrain() {
@@ -64,85 +85,29 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
     shifter = new DoubleSolenoid(RobotMap.shifterUp, RobotMap.shifterDown);
 
-    final double P_Drive = .28;
-    final double I_Drive = .0006;
-    final double D_Drive = .8;
-    final double F_Drive = 0.1217;
+    PIDUtil.configureTalon(leftT2, !side);
+    PIDUtil.configureTalon(rightT2, !side);
 
-    final double P_Turn = .0002;
-    final double I_Turn = .000002;
-    final double D_Turn = .2;
-    final double F_Turn = 0;
+    gear = GearState.UNKNOWN;
 
-    configureTalon(leftT2, P_Drive, I_Drive, D_Drive, F_Drive, !side);
-    configureTalon(rightT2, P_Drive, I_Drive, D_Drive, F_Drive, !side);
-
-    initTurnPID(P_Turn, I_Turn, D_Turn, F_Turn);
+    // initTurnPID(P_Turn, I_Turn, D_Turn, F_Turn);
 
     leftT1.set(ControlMode.Follower, leftT2.getDeviceID());
     rightT1.set(ControlMode.Follower, rightT2.getDeviceID());
+
+    // PIDConstant.startSmartDashboardInput(PIDConstant.highDrive, leftT2, rightT2);
+
   }
 
-  public void shift(DoubleSolenoid.Value value) {
-
-    double P_Drive = .28;
-    double I_Drive = .0006;
-    double D_Drive = .8;
-    double F_Drive = 0.1217;
-
-    if (value.equals(DoubleSolenoid.Value.kForward)) {
-      System.out.println("Using low values");
-      P_Drive = .6;
-      I_Drive = .00001;
-      D_Drive = 0;
-      F_Drive = 1023 / Config.lowTarget;
-    } else {
-      System.out.println("Using high values");
-      P_Drive = .2;
-      I_Drive = .001;
-      D_Drive = .02;
-      F_Drive = 1023 / Config.highTarget;
-    }
-    updatePID(rightT2, P_Drive, I_Drive, D_Drive, F_Drive);
-    updatePID(leftT2, P_Drive, I_Drive, D_Drive, F_Drive);
+  public void enable() {
+    System.out.println("Enabling drive train");
+    // turnController.enable();
+    applyShift(GearState.LOW, -10); // TODO 10 more attempts because of start up time?
   }
 
-  private void updatePID(TalonSRX talon, double P, double I, double D, double F) {
-    final int timeOutConstant = 10;
-    final int PIDIndex = 0;
-    talon.config_kP(PIDIndex, P, timeOutConstant);
-    talon.config_kI(PIDIndex, I, timeOutConstant);
-    talon.config_kD(PIDIndex, D, timeOutConstant);
-    talon.config_kF(PIDIndex, F, timeOutConstant);
-  }
-
-  private void configureTalon(
-      TalonSRX talon, double P, double I, double D, double F, boolean side) {
-
-    final int timeOutConstant = 10;
-    final int PIDIndex = 0;
-
-    talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PIDIndex, timeOutConstant);
-    talon.setSensorPhase(side);
-
-    talon.configNominalOutputForward(0, timeOutConstant);
-    talon.configNominalOutputReverse(0, timeOutConstant);
-    talon.configPeakOutputForward(1 * Config.totalDriveSpeedMultiplier, timeOutConstant);
-    talon.configPeakOutputReverse(-1 * Config.totalDriveSpeedMultiplier, timeOutConstant);
-
-    talon.config_kP(PIDIndex, P, timeOutConstant);
-    talon.config_kI(PIDIndex, I, timeOutConstant);
-    talon.config_kD(PIDIndex, D, timeOutConstant);
-    talon.config_kF(PIDIndex, F, timeOutConstant);
-
-    // talon.configMotionCruiseVelocity(8400, 10);
-    // talon.configMotionAcceleration(8400, 10);
-
-    // int absolutePosition = talon.getSelectedSensorPosition(timeOutConstant) &
-    // 0xFFF;
-    talon.setSelectedSensorPosition(0, PIDIndex, timeOutConstant);
-
-    talon.configVoltageCompSaturation(12, 10);
+  public void disable() {
+    System.out.println("Disableing drive train");
+    // turnController.disable();
   }
 
   public void initTurnPID(double P, double I, double D, double F) {
@@ -187,46 +152,98 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
     // SmartDashboard.putNumber("Velocity Diff",
     // rightT2.getSelectedSensorVelocity(0) - leftT2.getSelectedSensorVelocity(0));
-    //		SmartDashboard.putNumber("turn output", turnController.get());
-    //		SmartDashboard.putBoolean("is enabled", turnController.isEnabled());
-    //		SmartDashboard.putNumber("turn error", turnController.getError());
+    // SmartDashboard.putNumber("turn output", turnController.get());
+    // SmartDashboard.putBoolean("is enabled", turnController.isEnabled());
+    // SmartDashboard.putNumber("turn error", turnController.getError());
 
-    SmartDashboard.putNumber("Error", rightT2.getClosedLoopError(0));
+    SmartDashboard.putNumber("Error Right", rightT2.getClosedLoopError(0));
+    SmartDashboard.putNumber("Error Left", leftT2.getClosedLoopError(0));
+    SmartDashboard.putNumber("Left Throttle", rightT2.getMotorOutputPercent());
+    // SmartDashboard.putNumber("Target", leftT2.getClosedLoopTarget(0));
+
+  }
+
+  private void applyShift(GearState desiredState, int attempt) {
+    if (attempt > 10) {
+      System.err.println("Shifter is not shifting to " + desiredState + " at attempt " + attempt);
+      return;
+    }
+    shifter.set(GearState.gearToValue(desiredState));
+
+    // Timer.delay(.005);
+    if (!shifter
+        .get()
+        .equals(
+            GearState.gearToValue(desiredState))) { // did not shift for some reason //TODO check
+      // compressor pressure
+      java.util.Timer taskTimer = new java.util.Timer();
+      TimerTask task =
+          new TimerTask() {
+
+            @Override
+            public void run() {
+              applyShift(desiredState, attempt + 1);
+            }
+          };
+      taskTimer.schedule(task, 5); // try to shift again in half a second
+
+    } else {
+      System.out.println("shifted to " + desiredState);
+      gear = desiredState;
+      PIDConstant constant =
+          (gear == GearState.HIGH ? PIDConstant.highDrive : PIDConstant.lowDrive);
+      PIDUtil.updatePID(rightT2, constant);
+      PIDUtil.updatePID(leftT2, constant);
+    }
+
+    // P_Drive = .2;
+    // I_Drive = .003;
+    // D_Drive = 0;
+    // low ^ high v
+    // P_Drive = .2;
+    // I_Drive = .001;
+    // D_Drive = .02;
   }
 
   public void toggleShift() {
-    if (shifter.get() == Value.kForward) {
-      shifter.set(Value.kReverse);
-    } else if (shifter.get() == Value.kReverse) {
-      shifter.set(Value.kForward);
+    if (gear == GearState.HIGH) {
+      applyShift(GearState.LOW, 0);
+    } else if (gear == GearState.LOW) {
+      applyShift(GearState.HIGH, 0);
     } else {
-      System.out.println("Weird state " + shifter.get().toString() + " defualting to forward");
-      shifter.set(Value.kForward);
+      System.out.println("In unknown state, defaulting to LOW");
+      applyShift(GearState.LOW, 0);
     }
-    System.out.println("shifting to " + shifter.get().toString());
-    shift(shifter.get());
   }
 
   public void drive(double left, double right, ControlMode mode) {
+    // System.out.println(mode.toString() + " " + ControlMode.Velocity + " " +
+    // mode.equals(ControlMode.Velocity));
 
-    if (mode.equals(ControlMode.Velocity)) {
-      if (shifter.get().equals(Value.kForward)) {
-        left *= Config.highTarget;
-        right *= Config.highTarget;
-      } else {
+    if (mode.equals(ControlMode.Velocity) || mode.equals(ControlMode.MotionMagic)) {
+      if (gear == GearState.LOW) {
+        // System.out.println("Using low target");
         left *= Config.lowTarget;
         right *= Config.lowTarget;
+      } else {
+        // System.out.println("Using high target");
+        left *= Config.highTarget;
+        right *= Config.highTarget;
       }
     }
-
+    if (mode.equals(ControlMode.Position) || mode.equals(ControlMode.MotionMagic)) {
+      left += leftT2.getSelectedSensorPosition(0);
+      right += rightT2.getSelectedSensorPosition(0);
+    }
+    // System.out.println(left + " " + right);
     leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);
     rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);
+    leftT2.pushMotionProfileTrajectory(new TrajectoryPoint());
   }
 
   public void driveStraight(double left, double right, ControlMode mode) {
     double output = turnController.get();
     System.out.println(output);
-    // drive(left - (output * Config.targetVel / 2d), right, mode);
     turnController.setSetpoint(0);
   }
 
@@ -236,5 +253,9 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
   public void stop() {
     drive(0, 0);
+  }
+
+  public double getAvgEncoder() {
+    return (rightT2.getSelectedSensorPosition(0) + leftT2.getSelectedSensorPosition(0)) / 2d;
   }
 }
