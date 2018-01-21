@@ -1,6 +1,5 @@
 package org.usfirst.frc.team2854.robot;
 
 public enum SubsystemNames {
-  DRIVE_TRAIN,
-  SHIFTER;
+  DRIVE_TRAIN;
 }
