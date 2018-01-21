@@ -9,11 +9,13 @@ import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
+import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
@@ -220,7 +222,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		// System.out.println(mode.toString() + " " + ControlMode.Velocity + " " +
 		// mode.equals(ControlMode.Velocity));
 		
-		if (mode.equals(ControlMode.Velocity)) {
+		if (mode.equals(ControlMode.Velocity) || mode.equals(ControlMode.MotionMagic)) {
 			if (gear == GearState.LOW) {
 				// System.out.println("Using low target");
 				left *= Config.lowTarget;
@@ -230,14 +232,16 @@ public class DriveTrain extends Subsystem implements Restartabale {
 				left *= Config.highTarget;
 				right *= Config.highTarget;
 			}
-		} else if (mode.equals(ControlMode.Position) || mode.equals(ControlMode.MotionMagic)) {
+		} 
+		if (mode.equals(ControlMode.Position) || mode.equals(ControlMode.MotionMagic)) {
 			left += leftT2.getSelectedSensorPosition(0);
 			right += rightT2.getSelectedSensorPosition(0);
 		}
 		// System.out.println(left + " " + right);
 		leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);
 		rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);
-
+		leftT2.pushMotionProfileTrajectory(new TrajectoryPoint(	));
+		
 	}
 
 	public void driveStraight(double left, double right, ControlMode mode) {

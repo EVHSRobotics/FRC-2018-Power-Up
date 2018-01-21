@@ -1,10 +1,13 @@
 package org.usfirst.frc.team2854.robot.commands;
 
+import java.util.ResourceBundle.Control;
+
 import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.SubsystemNames;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 
+import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -31,6 +34,7 @@ public class DriveMotionMagik extends Command {
     	System.out.println("Driving");
     	drive.drive(revs * Config.lowTarget, revs * Config.lowTarget, ControlMode.MotionMagic);
     	targetPos = (revs * Config.lowTarget) + drive.getAvgEncoder();
+
     }
 
     // Called repeatedly when this Command is scheduled to run
