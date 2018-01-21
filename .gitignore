@@ -34,7 +34,6 @@ target/
 .classpath
 .project
 build.properties
-# uncomment for changes to travis build
 build.xml
 
 # NetBeans specific
