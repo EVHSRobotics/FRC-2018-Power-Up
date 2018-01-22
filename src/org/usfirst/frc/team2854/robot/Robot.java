@@ -30,7 +30,7 @@ public class Robot extends IterativeRobot {
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	private static HashMap<SubsystemNames, Subsystem> subsystems;
-	private SensorBoard sensors;
+	private static SensorBoard sensors;
 
 
 	/**
@@ -141,7 +141,7 @@ public class Robot extends IterativeRobot {
 	public static Subsystem getSubsystem(SubsystemNames name) {
 		return subsystems.get(name);
 	}
-	public SensorBoard getSensors() {
+	public static SensorBoard getSensors() {
 		return sensors;
 	}
 
