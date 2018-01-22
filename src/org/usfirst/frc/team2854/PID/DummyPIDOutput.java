@@ -4,22 +4,19 @@ import edu.wpi.first.wpilibj.PIDOutput;
 
 public class DummyPIDOutput implements PIDOutput {
 
-	private double output;
-	
-	public DummyPIDOutput() {
-		output = 0;
-	}
-	
-	@Override
-	public void pidWrite(double output) {
-		//System.out.println("PId writing");
-		this.output = output;
-	}
+  private double output;
 
-	public double getOutput() {
-		return output;
-	}
+  public DummyPIDOutput() {
+    output = 0;
+  }
 
-	
-	
+  @Override
+  public void pidWrite(double output) {
+    // System.out.println("PId writing");
+    this.output = output;
+  }
+
+  public double getOutput() {
+    return output;
+  }
 }
