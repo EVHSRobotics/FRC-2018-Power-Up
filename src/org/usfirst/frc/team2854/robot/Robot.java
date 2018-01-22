@@ -7,6 +7,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import java.util.HashMap;
+
+import org.usfirst.frc.team2854.map.EncoderBased;
+import org.usfirst.frc.team2854.map.FieldMapDriver;
+import org.usfirst.frc.team2854.map.MapInput;
+import org.usfirst.frc.team2854.map.elements.FieldMap;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
 
@@ -35,13 +40,19 @@ public class Robot extends IterativeRobot {
 		subsystems = new HashMap<SubsystemNames, Subsystem>();
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 
-		//sensors = new SensorBoard();
+		sensors = new SensorBoard();
 		
 		for(Subsystem s : subsystems.values()) {
 			if(s instanceof Restartabale) {
 				((Restartabale) s).enable();
 			}
 		}
+		
+		double fieldWidth = 5;
+		double fieldHeight = 5;
+		FieldMap map = new FieldMap(fieldWidth, fieldHeight);
+		MapInput input = new EncoderBased();
+		FieldMapDriver mapDrive = new FieldMapDriver(map, 720, 720, input);
 
 	}
 	/**

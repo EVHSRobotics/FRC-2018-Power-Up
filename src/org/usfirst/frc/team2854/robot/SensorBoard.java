@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2854.robot;
 
+import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
@@ -11,16 +13,17 @@ public class SensorBoard {
   private AHRS navX;
   private ADXRS450_Gyro spiGyro;
   private BuiltInAccelerometer builtInacc;
-
+  private DriveTrain drive;
+  
   public SensorBoard() {
     navX = new AHRS(I2C.Port.kMXP);
 
     System.out.println("Navx connection: " + navX.isConnected());
-    spiGyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS1);
+    //spiGyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS1);
     builtInacc = new BuiltInAccelerometer();
     // gyro = new DualSensor("Gyro");
     // forwardAccel = new DualSensor("Forward Acceleration");
-
+    drive = (DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN);
   }
 
   //	public void calibrate(long time) {
@@ -53,10 +56,15 @@ public class SensorBoard {
     return builtInacc;
   }
 
-	public AHRS getNavX() {
+  public AHRS getNavX() {
 		return navX;
-	}
+  }
 	
+  public double getVelocity() {
+	  return drive.getAvgVelocity();
+  }
+  
+  
 	
 	
 }

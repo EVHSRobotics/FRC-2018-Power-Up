@@ -7,25 +7,16 @@ import org.usfirst.frc.team2854.robot.SensorBoard;
 public class EncoderBased implements MapInput {
 
 	private SensorBoard sensors;
-	private long startTime = 0, lastTime = 0;
-	private double deltaTime = 0;
 	private boolean init = true;
-	private double velocity = 0;
-	
-	private int leftValue, rightValue;
-	private int lastLeft, lastRight;
+
 	
 	public EncoderBased() {
 		sensors = Robot.getSensors();
-		
-		//leftT = ((DriveTrain)(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN))).getLeftT1();
-		//rightT = ((DriveTrain)(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN))).getRightT1();
-
 	} 
 	
 	@Override
 	public double getDeltaForward() {
-		return 0;
+		return sensors.getVelocity();
 	}
 
 	
@@ -42,7 +33,6 @@ public class EncoderBased implements MapInput {
 		}
 		
 	
-		lastTime = startTime;
 	}
 	
 	public void init() {
