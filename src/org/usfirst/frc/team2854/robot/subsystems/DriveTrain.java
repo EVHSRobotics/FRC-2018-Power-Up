@@ -2,6 +2,7 @@ package org.usfirst.frc.team2854.robot.subsystems;
 
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -184,6 +185,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 		} else {
 			System.out.println("shifted to " + desiredState);
+			SmartDashboard.putString("Gear", desiredState.toString());
 			gear = desiredState;
 			PIDConstant constant = (gear == GearState.HIGH ? PIDConstant.highDrive : PIDConstant.lowDrive);
 			PIDUtil.updatePID(rightT2, constant);
@@ -229,16 +231,22 @@ public class DriveTrain extends Subsystem implements Restartabale {
 			left += leftT2.getSelectedSensorPosition(0);
 			right += rightT2.getSelectedSensorPosition(0);
 		}
+		//System.out.println("target left + " + left);
 		// System.out.println(left + " " + right);
 		leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);
 		rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);
-		leftT2.pushMotionProfileTrajectory(new TrajectoryPoint());
+		
 	}
 
 	public void driveStraight(double left, double right, ControlMode mode) {
 		double output = turnController.get();
 		System.out.println(output);
 		turnController.setSetpoint(0);
+	}
+	
+	public void setNeutralMode(NeutralMode mode) {
+		rightT2.setNeutralMode(mode);
+		leftT2.setNeutralMode(mode);
 	}
 
 	public void drive(double left, double right) {
@@ -257,8 +265,8 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		return (rightT2.getSelectedSensorVelocity(0) + leftT2.getSelectedSensorVelocity(0)) / 2d;
 	}
 
-	public double cyclesToInches(double d) { //TODO finish this
-		return 1;
+	public double inchesToCycles(double d) { //TODO finish this
+		return (d+.997)/6.96d;
 	}
 
 	public boolean isAutoShift() {
@@ -267,6 +275,10 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	public void setAutoShift(boolean autoShift) {
 		this.autoShift = autoShift;
+	}
+	
+	public double getDriveConstant() {
+		return (gear == GearState.HIGH ? Config.highTarget : Config.lowTarget);
 	}
 
 }

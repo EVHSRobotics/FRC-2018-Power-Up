@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import java.util.HashMap;
 
 import org.usfirst.frc.team2854.map.EncoderBased;
@@ -26,7 +28,7 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
-	private static HashMap<SubsystemNames, Subsystem> subsystems;
+	private static HashMap<SubsystemNames, Subsystem> subsystems;	
 	private static SensorBoard sensors;
 
 
@@ -48,11 +50,12 @@ public class Robot extends IterativeRobot {
 			}
 		}
 		
-		double fieldWidth = 5;
-		double fieldHeight = 5;
-		FieldMap map = new FieldMap(fieldWidth, fieldHeight);
-		MapInput input = new EncoderBased();
-		FieldMapDriver mapDrive = new FieldMapDriver(map, 720, 720, input);
+//		double fieldWidth = 5;
+//		double fieldHeight = 5;
+//		FieldMap map = new FieldMap(fieldWidth, fieldHeight);
+//		MapInput input = new EncoderBased();
+//		FieldMapDriver mapDrive = new FieldMapDriver(map, 720, 720, input);
+//		
 
 	}
 	/**
@@ -93,6 +96,7 @@ public class Robot extends IterativeRobot {
 				((Restartabale) s).enable();
 			}
 		}
+		
 	}
 
 	/**
@@ -120,7 +124,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-
+		SmartDashboard.putBoolean("NavX is Connected", sensors.getNavX().isConnected());
+		SmartDashboard.putBoolean("NavX is Calibrating", sensors.getNavX().isCalibrating());
 
 		((DriveTrain)getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
 //		double angle = sensors.getNavX().getAngle();

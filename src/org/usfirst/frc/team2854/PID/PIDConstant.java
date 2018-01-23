@@ -21,16 +21,17 @@ public class PIDConstant {
 		double I_Drive_HIGH = .0014;
 		double D_Drive_HIGH = 1.5;
 		double F_Drive_HIGH = 1023 / Config.highTarget;
-
+		
 		highDrive = new PIDConstant(P_Drive_HIGH, I_Drive_HIGH, D_Drive_HIGH, F_Drive_HIGH, Config.highTarget);
 		
 		//TODO TUNE
-		double P_Drive_AUTO_TURN = .22;
-		double I_Drive_AUTO_TURN = .0014;
-		double D_Drive_AUTO_TURN = 1.5;
-		double F_Drive_AUTO_TURN = 1023 / 180d;
+		//ty matt
+		double P_Drive_AUTO_TURN = .009;
+		double I_Drive_AUTO_TURN = .001;
+		double D_Drive_AUTO_TURN = .025;
+		double F_Drive_AUTO_TURN = 0;//1023 / 180d;
 
-		highDrive = new PIDConstant(P_Drive_AUTO_TURN, I_Drive_AUTO_TURN, D_Drive_AUTO_TURN, F_Drive_AUTO_TURN, -1);
+		autoTurn = new PIDConstant(P_Drive_AUTO_TURN, I_Drive_AUTO_TURN, D_Drive_AUTO_TURN, F_Drive_AUTO_TURN, -1);
 	}
 
 	// ---------------------------------------------------------------------------
@@ -57,7 +58,7 @@ public class PIDConstant {
 				double newI = SmartDashboard.getNumber("I", 0);
 				double newD = SmartDashboard.getNumber("D", 0);
 				double newF = SmartDashboard.getNumber("F", 0);
-
+				
 				PIDConstant newConst = new PIDConstant(newP, newI, newD, newF, pid.getTargetSpeed());
 				if (!newConst.equals(pid)) {
 					System.out.println("updating PID to " + newConst);
