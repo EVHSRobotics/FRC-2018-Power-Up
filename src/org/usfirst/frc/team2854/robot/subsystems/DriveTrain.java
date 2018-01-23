@@ -35,7 +35,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	private DoubleSolenoid shifter;
 
 	private GearState gear;
-	
+
 	private boolean autoShift = true;
 
 	enum GearState {
@@ -71,6 +71,9 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		setDefaultCommand(new JoystickDrive());
 	}
 
+	/**
+	 * Default constructor.
+	 */
 	public DriveTrain() {
 		leftT1 = new TalonSRX(RobotMap.leftTalonID1);
 		leftT1.setInverted(side);
@@ -96,8 +99,6 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		leftT1.set(ControlMode.Follower, leftT2.getDeviceID());
 		rightT1.set(ControlMode.Follower, rightT2.getDeviceID());
 
-		// PIDConstant.startSmartDashboardInput(PIDConstant.highDrive, leftT2, rightT2);
-
 	}
 
 	public void enable() {
@@ -109,8 +110,21 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	public void disable() {
 		System.out.println("Disableing drive train");
 		// turnController.disable();
+
 	}
 
+	/**
+	 * Initializes PID values when turning
+	 * 
+	 * @param P
+	 *            - proportional gain
+	 * @param I
+	 *            - integral gain
+	 * @param D
+	 *            - derivative gain
+	 * @param F
+	 *            - feed forward term
+	 */
 	public void initTurnPID(double P, double I, double D, double F) {
 		PIDSource turnSource = new PIDSource() {
 
@@ -145,6 +159,9 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		turnController.enable();
 	}
 
+	/**
+	 * Writes to SmartDashboard
+	 */
 	public void writeToDashBoard() {
 
 		SmartDashboard.putNumber("Left Velocity", leftT2.getSelectedSensorVelocity(0));
@@ -163,6 +180,9 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	}
 
+	/**
+	 * Shifts the gears on the robot.
+	 */
 	private void applyShift(GearState desiredState, int attempt) {
 		if (attempt > 10) {
 			System.err.println("Shifter is not shifting to " + desiredState + " at attempt " + attempt);
@@ -212,6 +232,16 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		}
 	}
 
+	/**
+	 * Method that drives the robot at the specified ControlMode.
+	 * 
+	 * @param left
+	 *            - input percentage
+	 * @param right
+	 *            - input percentage
+	 * @param mode
+	 *            - ControlMode object that specifies ControlMode
+	 */
 	public void drive(double left, double right, ControlMode mode) {
 		// System.out.println(mode.toString() + " " + ControlMode.Velocity + " " +
 		// mode.equals(ControlMode.Velocity));
@@ -231,28 +261,49 @@ public class DriveTrain extends Subsystem implements Restartabale {
 			left += leftT2.getSelectedSensorPosition(0);
 			right += rightT2.getSelectedSensorPosition(0);
 		}
-		//System.out.println("target left + " + left);
+		// System.out.println("target left + " + left);
 		// System.out.println(left + " " + right);
 		leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);
 		rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);
-		
+
 	}
 
+	/**
+	 * Drives the robot straight.
+	 * 
+	 * @param left
+	 *            - input percentage
+	 * @param right
+	 *            - input percentage
+	 * @param mode
+	 *            - ControlMode object that specifies ControlMode
+	 */
 	public void driveStraight(double left, double right, ControlMode mode) {
 		double output = turnController.get();
 		System.out.println(output);
 		turnController.setSetpoint(0);
 	}
-	
+
 	public void setNeutralMode(NeutralMode mode) {
 		rightT2.setNeutralMode(mode);
 		leftT2.setNeutralMode(mode);
 	}
 
+	/**
+	 * Drives the robot at the PercentOutput Control Mode.
+	 * 
+	 * @param left
+	 *            - input percentage
+	 * @param right
+	 *            - input percentage
+	 */
 	public void drive(double left, double right) {
 		drive(left, right, ControlMode.PercentOutput);
 	}
 
+	/**
+	 * Stops the robot.
+	 */
 	public void stop() {
 		drive(0, 0);
 	}
@@ -265,8 +316,8 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		return (rightT2.getSelectedSensorVelocity(0) + leftT2.getSelectedSensorVelocity(0)) / 2d;
 	}
 
-	public double inchesToCycles(double d) { //TODO finish this
-		return (d+.997)/6.96d;
+	public double inchesToCycles(double d) {
+		return (d + .997) / 6.96d;
 	}
 
 	public boolean isAutoShift() {
@@ -276,7 +327,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	public void setAutoShift(boolean autoShift) {
 		this.autoShift = autoShift;
 	}
-	
+
 	public double getDriveConstant() {
 		return (gear == GearState.HIGH ? Config.highTarget : Config.lowTarget);
 	}

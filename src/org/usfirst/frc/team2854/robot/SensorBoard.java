@@ -18,9 +18,16 @@ public class SensorBoard {
 	private AHRS navX;
 	private ADXRS450_Gyro spiGyro;
 	private BuiltInAccelerometer builtInacc;
+
 	private DriveTrain drive;
 
-	public SensorBoard() {
+	
+	/**
+	 * Default constructor.
+	 */
+
+
+public SensorBoard() {
 
 		// navX = new AHRS(I2C.Port.kMXP);
 		String type = null;
@@ -73,37 +80,61 @@ public class SensorBoard {
 		// forwardAccel = new DualSensor("Forward Acceleration");
 		drive = (DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN);
 	}
+	
+	/**
+	 * Calibrates gyro and forward accelerometer.
+	 */
+//	public void calibrate(long time) {
+//		long startTime = System.nanoTime();
+//		while(System.nanoTime() - startTime < time) {
+//			gyro.addValue(spiGyro.getRate(), navX.getRate());
+//			forwardAccel.addValue(builtInacc.getX(), navX.getRawAccelY());
+//		}
+//		gyro.calibrate();
+//		forwardAccel.calibrate();
+//	}
+	/**
+	 * Gets the value of the gyro.
+	 * @return - value of the gyro
+	 */
+//	public double getGyroValue() {
+//		return gyro.calculateValue(spiGyro.getRate(), navX.getRate());
+//	}
+	/**
+	 * Gets the value of the forward acceleration.
+	 * @return - value of the forward acceleration
+	 */
+//	public double getForwardAccelValue() {
+//		return forwardAccel.calculateValue(builtInacc.getX(), navX.getRawAccelY());
+//	}
+	/**
+	 * Gets gyro.
+	 * @return - gyro
+	 */
+//	public DualSensor getGyro() {
+//		return gyro;
+//	}
+	/**
+	 * Gets the forward acceleration.
+	 * @return - forward acceleration.
+	 */
+//	public DualSensor getForwardAccel() {
+//		return forwardAccel;
+//	}
 
-	// public void calibrate(long time) {
-	// long startTime = System.nanoTime();
-	// while(System.nanoTime() - startTime < time) {
-	// gyro.addValue(spiGyro.getRate(), navX.getRate());
-	// forwardAccel.addValue(builtInacc.getX(), navX.getRawAccelY());
-	// }
-	// gyro.calibrate();
-	// forwardAccel.calibrate();
-	// }
 
-	// public double getGyroValue() {
-	// return gyro.calculateValue(spiGyro.getRate(), navX.getRate());
-	// }
-	//
-	// public double getForwardAccelValue() {
-	// return forwardAccel.calculateValue(builtInacc.getX(), navX.getRawAccelY());
-	// }
-	//
-	// public DualSensor getGyro() {
-	// return gyro;
-	// }
-	//
-	// public DualSensor getForwardAccel() {
-	// return forwardAccel;
-	// }
-
+	/**
+	 * Getter method for the Accelerometer.
+	 * @return - built in accelerometer.
+	 */
 	public BuiltInAccelerometer getAccelerometer() {
 		return builtInacc;
 	}
 
+	/**
+	 * Getter method for NavX object.
+	 * @return - NavX object
+	 */
 	public AHRS getNavX() {
 		return navX;
 	}

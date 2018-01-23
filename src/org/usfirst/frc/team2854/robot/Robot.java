@@ -18,19 +18,19 @@ import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the IterativeRobot documentation. If you change the name of this class
- * or the package after creating this project, you must also update the manifest file in the
- * resource directory.
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the IterativeRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the manifest file in the resource
+ * directory.
  */
 public class Robot extends IterativeRobot {
 
 	public static OI oi;
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
-	private static HashMap<SubsystemNames, Subsystem> subsystems;	
+	private static HashMap<SubsystemNames, Subsystem> subsystems;
 	private static SensorBoard sensors;
-
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -43,21 +43,23 @@ public class Robot extends IterativeRobot {
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 
 		sensors = new SensorBoard();
-		
-		for(Subsystem s : subsystems.values()) {
-			if(s instanceof Restartabale) {
+
+		for (Subsystem s : subsystems.values()) {
+			if (s instanceof Restartabale) {
 				((Restartabale) s).enable();
 			}
+
 		}
-		
-//		double fieldWidth = 5;
-//		double fieldHeight = 5;
-//		FieldMap map = new FieldMap(fieldWidth, fieldHeight);
-//		MapInput input = new EncoderBased();
-//		FieldMapDriver mapDrive = new FieldMapDriver(map, 720, 720, input);
-//		
+
+		// double fieldWidth = 5;
+		// double fieldHeight = 5;
+		// FieldMap map = new FieldMap(fieldWidth, fieldHeight);
+		// MapInput input = new EncoderBased();
+		// FieldMapDriver mapDrive = new FieldMapDriver(map, 720, 720, input);
+		//
 
 	}
+
 	/**
 	 * This function is called once each time the robot enters Disabled mode. You
 	 * can use it to reset any subsystem information you want to clear when the
@@ -65,8 +67,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-		for(Subsystem s : subsystems.values()) {
-			if(s instanceof Restartabale) {
+		for (Subsystem s : subsystems.values()) {
+			if (s instanceof Restartabale) {
 				((Restartabale) s).disable();
 			}
 		}
@@ -91,12 +93,12 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		for(Subsystem s : subsystems.values()) {
-			if(s instanceof Restartabale) {
+		for (Subsystem s : subsystems.values()) {
+			if (s instanceof Restartabale) {
 				((Restartabale) s).enable();
 			}
 		}
-		
+
 	}
 
 	/**
@@ -109,13 +111,13 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		for(Subsystem s : subsystems.values()) {
-			if(s instanceof Restartabale) {
+		for (Subsystem s : subsystems.values()) {
+			if (s instanceof Restartabale) {
 				((Restartabale) s).enable();
 			}
 		}
-		
-		//OI.buttonA.whenPressed(new DriveMotionMagik());
+
+		// OI.buttonA.whenPressed(new DriveMotionMagik());
 
 	}
 
@@ -127,15 +129,14 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("NavX is Connected", sensors.getNavX().isConnected());
 		SmartDashboard.putBoolean("NavX is Calibrating", sensors.getNavX().isCalibrating());
 
-		((DriveTrain)getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
-//		double angle = sensors.getNavX().getAngle();
-//		while(angle < 0) {
-//			angle += 360;
-//		}
-//		SmartDashboard.putNumber("Gyro", angle % 360);
+		((DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
+		// double angle = sensors.getNavX().getAngle();
+		// while(angle < 0) {
+		// angle += 360;
+		// }
+		// SmartDashboard.putNumber("Gyro", angle % 360);
 
-		
-		Scheduler.getInstance().run();		
+		Scheduler.getInstance().run();
 	}
 
 	/**
@@ -149,10 +150,9 @@ public class Robot extends IterativeRobot {
 	public static Subsystem getSubsystem(SubsystemNames name) {
 		return subsystems.get(name);
 	}
+
 	public static SensorBoard getSensors() {
 		return sensors;
 	}
-
-
 
 }

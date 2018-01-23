@@ -9,6 +9,12 @@ import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.SubsystemNames;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 
+import com.ctre.phoenix.motion.MotionProfileStatus;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import edu.wpi.first.wpilibj.command.Command;
+
+
 /** */
 public class DriveMotionMagik extends Command {
 
