@@ -23,13 +23,13 @@ public class TurnToAngle extends Command {
    * and implements the <code>drive</code> method<br>
    * Only tank drive is supported at the moment
    *
-   * @param drive The Subsystem indented for driving
+   * @param drive The Subsystem intended for driving
    * @param target The target angle in degrees relative to current angle, Ex. To turn by 90 degrees
    *     pass in 90
-   * @param SpeedOpp supplies the function for converting the angle difference (0-180) to the
+   * @param speedOpp supplies the function for converting the angle difference (0-180) to the
    *     speed(0-1)
-   * @param theshHoldAngle, the minimum angle difference to stop
-   * @param angle Implement a function or lambda that passes in the gyro value to get the current
+   * @param threshHoldAngle, the minimum angle difference to stop
+   * @param target Implement a function or lambda that passes in the gyro value to get the current
    *     angle. The easiest way to pass in the gyro is the use the lambda expression () -> new
    *     Double(gyro.getValue()), where gyro.getValue() is your way of getting the acumelated angle
    *     from the gyro
@@ -61,7 +61,7 @@ public class TurnToAngle extends Command {
    *     greater than 90
    * @param minSpeed the minimum turn speed, will approach this speed as the angle difference
    *     approaches 0
-   * @param theshHoldAngle, the minimum angle difference to stop
+   * @param threshHoldAngle, the minimum angle difference to stop
    * @param angle Implement a function or lambda that passes in the gyro value to get the current
    *     angle. The easiest way to pass in the gyro is the use the lambda expression () -> new
    *     Double(gyro.getValue()), where gyro.getValue() is your way of getting the acumelated angle
