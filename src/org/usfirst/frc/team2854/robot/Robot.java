@@ -6,10 +6,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.HashMap;
-import org.usfirst.frc.team2854.robot.commands.DriveThottle;
-import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.Restartable;
 
@@ -37,7 +34,7 @@ public class Robot extends IterativeRobot {
     subsystems = new HashMap<SubsystemNames, Subsystem>();
     subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 
-    sensors = new SensorBoard();
+    // sensors = new SensorBoard();
 
     for (Subsystem s : subsystems.values()) {
       if (s instanceof Restartable) {
@@ -97,9 +94,7 @@ public class Robot extends IterativeRobot {
     }
 
     // OI.buttonA.whenPressed(new DriveMotionMagik());
-    OI.buttonB.whileHeld(new DriveThottle(.5));
 
-    OI.rTrigger.whenPressed(new ToggleShift());
   }
 
   /** s This function is called periodically during operator control */
@@ -107,11 +102,11 @@ public class Robot extends IterativeRobot {
   public void teleopPeriodic() {
 
     ((DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
-    double angle = sensors.getNavX().getAngle();
-    while (angle < 0) {
-      angle += 360;
-    }
-    SmartDashboard.putNumber("Gyro", angle % 360);
+    //		double angle = sensors.getNavX().getAngle();
+    //		while(angle < 0) {
+    //			angle += 360;
+    //		}
+    //		SmartDashboard.putNumber("Gyro", angle % 360);
 
     Scheduler.getInstance().run();
   }
