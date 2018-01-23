@@ -1,12 +1,12 @@
 package org.usfirst.frc.team2854.PID;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.usfirst.frc.team2854.robot.Config;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 public class PIDUtil {
-	
+
 	public static void updatePID(TalonSRX talon, PIDConstant PID) {
 		updatePID(talon, PID.getP(), PID.getI(), PID.getD(), PID.getF(), PID.getTargetSpeed());
 	}
@@ -18,14 +18,12 @@ public class PIDUtil {
 		talon.config_kI(PIDIndex, I, timeOutConstant);
 		talon.config_kD(PIDIndex, D, timeOutConstant);
 		talon.config_kF(PIDIndex, F, timeOutConstant);
-		//System.out.println(targetSpeed);
-		talon.configMotionCruiseVelocity((int)targetSpeed, 10);
-		talon.configMotionAcceleration((int)(targetSpeed/ .5d), 10);
+		// System.out.println(targetSpeed);
+		talon.configMotionCruiseVelocity((int) targetSpeed/3, 10);
+		talon.configMotionAcceleration((int) (targetSpeed / 1d), 10);
 		talon.configAllowableClosedloopError(0, 5, 10);
 	}
-	
 
-	
 	public static void configureTalon(TalonSRX talon, boolean side) {
 
 		final int timeOutConstant = 10;
@@ -44,7 +42,7 @@ public class PIDUtil {
 		talon.setSelectedSensorPosition(0, PIDIndex, timeOutConstant);
 
 		talon.configVoltageCompSaturation(12, 10);
-
+		
+		talon.setNeutralMode(NeutralMode.Brake);
 	}
-	
 }

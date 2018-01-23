@@ -1,32 +1,31 @@
 package org.usfirst.frc.team2854.robot;
 
-import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
-import org.usfirst.frc.team2854.robot.commands.DriveThottle;
-import org.usfirst.frc.team2854.robot.commands.ToggleShift;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-
+import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
+import org.usfirst.frc.team2854.robot.commands.DriveTest;
+import org.usfirst.frc.team2854.robot.commands.DriveThottle;
+import org.usfirst.frc.team2854.robot.commands.PIDTurn;
+import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	
-	public static Joystick joystick = new Joystick(0);
+
+	public static Joystick joystick = new Joystick(0);	
 	public static JoystickButton buttonA = new JoystickButton(joystick, 1);
 	public static JoystickButton buttonB = new JoystickButton(joystick, 2);
 	public static JoystickButton rTrigger = new JoystickButton(joystick, 6);
 
 	static {
-		OI.buttonA.whenPressed(new DriveMotionMagik(100));
-		OI.buttonB.toggleWhenPressed(new DriveThottle(.5));
+		
+		OI.buttonA.whenPressed(new DriveTest());
+		OI.buttonB.whenPressed(new PIDTurn(90, 0.5, true));
 		OI.rTrigger.whenPressed(new ToggleShift());
 	}
 
-
-	
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.

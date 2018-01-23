@@ -1,7 +1,17 @@
 package org.usfirst.frc.team2854.robot.subsystems;
 
+import com.ctre.phoenix.motion.TrajectoryPoint;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.TimerTask;
-
 import org.usfirst.frc.team2854.PID.DummyPIDOutput;
 import org.usfirst.frc.team2854.PID.PIDConstant;
 import org.usfirst.frc.team2854.PID.PIDUtil;
@@ -9,23 +19,7 @@ import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
-import com.ctre.phoenix.motion.TrajectoryPoint;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-/**
- *
- */
+/** */
 public class DriveTrain extends Subsystem implements Restartabale {
 
 	// Put methods for controlling this subsyWstem
@@ -41,6 +35,8 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	private DoubleSolenoid shifter;
 
 	private GearState gear;
+
+	private boolean autoShift = true;
 
 	enum GearState {
 		LOW, HIGH, UNKNOWN;
@@ -67,7 +63,6 @@ public class DriveTrain extends Subsystem implements Restartabale {
 				return GearState.HIGH;
 			default:
 				return GearState.UNKNOWN;
-
 			}
 		}
 	}
@@ -162,7 +157,6 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		turnController.setSetpoint(0);
 		turnController.setAbsoluteTolerance(5);
 		turnController.enable();
-
 	}
 
 	/**
@@ -198,7 +192,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 		// Timer.delay(.005);
 		if (!shifter.get().equals(GearState.gearToValue(desiredState))) { // did not shift for some reason //TODO check
-																			// compressor pressure
+			// compressor pressure
 			java.util.Timer taskTimer = new java.util.Timer();
 			TimerTask task = new TimerTask() {
 
@@ -211,6 +205,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 		} else {
 			System.out.println("shifted to " + desiredState);
+			SmartDashboard.putString("Gear", desiredState.toString());
 			gear = desiredState;
 			PIDConstant constant = (gear == GearState.HIGH ? PIDConstant.highDrive : PIDConstant.lowDrive);
 			PIDUtil.updatePID(rightT2, constant);
@@ -235,7 +230,6 @@ public class DriveTrain extends Subsystem implements Restartabale {
 			System.out.println("In unknown state, defaulting to LOW");
 			applyShift(GearState.LOW, 0);
 		}
-
 	}
 
 	/**
@@ -267,10 +261,10 @@ public class DriveTrain extends Subsystem implements Restartabale {
 			left += leftT2.getSelectedSensorPosition(0);
 			right += rightT2.getSelectedSensorPosition(0);
 		}
+		// System.out.println("target left + " + left);
 		// System.out.println(left + " " + right);
 		leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);
 		rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);
-		leftT2.pushMotionProfileTrajectory(new TrajectoryPoint());
 
 	}
 
@@ -288,6 +282,11 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		double output = turnController.get();
 		System.out.println(output);
 		turnController.setSetpoint(0);
+	}
+
+	public void setNeutralMode(NeutralMode mode) {
+		rightT2.setNeutralMode(mode);
+		leftT2.setNeutralMode(mode);
 	}
 
 	/**
@@ -311,6 +310,26 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	public double getAvgEncoder() {
 		return (rightT2.getSelectedSensorPosition(0) + leftT2.getSelectedSensorPosition(0)) / 2d;
+	}
+
+	public double getAvgVelocity() {
+		return (rightT2.getSelectedSensorVelocity(0) + leftT2.getSelectedSensorVelocity(0)) / 2d;
+	}
+
+	public double inchesToCycles(double d) {
+		return (d + .997) / 6.96d;
+	}
+
+	public boolean isAutoShift() {
+		return autoShift;
+	}
+
+	public void setAutoShift(boolean autoShift) {
+		this.autoShift = autoShift;
+	}
+
+	public double getDriveConstant() {
+		return (gear == GearState.HIGH ? Config.highTarget : Config.lowTarget);
 	}
 
 }

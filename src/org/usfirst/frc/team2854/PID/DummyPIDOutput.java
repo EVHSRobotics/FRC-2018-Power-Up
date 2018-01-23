@@ -26,10 +26,9 @@ public class DummyPIDOutput implements PIDOutput {
 		this.output = output;
 	}
 
-	public double getOutput() {
-		return output;
-	}
 
-	
-	
+
+  public double getOutput() {
+    return output;
+  }
 }
