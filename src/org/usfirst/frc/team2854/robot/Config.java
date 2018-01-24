@@ -14,4 +14,7 @@ public class Config {
   
   public static double highTarget = 8750; // in units per 100 ms
   public static double lowTarget = 3000;
+  
+  public static double turnDistance;
+  
 }

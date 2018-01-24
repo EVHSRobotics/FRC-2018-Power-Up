@@ -4,42 +4,51 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.SubsystemNames;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 
 /** */
-public class DriveMotionMagik extends Command {
+public class EncoderTurn extends Command {
 
 	private DriveTrain drive;
 	private double revs, inchs;
-	private double targetPos;
+	private double leftTarget, rightTarget;
 
-	public DriveMotionMagik(double inchs) {
+	public EncoderTurn(double inchs) {
 		requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
 		this.inchs = inchs;
 	}
 
 	// Called just before this Command runs
+
 	protected void initialize() {
 		drive = ((DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
 		this.revs = drive.inchesToCycles(inchs);
-		drive.setNeutralMode(NeutralMode.Brake);
-		//System.out.println("Driving");
-		drive.drive(revs, revs, ControlMode.MotionMagic);
-		targetPos = (revs * drive.getDriveConstant()) + drive.getAvgEncoder();
+		drive.setNeutralMode(NeutralMode.Coast);
+		// System.out.println("Driving");
+		drive.drive(-revs, revs, ControlMode.MotionMagic);
+		leftTarget = (-revs * drive.getDriveConstant()) + drive.getLeftEncoder();
+		rightTarget = (revs * drive.getDriveConstant()) + drive.getRightEncoder();
+	
+
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 
 	protected void execute() {
-		//System.out.println((revs * drive.getDriveConstant()) + " " + drive.getAvgEncoder());
+		// System.out.println((revs * drive.getDriveConstant()) + " " +
+		// drive.getAvgEncoder());
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return Math.abs(drive.getAvgEncoder() - targetPos) < 255;
+		SmartDashboard.putNumber("turn error", Math.abs(drive.getLeftEncoder() - leftTarget));
+		return Math.abs(drive.getLeftEncoder() - leftTarget) < 	300
+				&& Math.abs(drive.getRightEncoder() - rightTarget) < 300;
 	}
 
 	// Called once after isFinished returns true

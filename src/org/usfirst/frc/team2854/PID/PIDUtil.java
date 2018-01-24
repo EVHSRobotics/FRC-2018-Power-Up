@@ -19,7 +19,7 @@ public class PIDUtil {
 		talon.config_kD(PIDIndex, D, timeOutConstant);
 		talon.config_kF(PIDIndex, F, timeOutConstant);
 		// System.out.println(targetSpeed);
-		talon.configMotionCruiseVelocity((int) targetSpeed/3, 10);
+		talon.configMotionCruiseVelocity((int) targetSpeed/1, 10);
 		talon.configMotionAcceleration((int) (targetSpeed / 1d), 10);
 		talon.configAllowableClosedloopError(0, 5, 10);
 	}

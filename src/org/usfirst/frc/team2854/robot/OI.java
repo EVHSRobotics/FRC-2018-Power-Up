@@ -2,9 +2,12 @@ package org.usfirst.frc.team2854.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+
+import org.usfirst.frc.team2854.robot.commands.DriveCarpet;
 import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
 import org.usfirst.frc.team2854.robot.commands.DriveTest;
 import org.usfirst.frc.team2854.robot.commands.DriveThottle;
+import org.usfirst.frc.team2854.robot.commands.EncoderTurn;
 import org.usfirst.frc.team2854.robot.commands.PIDTurn;
 import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 
@@ -20,9 +23,9 @@ public class OI {
 	public static JoystickButton rTrigger = new JoystickButton(joystick, 6);
 
 	static {
-		
-		OI.buttonA.whenPressed(new DriveTest());
-		OI.buttonB.whenPressed(new PIDTurn(90, 0.5, true));
+
+		OI.buttonA.whenPressed(new EncoderTurn(-79.25/4d));
+		OI.buttonB.whenPressed(new DriveTest());
 		OI.rTrigger.whenPressed(new ToggleShift());
 	}
 

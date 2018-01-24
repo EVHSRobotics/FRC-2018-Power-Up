@@ -11,7 +11,7 @@ public class PIDConstant {
 	static {
 		// ty richard
 		double P_Drive_LOW = 0.6;
-		double I_Drive_LOW = 1.6E-4;
+		double I_Drive_LOW = 1.7E-4;
 		double D_Drive_LOW = 5.8;
 		double F_Drive_LOW = 1023d / Config.lowTarget;
 
@@ -26,9 +26,9 @@ public class PIDConstant {
 		
 		//TODO TUNE
 		//ty matt
-		double P_Drive_AUTO_TURN = .009;
-		double I_Drive_AUTO_TURN = .001;
-		double D_Drive_AUTO_TURN = .025;
+		double P_Drive_AUTO_TURN = .004;
+		double I_Drive_AUTO_TURN = .002;
+		double D_Drive_AUTO_TURN = .07;
 		double F_Drive_AUTO_TURN = 0;//1023 / 180d;
 
 		autoTurn = new PIDConstant(P_Drive_AUTO_TURN, I_Drive_AUTO_TURN, D_Drive_AUTO_TURN, F_Drive_AUTO_TURN, -1);

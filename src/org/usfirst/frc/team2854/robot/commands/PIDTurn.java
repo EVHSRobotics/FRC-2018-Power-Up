@@ -45,6 +45,8 @@ public class PIDTurn extends Command {
 		//16 8 8 13 4
 	}
 
+	//20 ft forward
+	//9 side
 	public void initialize() {
 		System.out.println("relative target " + target);
 		if (relative) {
@@ -52,7 +54,7 @@ public class PIDTurn extends Command {
 		} else {
 			this.target = target;
 		}
-		System.out.println("Abosolute target " + target);
+		//System.out.println("Abosolute target " + target);
 		//System.out.println(target);
 		PIDSource in = new PIDSource() {
 
@@ -86,6 +88,7 @@ public class PIDTurn extends Command {
 		pidController.setSetpoint(0);
 		pidController.setAbsoluteTolerance(thresh);
 		pidController.enable();
+		driveTrain.setNeutralMode(NeutralMode.Brake);
 	
 	}
 
@@ -95,10 +98,10 @@ public class PIDTurn extends Command {
 
 		double value = pidController.get();
 
-		System.out.println("Error: " + pidController.getError()
-				+ " output: " + value );
+	//	System.out.println("Error: " + pidController.getError()
+	//			+ " output: " + value );
 
-		driveTrain.drive(-value, value, ControlMode.PercentOutput);
+		driveTrain.drive(-value/2, value/2, ControlMode.PercentOutput);
 	}
 
 	@Override

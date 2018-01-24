@@ -3,6 +3,7 @@ package org.usfirst.frc.team2854.robot.subsystems;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StickyFaults;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -35,7 +36,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	private DoubleSolenoid shifter;
 
 	private GearState gear;
-	
+
 	private boolean autoShift = true;
 
 	enum GearState {
@@ -124,7 +125,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 			@Override
 			public double pidGet() {
 				// System.out.println("Calling PID get " + Math.random());
-				return rightT2.getSelectedSensorVelocity(0) - leftT2.getSelectedSensorVelocity(0);
+				return rightT2.getSelectedSensorPosition(0) - leftT2.getSelectedSensorPosition(0);
 			}
 
 			@Override
@@ -133,7 +134,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 			}
 		};
 
-		turnSource.setPIDSourceType(PIDSourceType.kRate);
+		turnSource.setPIDSourceType(PIDSourceType.kDisplacement);
 
 		turnOut = new DummyPIDOutput();
 
@@ -161,6 +162,9 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		SmartDashboard.putNumber("Left Throttle", rightT2.getMotorOutputPercent());
 		// SmartDashboard.putNumber("Target", leftT2.getClosedLoopTarget(0));
 
+		SmartDashboard.putBoolean("reset during en?", new StickyFaults().ResetDuringEn);
+		SmartDashboard.putNumber("encoder diff",
+				Math.abs(rightT2.getSelectedSensorPosition(0) - leftT2.getSelectedSensorPosition(0)));
 	}
 
 	private void applyShift(GearState desiredState, int attempt) {
@@ -195,7 +199,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		// P_Drive = .2;
 		// I_Drive = .003;
 		// D_Drive = 0;
-		// low ^ high v
+		// low ^ high vs
 		// P_Drive = .2;
 		// I_Drive = .001;
 		// D_Drive = .02;
@@ -210,13 +214,15 @@ public class DriveTrain extends Subsystem implements Restartabale {
 			System.out.println("In unknown state, defaulting to LOW");
 			applyShift(GearState.LOW, 0);
 		}
+
 	}
 
 	public void drive(double left, double right, ControlMode mode) {
 		// System.out.println(mode.toString() + " " + ControlMode.Velocity + " " +
 		// mode.equals(ControlMode.Velocity));
 
-		if (mode.equals(ControlMode.Velocity) || mode.equals(ControlMode.MotionMagic)) {
+		if (mode.equals(ControlMode.Velocity) || mode.equals(ControlMode.MotionMagic) || mode.equals(ControlMode.Position) 
+				) {
 			if (gear == GearState.LOW) {
 				// System.out.println("Using low target");
 				left *= Config.lowTarget;
@@ -231,19 +237,19 @@ public class DriveTrain extends Subsystem implements Restartabale {
 			left += leftT2.getSelectedSensorPosition(0);
 			right += rightT2.getSelectedSensorPosition(0);
 		}
-		//System.out.println("target left + " + left);
+		// System.out.println("target left + " + left);
 		// System.out.println(left + " " + right);
 		leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);
 		rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);
-		
+
 	}
 
 	public void driveStraight(double left, double right, ControlMode mode) {
 		double output = turnController.get();
-		System.out.println(output);
-		turnController.setSetpoint(0);
+		//double error = rightT2.getSelectedSensorPosition(0) - leftT2.getSelectedSensorPosition(0);
+		drive(left, right, mode);
 	}
-	
+
 	public void setNeutralMode(NeutralMode mode) {
 		rightT2.setNeutralMode(mode);
 		leftT2.setNeutralMode(mode);
@@ -260,13 +266,21 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	public double getAvgEncoder() {
 		return (rightT2.getSelectedSensorPosition(0) + leftT2.getSelectedSensorPosition(0)) / 2d;
 	}
+	
+	public double getLeftEncoder() {
+		return leftT2.getSelectedSensorPosition(0);
+	}
+	
+	public double getRightEncoder() {
+		return rightT2.getSelectedSensorPosition(0);
+	}
 
 	public double getAvgVelocity() {
 		return (rightT2.getSelectedSensorVelocity(0) + leftT2.getSelectedSensorVelocity(0)) / 2d;
 	}
 
-	public double inchesToCycles(double d) { //TODO finish this
-		return (d+.997)/6.96d;
+	public double inchesToCycles(double d) { // TODO finish this
+		return (d + .997) / 6.96d;
 	}
 
 	public boolean isAutoShift() {
@@ -276,7 +290,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	public void setAutoShift(boolean autoShift) {
 		this.autoShift = autoShift;
 	}
-	
+
 	public double getDriveConstant() {
 		return (gear == GearState.HIGH ? Config.highTarget : Config.lowTarget);
 	}

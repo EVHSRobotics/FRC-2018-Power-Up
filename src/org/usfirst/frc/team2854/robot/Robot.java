@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2854.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -39,7 +41,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		System.out.println("STARTING");
-		subsystems = new HashMap<SubsystemNames, Subsystem>();
+		subsystems = new HashMap<SubsystemNames, Subsystem>();	
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 
 		sensors = new SensorBoard();
@@ -56,7 +58,7 @@ public class Robot extends IterativeRobot {
 //		MapInput input = new EncoderBased();
 //		FieldMapDriver mapDrive = new FieldMapDriver(map, 720, 720, input);
 //		
-
+		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
 	}
 	/**
 	 * This function is called once each time the robot enters Disabled mode. You
@@ -128,11 +130,9 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("NavX is Calibrating", sensors.getNavX().isCalibrating());
 
 		((DriveTrain)getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
-//		double angle = sensors.getNavX().getAngle();
-//		while(angle < 0) {
-//			angle += 360;
-//		}
-//		SmartDashboard.putNumber("Gyro", angle % 360);
+		
+		double angle = sensors.getNavX().getAngle();
+		SmartDashboard.putNumber("Gyro", angle);
 
 		
 		Scheduler.getInstance().run();		
