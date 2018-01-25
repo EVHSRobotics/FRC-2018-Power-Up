@@ -17,4 +17,6 @@ public class Config {
   
   public static double turnDistance;
   
+  public static double robotWidth = 0; //center of wheel to center of wheel
+  
 }

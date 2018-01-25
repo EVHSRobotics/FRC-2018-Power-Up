@@ -1,6 +1,6 @@
 package org.usfirst.frc.team2854.robot.subsystems;
 
-import com.ctre.phoenix.motion.TrajectoryPoint;
+import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StickyFaults;
@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.TimerTask;
+
+import javax.management.RuntimeErrorException;
+
 import org.usfirst.frc.team2854.PID.DummyPIDOutput;
 import org.usfirst.frc.team2854.PID.PIDConstant;
 import org.usfirst.frc.team2854.PID.PIDUtil;
@@ -221,8 +224,8 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		// System.out.println(mode.toString() + " " + ControlMode.Velocity + " " +
 		// mode.equals(ControlMode.Velocity));
 
-		if (mode.equals(ControlMode.Velocity) || mode.equals(ControlMode.MotionMagic) || mode.equals(ControlMode.Position) 
-				) {
+		if (mode.equals(ControlMode.Velocity) || mode.equals(ControlMode.MotionMagic)
+				|| mode.equals(ControlMode.Position)) {
 			if (gear == GearState.LOW) {
 				// System.out.println("Using low target");
 				left *= Config.lowTarget;
@@ -246,7 +249,8 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	public void driveStraight(double left, double right, ControlMode mode) {
 		double output = turnController.get();
-		//double error = rightT2.getSelectedSensorPosition(0) - leftT2.getSelectedSensorPosition(0);
+		// double error = rightT2.getSelectedSensorPosition(0) -
+		// leftT2.getSelectedSensorPosition(0);
 		drive(left, right, mode);
 	}
 
@@ -263,14 +267,42 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		drive(0, 0);
 	}
 
+	public void generateTurnMotionControl(double cruzV, double outV, double turnR, double turnAngle,
+			boolean right, MotionProfileStatus status) {
+		if(Config.robotWidth == 0)	{
+			throw new RuntimeException("measure the robot width");
+		}
+		TalonSRX outer = (right ? leftT2 : rightT2);
+		TalonSRX inner = (right ? rightT2 : leftT2);
+		double angle = Math.toRadians(turnAngle);
+		double outerDist = inchesToCycles(turnR+Config.robotWidth) * angle;
+		double innerDist = inchesToCycles(turnR) * angle;
+
+		double inVelOuter = outer.getSelectedSensorVelocity(0);
+		double inVelInner = inner.getSelectedSensorPosition(0);
+
+		double d1 = (inVelOuter + cruzV) / 8d;
+		double d2 = cruzV / 2d;
+		double d3 = (cruzV + outV) / 8d;
+
+		double time = outerDist / (d1 + d2 + d3); // cycles / (cycles / 100ms) -> 100ms
+		
+		
+		double innerCruzVel = 4*((innerDist/time) - (inVelInner/8d) - (outV/8d))/3d;
+		
+		
+		
+
+	}
+
 	public double getAvgEncoder() {
 		return (rightT2.getSelectedSensorPosition(0) + leftT2.getSelectedSensorPosition(0)) / 2d;
 	}
-	
+
 	public double getLeftEncoder() {
 		return leftT2.getSelectedSensorPosition(0);
 	}
-	
+
 	public double getRightEncoder() {
 		return rightT2.getSelectedSensorPosition(0);
 	}
@@ -280,7 +312,11 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	public double inchesToCycles(double d) { // TODO finish this
-		return (d + .997) / 6.96d;
+		if (gear == GearState.LOW) {
+			return (d + .997) / 6.96d;
+		} else {
+			throw new RuntimeException("Need to calibrate distance for " + gear.toString());
+		}
 	}
 
 	public boolean isAutoShift() {
