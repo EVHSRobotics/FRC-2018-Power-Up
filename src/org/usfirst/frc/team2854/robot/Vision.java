@@ -1,8 +1,10 @@
 package org.usfirst.frc.team2854.robot;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
@@ -21,23 +23,51 @@ public class Vision implements Runnable {
 	private UsbCamera camera;
 	private CvSink cvSink;
 	private CvSource outputStream;
-	private double distance;
 	Mat source;
 	Mat output;
+	
+	InterpolatingMap data;
+	private Mat img;
+	private Scalar upperBoundValue;
+	private Scalar lowerBoundValue;
+	private final int imgHeight = 1008;
+	private final int imgWidth = 756;
+	private String distance;
+	private double angle;
+	
+	public Vision(Scalar lowerBoundVal, Scalar upperBoundVal) {
+		data = new InterpolatingMap();
+		
+		data.addDataPoint(608d, 1d);
+		data.addDataPoint(70d, 10d);
+		data.addDataPoint(64d, 11d);
+		data.addDataPoint(60d, 12d);
+		data.addDataPoint(367d, 2d);
+		data.addDataPoint(253d, 3d);
+		data.addDataPoint(189d, 4d);
+		data.addDataPoint(158d, 5d);
+		data.addDataPoint(111d, 6d);
+		data.addDataPoint(95d, 7d);
+		data.addDataPoint(87d, 8d);
+		data.addDataPoint(77d, 9d);
+		
+		upperBoundValue = upperBoundVal;
+		lowerBoundValue = lowerBoundVal;
+		
+	}
 
 	public void run() {
 		camera = CameraServer.getInstance().startAutomaticCapture();
-
 		cvSink = CameraServer.getInstance().getVideo();
 		outputStream = CameraServer.getInstance().putVideo("Distance", 640, 480);
 
 		source = new Mat();
 		output = new Mat();
+		
 		while (!Thread.interrupted()) {
 			cvSink.grabFrame(source);
 			Mat hsv = convertToHsv(source);
-			int w = printSize(hsv);
-			findDistance(w);
+			printSize(hsv);
 			outputStream.putFrame(output);
 		}
 	}
@@ -46,17 +76,21 @@ public class Vision implements Runnable {
 		Mat hsvImg = new Mat();
 
 		Imgproc.cvtColor(source, output, Imgproc.COLOR_RGB2HSV);
-		// H S V
-		Scalar lowerBoundYellow = new Scalar(85, 100, 100);
-		Scalar upperBoundYellow = new Scalar(100, 255, 255);
-		Core.inRange(output, lowerBoundYellow, upperBoundYellow, hsvImg);
+		Core.inRange(output, lowerBoundValue, upperBoundValue, hsvImg);
+		Mat kernel = Mat.ones(new Size(5, 5), CvType.CV_8U);
+		Imgproc.erode(hsvImg, hsvImg, kernel, new Point(0, 0), 5);
+		Imgproc.dilate(hsvImg, hsvImg, kernel, new Point(0, 0), 5);
 
 		return output;
 	}
 
-	public int printSize(Mat hsvImg) {
-		int largestHeight = 0;
-		int largestWidth = 0;
+	public void printSize(Mat hsvImg) {
+		int height = 60;
+		int width = 0;
+		int x = 0;
+		int y = 0;
+		
+		
 		Mat hierarchy = new Mat();
 		ArrayList<MatOfPoint> contours = new ArrayList<>();
 
@@ -75,39 +109,55 @@ public class Vision implements Runnable {
 																				// approximate a closed polygon
 
 			MatOfPoint points = new MatOfPoint(approxCurve.toArray()); // convert back to matofpoint
-
-			Rect rect = Imgproc.boundingRect(points); // create bounding box
-			Imgproc.rectangle(hsvImg, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
-					new Scalar(255, 255, 255), 3);// draw the box
-
-			for (int j = 0; j < contours.size(); j++) {
-				int height = rect.height;
-				int width = rect.width;
-				if (height > largestHeight)
-					largestHeight = height;
-				if (width > largestWidth)
-					largestWidth = width;
+			int verticies = points.height();
+			if(verticies == 4) {
+				Rect rect = Imgproc.boundingRect(points); // create bounding box
+				x = rect.x;
+				y = rect.y;
+				height = rect.height;
+				width = rect.width;
+				Imgproc.rectangle(hsvImg, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
+						new Scalar(255, 255, 255), 3);// draw the box
+				
+				if(height > 60) {
+					distance = new DecimalFormat("##.##").format(data.getValue((double) height));
+					angle = getAngle(imgHeight, imgWidth, x, y, height, width);
+					System.out.println(distance + " at height " + height);
+					System.out.println(angle + " degrees");
+					
+					Imgproc.putText(hsvImg, "Distance(ft): " + distance, new Point(rect.x, rect.y - 20),
+							Core.FONT_HERSHEY_PLAIN, 1.2, new Scalar(250, 0, 0), 1);
+					Imgproc.putText(hsvImg, "Angle(deg) " + new DecimalFormat("##.##").format(angle), new Point(rect.x, rect.y - 40), 
+							Core.FONT_HERSHEY_PLAIN, 1.2, new Scalar(250, 0, 0), 1);
+				}
 			}
 		}
-		System.out.println(largestHeight + " height");
-		System.out.println(largestWidth + " width");
-
-		return largestWidth;
+		
 	}
 
+	public double getAngle(int imgHeight, int imgWidth, int x, int y, int boxH, int boxW) {
+		int height = imgHeight - (y + boxH);
+		int width = ((x + boxW/2) - imgWidth/2); //camera is always at center of frame
+		
+		return Math.toDegrees(Math.atan2(width, height)); //angle in degrees
+	
+	}
+	
+	
+	//IGNOREEEEEE
 	public double findDistance(int p) { // some constant parameter of object, use width
-		int focal = 756; // f = (image of object width(pixels) * distance(in))/width of object(in); focal
+		int focal = 683; // f = (image of object width(pixels) * distance(in))/width of object(in); focal
 							// is in pixels
 
 		// int distance = (int)(Math.ceil((double)(focal)/p)); // (focal * w) / p
 		int objWidth = 12;
-		distance = ((double) (focal * objWidth) / p) / 12;
+		//distance = ((double) (focal * objWidth) / p) / 12;
 		System.out.println("Distance to box is " + distance + " feet");
 
-		return distance;
+		return 0;
 	}
 	
-	public double getDistance() {
-		return distance;
-	}
 }
+
+
+

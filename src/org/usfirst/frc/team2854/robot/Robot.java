@@ -18,7 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import org.opencv.core.Mat;
-
+import org.opencv.core.Scalar;
 import org.usfirst.frc.team2854.robot.commands.DriveDistance;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.Vision;
@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
 		subsystems = new HashMap<SubsystemNames, Subsystem>();
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 		
-		Vision vis = new Vision();
+		Vision vis = new Vision(new Scalar(85, 100, 100), new Scalar(100, 255, 255));
 		Thread visT = new Thread(vis);
 		visT.start();
 	 
