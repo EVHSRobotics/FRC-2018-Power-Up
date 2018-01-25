@@ -32,7 +32,7 @@ public class Vision implements Runnable {
 	private Scalar lowerBoundValue;
 	private final int imgHeight = 1008;
 	private final int imgWidth = 756;
-	private String distance;
+	private Double distance;
 	private double angle;
 	
 	public Vision(Scalar lowerBoundVal, Scalar upperBoundVal) {
@@ -67,7 +67,8 @@ public class Vision implements Runnable {
 		while (!Thread.interrupted()) {
 			cvSink.grabFrame(source);
 			Mat hsv = convertToHsv(source);
-			printSize(hsv);
+			ArrayList<Double> data = printSize(hsv);
+			System.out.println(data);
 			outputStream.putFrame(output);
 		}
 	}
@@ -84,12 +85,13 @@ public class Vision implements Runnable {
 		return output;
 	}
 
-	public void printSize(Mat hsvImg) {
+	public ArrayList<Double> printSize(Mat hsvImg) {
 		int height = 60;
 		int width = 0;
 		int x = 0;
 		int y = 0;
 		
+		ArrayList<Double> results = new ArrayList<Double>();
 		
 		Mat hierarchy = new Mat();
 		ArrayList<MatOfPoint> contours = new ArrayList<>();
@@ -120,18 +122,22 @@ public class Vision implements Runnable {
 						new Scalar(255, 255, 255), 3);// draw the box
 				
 				if(height > 60) {
-					distance = new DecimalFormat("##.##").format(data.getValue((double) height));
+					distance = data.getValue((double) height);
 					angle = getAngle(imgHeight, imgWidth, x, y, height, width);
+					results.add(distance);
+					results.add(angle);
 					System.out.println(distance + " at height " + height);
 					System.out.println(angle + " degrees");
 					
-					Imgproc.putText(hsvImg, "Distance(ft): " + distance, new Point(rect.x, rect.y - 20),
+					Imgproc.putText(hsvImg, "Distance(ft): " + new DecimalFormat("##.##").format(distance), new Point(rect.x, rect.y - 20),
 							Core.FONT_HERSHEY_PLAIN, 1.2, new Scalar(250, 0, 0), 1);
 					Imgproc.putText(hsvImg, "Angle(deg) " + new DecimalFormat("##.##").format(angle), new Point(rect.x, rect.y - 40), 
 							Core.FONT_HERSHEY_PLAIN, 1.2, new Scalar(250, 0, 0), 1);
 				}
 			}
 		}
+		
+		return  results;
 		
 	}
 
