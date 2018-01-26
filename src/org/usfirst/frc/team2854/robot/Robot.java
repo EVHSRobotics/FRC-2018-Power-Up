@@ -1,5 +1,28 @@
 package org.usfirst.frc.team2854.robot;
 
+
+
+import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.util.HashMap;
+
+
+import org.usfirst.frc.team2854.robot.commands.ToggleShift;
+import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2854.robot.Vision;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -43,6 +66,11 @@ public class Robot extends IterativeRobot {
 		System.out.println("STARTING");
 		subsystems = new HashMap<SubsystemNames, Subsystem>();	
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
+		
+		Vision vis = new Vision(new Scalar(85, 100, 100), new Scalar(100, 255, 255));
+		Thread visT = new Thread(vis);
+		visT.start();
+	 
 
 		sensors = new SensorBoard();
 		
@@ -152,7 +180,5 @@ public class Robot extends IterativeRobot {
 	public static SensorBoard getSensors() {
 		return sensors;
 	}
-
-
 
 }
