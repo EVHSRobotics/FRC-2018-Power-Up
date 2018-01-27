@@ -339,7 +339,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /**
      * Compute the sum of this matrix and {@code m}.
      *
-     * @param m Matrix to be added.
+     * @param m SlimMatrix to be added.
      * @return {@code this} + m.
      * @throws MatrixDimensionMismatchException if {@code m} is not the same
      * size as this matrix.
@@ -407,7 +407,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /**
      * Subtract {@code m} from this matrix.
      *
-     * @param m Matrix to be subtracted.
+     * @param m SlimMatrix to be subtracted.
      * @return {@code this} - m.
      * @throws MatrixDimensionMismatchException if {@code m} is not the
      * same size as this matrix.
@@ -525,7 +525,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /**
      * Returns the result of postmultiplying this by {@code m}.
      *
-     * @param m Matrix to postmultiply by.
+     * @param m SlimMatrix to postmultiply by.
      * @return {@code this} * m.
      * @throws DimensionMismatchException if the matrices are not compatible.
      */

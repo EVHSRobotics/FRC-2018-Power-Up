@@ -152,7 +152,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     /**
      * Compute the sum of {@code this} and {@code m}.
      *
-     * @param m Matrix to be added.
+     * @param m SlimMatrix to be added.
      * @return {@code this + m}.
      * @throws MatrixDimensionMismatchException if {@code m} is not the same
      * size as {@code this}.
@@ -180,7 +180,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     /**
      * Returns {@code this} minus {@code m}.
      *
-     * @param m Matrix to be subtracted.
+     * @param m SlimMatrix to be subtracted.
      * @return {@code this - m}
      * @throws MatrixDimensionMismatchException if {@code m} is not the same
      * size as {@code this}.

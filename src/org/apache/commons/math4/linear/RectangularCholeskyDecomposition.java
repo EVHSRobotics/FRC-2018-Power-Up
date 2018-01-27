@@ -57,7 +57,7 @@ public class RectangularCholeskyDecomposition {
      * element is encountered.
      *
      * @see <a href="http://eprints.ma.man.ac.uk/1193/01/covered/MIMS_ep2008_56.pdf">
-     * Analysis of the Cholesky Decomposition of a Semi-definite Matrix</a>
+     * Analysis of the Cholesky Decomposition of a Semi-definite SlimMatrix</a>
      *
      * @param matrix Symmetric positive semidefinite matrix.
      * @exception NonPositiveDefiniteMatrixException if the matrix is not

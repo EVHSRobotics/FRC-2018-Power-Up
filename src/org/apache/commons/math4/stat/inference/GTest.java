@@ -248,13 +248,13 @@ public class GTest {
     /**
      * Calculates the <a href=
      * "http://en.wikipedia.org/wiki/Entropy_%28information_theory%29">Shannon
-     * entropy</a> for 2 Dimensional Matrix.  The value returned is the entropy
+     * entropy</a> for 2 Dimensional SlimMatrix.  The value returned is the entropy
      * of the vector formed by concatenating the rows (or columns) of {@code k}
      * to form a vector. See {@link #entropy(long[])}.
      *
-     * @param k 2 Dimensional Matrix of long values (for ex. the counts of a
+     * @param k 2 Dimensional SlimMatrix of long values (for ex. the counts of a
      * trials)
-     * @return Shannon Entropy of the given Matrix
+     * @return Shannon Entropy of the given SlimMatrix
      *
      */
     private double entropy(final long[][] k) {

@@ -159,7 +159,7 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
      * <li>Construct a matrix with {@code N} rows and {@code n + 1} columns,
      * {@code hadm[n+1][N]}.<br>
      * <em>(If I use [x][y] it always means [row-offset][column-offset] of a
-     * Matrix with n rows and m columns. Its entries go from M[0][0]
+     * SlimMatrix with n rows and m columns. Its entries go from M[0][0]
      * to M[n][N])</em></li>
      * <li>Place the input vector {@code x[N]} in the first column of the
      * matrix {@code hadm}.</li>

@@ -1,6 +1,6 @@
 /**
  * **************************************************************************** Compilation: javac
- * Matrix.java Execution: java Matrix
+ * SlimMatrix.java Execution: java SlimMatrix
  *
  * <p>A bare-bones immutable data type for M-by-N matrices.
  *
@@ -8,7 +8,7 @@
  */
 package org.usfirst.frc.team2854.robot.filter;
 
-public final class Matrix {
+public final class SlimMatrix {
   private final int M; // number of rows
   private final int N; // number of columns
   private final double[][] data; // M-by-N array
@@ -18,14 +18,14 @@ public final class Matrix {
    * @param M number of rows
    * @param N number of columns
    */
-  public Matrix(int M, int N) {
+  public SlimMatrix(int M, int N) {
     this.M = M;
     this.N = N;
     data = new double[M][N];
   }
 
   // create matrix based on 2d array
-  public Matrix(double[][] data) {
+  public SlimMatrix(double[][] data) {
     M = data.length;
     N = data[0].length;
     this.data = new double[M][N];
@@ -33,20 +33,20 @@ public final class Matrix {
   }
 
   // copy constructor
-  private Matrix(Matrix A) {
+  private SlimMatrix(SlimMatrix A) {
     this(A.data);
   }
 
   // create and return a random M-by-N matrix with values between 0 and 1
-  public static Matrix random(int M, int N) {
-    Matrix A = new Matrix(M, N);
+  public static SlimMatrix random(int M, int N) {
+    SlimMatrix A = new SlimMatrix(M, N);
     for (int i = 0; i < M; i++) for (int j = 0; j < N; j++) A.data[i][j] = Math.random();
     return A;
   }
 
   // create and return the N-by-N identity matrix
-  public static Matrix identity(int N) {
-    Matrix I = new Matrix(N, N);
+  public static SlimMatrix identity(int N) {
+    SlimMatrix I = new SlimMatrix(N, N);
     for (int i = 0; i < N; i++) I.data[i][i] = 1;
     return I;
   }
@@ -59,35 +59,35 @@ public final class Matrix {
   }
 
   // create and return the transpose of the invoking matrix
-  public Matrix transpose() {
-    Matrix A = new Matrix(N, M);
+  public SlimMatrix transpose() {
+    SlimMatrix A = new SlimMatrix(N, M);
     for (int i = 0; i < M; i++) for (int j = 0; j < N; j++) A.data[j][i] = this.data[i][j];
     return A;
   }
 
   // return C = A + B
-  public Matrix plus(Matrix B) {
-    Matrix A = this;
+  public SlimMatrix plus(SlimMatrix B) {
+    SlimMatrix A = this;
     if (B.M != A.M || B.N != A.N) throw new RuntimeException("Illegal matrix dimensions.");
-    Matrix C = new Matrix(M, N);
+    SlimMatrix C = new SlimMatrix(M, N);
     for (int i = 0; i < M; i++)
       for (int j = 0; j < N; j++) C.data[i][j] = A.data[i][j] + B.data[i][j];
     return C;
   }
 
   // return C = A - B
-  public Matrix minus(Matrix B) {
-    Matrix A = this;
+  public SlimMatrix minus(SlimMatrix B) {
+    SlimMatrix A = this;
     if (B.M != A.M || B.N != A.N) throw new RuntimeException("Illegal matrix dimensions.");
-    Matrix C = new Matrix(M, N);
+    SlimMatrix C = new SlimMatrix(M, N);
     for (int i = 0; i < M; i++)
       for (int j = 0; j < N; j++) C.data[i][j] = A.data[i][j] - B.data[i][j];
     return C;
   }
 
   // does A = B exactly?
-  public boolean eq(Matrix B) {
-    Matrix A = this;
+  public boolean eq(SlimMatrix B) {
+    SlimMatrix A = this;
     if (B.M != A.M || B.N != A.N) throw new RuntimeException("Illegal matrix dimensions.");
     for (int i = 0; i < M; i++)
       for (int j = 0; j < N; j++) if (A.data[i][j] != B.data[i][j]) return false;
@@ -95,10 +95,10 @@ public final class Matrix {
   }
 
   // return C = A * B
-  public Matrix times(Matrix B) {
-    Matrix A = this;
+  public SlimMatrix times(SlimMatrix B) {
+    SlimMatrix A = this;
     if (A.N != B.M) throw new RuntimeException("Illegal matrix dimensions.");
-    Matrix C = new Matrix(A.M, B.N);
+    SlimMatrix C = new SlimMatrix(A.M, B.N);
     for (int i = 0; i < C.M; i++)
       for (int j = 0; j < C.N; j++)
         for (int k = 0; k < A.N; k++) C.data[i][j] += (A.data[i][k] * B.data[k][j]);
@@ -106,13 +106,13 @@ public final class Matrix {
   }
 
   // return x = A^-1 b, assuming A is square and has full rank
-  public Matrix solve(Matrix rhs) {
+  public SlimMatrix solve(SlimMatrix rhs) {
     if (M != N || rhs.M != N || rhs.N != 1)
       throw new RuntimeException("Illegal matrix dimensions.");
 
     // create copies of the data
-    Matrix A = new Matrix(this);
-    Matrix b = new Matrix(rhs);
+    SlimMatrix A = new SlimMatrix(this);
+    SlimMatrix b = new SlimMatrix(rhs);
 
     // Gaussian elimination with partial pivoting
     for (int i = 0; i < N; i++) {
@@ -125,7 +125,7 @@ public final class Matrix {
       b.swap(i, max);
 
       // singular
-      if (A.data[i][i] == 0.0) throw new RuntimeException("Matrix is singular.");
+      if (A.data[i][i] == 0.0) throw new RuntimeException("SlimMatrix is singular.");
 
       // pivot within b
       for (int j = i + 1; j < N; j++) b.data[j][0] -= b.data[i][0] * A.data[j][i] / A.data[i][i];
@@ -141,7 +141,7 @@ public final class Matrix {
     }
 
     // back substitution
-    Matrix x = new Matrix(N, 1);
+    SlimMatrix x = new SlimMatrix(N, 1);
     for (int j = N - 1; j >= 0; j--) {
       double t = 0.0;
       for (int k = j + 1; k < N; k++) t += A.data[j][k] * x.data[k][0];
@@ -163,11 +163,11 @@ public final class Matrix {
   // test client
   public static void main(String[] args) {
     double[][] d = {{1, 2, 3}, {4, 5, 6}, {9, 1, 3}};
-    Matrix D = new Matrix(d);
+    SlimMatrix D = new SlimMatrix(d);
     D.show();
     System.out.println();
 
-    Matrix A = Matrix.random(5, 5);
+    SlimMatrix A = SlimMatrix.random(5, 5);
     A.show();
     System.out.println();
 
@@ -175,11 +175,11 @@ public final class Matrix {
     A.show();
     System.out.println();
 
-    Matrix B = A.transpose();
+    SlimMatrix B = A.transpose();
     B.show();
     System.out.println();
 
-    Matrix C = Matrix.identity(5);
+    SlimMatrix C = SlimMatrix.identity(5);
     C.show();
     System.out.println();
 
@@ -193,11 +193,11 @@ public final class Matrix {
     System.out.println(A.times(B).eq(B.times(A)));
     System.out.println();
 
-    Matrix b = Matrix.random(5, 1);
+    SlimMatrix b = SlimMatrix.random(5, 1);
     b.show();
     System.out.println();
 
-    Matrix x = A.solve(b);
+    SlimMatrix x = A.solve(b);
     x.show();
     System.out.println();
 

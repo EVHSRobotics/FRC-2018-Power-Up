@@ -46,7 +46,7 @@ public class MultivariateNormalDistribution
     private final RealMatrix covarianceMatrixInverse;
     /** The determinant of the covariance matrix. */
     private final double covarianceMatrixDeterminant;
-    /** Matrix used in computation of samples. */
+    /** SlimMatrix used in computation of samples. */
     private final RealMatrix samplingMatrix;
 
     /**
@@ -107,7 +107,7 @@ public class MultivariateNormalDistribution
             }
         }
 
-        // Matrix where each column is an eigenvector of the covariance matrix.
+        // SlimMatrix where each column is an eigenvector of the covariance matrix.
         final Array2DRowRealMatrix covMatEigenvectors = new Array2DRowRealMatrix(dim, dim);
         for (int v = 0; v < dim; v++) {
             final double[] evec = covMatDec.getEigenvector(v).toArray();

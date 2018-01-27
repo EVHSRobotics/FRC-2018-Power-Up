@@ -220,7 +220,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     /**
      * Add {@code m} to this matrix.
      *
-     * @param m Matrix to be added.
+     * @param m SlimMatrix to be added.
      * @return {@code this} + m.
      * @throws MatrixDimensionMismatchException if {@code m} is not the same
      * size as this matrix.
@@ -248,7 +248,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     /**
      * Subtract {@code m} from this matrix.
      *
-     * @param m Matrix to be subtracted.
+     * @param m SlimMatrix to be subtracted.
      * @return {@code this} + m.
      * @throws MatrixDimensionMismatchException if {@code m} is not the same
      * size as this matrix.
@@ -277,7 +277,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     /**
      * Postmultiplying this matrix by {@code m}.
      *
-     * @param m Matrix to postmultiply by.
+     * @param m SlimMatrix to postmultiply by.
      * @return {@code this} * m.
      * @throws DimensionMismatchException if the number of columns of this
      * matrix is not equal to the number of rows of {@code m}.

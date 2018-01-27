@@ -111,7 +111,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * <p>The implementation here uses the QR decomposition to compute the
      * hat matrix as Q I<sub>p</sub>Q<sup>T</sup> where I<sub>p</sub> is the
      * p-dimensional identity matrix augmented by 0's.  This computational
-     * formula is from "The Hat Matrix in Regression and ANOVA",
+     * formula is from "The Hat SlimMatrix in Regression and ANOVA",
      * David C. Hoaglin and Roy E. Welsch,
      * <i>The American Statistician</i>, Vol. 32, No. 1 (Feb., 1978), pp. 17-22.
      * </p>

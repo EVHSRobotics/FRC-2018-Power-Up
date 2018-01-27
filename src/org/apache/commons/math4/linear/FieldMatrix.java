@@ -31,7 +31,7 @@ import org.apache.commons.math4.exception.OutOfRangeException;
 /**
  * Interface defining field-valued matrix with basic algebraic operations.
  * <p>
- * Matrix element indexing is 0-based -- e.g., <code>getEntry(0, 0)</code>
+ * SlimMatrix element indexing is 0-based -- e.g., <code>getEntry(0, 0)</code>
  * returns the element in the first row, first column of the matrix.</p>
  *
  * @param <T> the type of the field elements
@@ -68,7 +68,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     /**
      * Compute the sum of this and m.
      *
-     * @param m Matrix to be added.
+     * @param m SlimMatrix to be added.
      * @return {@code this} + {@code m}.
      * @throws MatrixDimensionMismatchException if {@code m} is not the same
      * size as {@code this} matrix.
@@ -78,7 +78,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     /**
      * Subtract {@code m} from this matrix.
      *
-     * @param m Matrix to be subtracted.
+     * @param m SlimMatrix to be subtracted.
      * @return {@code this} - {@code m}.
      * @throws MatrixDimensionMismatchException if {@code m} is not the same
      * size as {@code this} matrix.
@@ -104,7 +104,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     /**
      * Postmultiply this matrix by {@code m}.
      *
-     * @param m  Matrix to postmultiply by.
+     * @param m  SlimMatrix to postmultiply by.
      * @return {@code this} * {@code m}.
      * @throws DimensionMismatchException if the number of columns of
      * {@code this} matrix is not equal to the number of rows of matrix
@@ -115,7 +115,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     /**
      * Premultiply this matrix by {@code m}.
      *
-     * @param m Matrix to premultiply by.
+     * @param m SlimMatrix to premultiply by.
      * @return {@code m} * {@code this}.
      * @throws DimensionMismatchException if the number of columns of {@code m}
      * differs from the number of rows of {@code this} matrix.

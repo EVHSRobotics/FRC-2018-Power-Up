@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 public class SlimKalmanFilter {
 
   Gyro a, b, c, d;
-  Matrix states, covariance;
+  SlimMatrix states, covariance;
 
 
   public SlimKalmanFilter(Gyro a, Gyro b, Gyro c, Gyro d) {
@@ -13,8 +13,8 @@ public class SlimKalmanFilter {
     this.b = b;
     this.c = c;
     this.d = d;
-    states = new Matrix(1,4);
+    states = new SlimMatrix(1,4);
 
-    covariance = new Matrix(4,4);
+    covariance = new SlimMatrix(4,4);
   }
 }

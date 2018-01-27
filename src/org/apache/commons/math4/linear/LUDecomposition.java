@@ -68,7 +68,7 @@ public class LUDecomposition {
      * This constructor uses 1e-11 as default value for the singularity
      * threshold.
      *
-     * @param matrix Matrix to decompose.
+     * @param matrix SlimMatrix to decompose.
      * @throws NonSquareMatrixException if matrix is not square.
      */
     public LUDecomposition(RealMatrix matrix) {

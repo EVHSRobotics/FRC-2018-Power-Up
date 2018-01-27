@@ -28,7 +28,7 @@ import org.apache.commons.math4.exception.OutOfRangeException;
 /**
  * Interface defining a real-valued matrix with basic algebraic operations.
  * <p>
- * Matrix element indexing is 0-based -- e.g., <code>getEntry(0, 0)</code>
+ * SlimMatrix element indexing is 0-based -- e.g., <code>getEntry(0, 0)</code>
  * returns the element in the first row, first column of the matrix.</p>
  *
  */
@@ -266,7 +266,7 @@ public interface RealMatrix extends AnyMatrix {
     * at 0.
     *
     * @param row Row to be fetched.
-    * @return row Matrix.
+    * @return row SlimMatrix.
     * @throws OutOfRangeException if the specified row index is invalid.
     */
    RealMatrix getRowMatrix(int row) throws OutOfRangeException;
@@ -291,7 +291,7 @@ public interface RealMatrix extends AnyMatrix {
      * indices start at 0.
      *
      * @param column Column to be fetched.
-     * @return column Matrix.
+     * @return column SlimMatrix.
      * @throws OutOfRangeException if the specified column index is invalid.
      */
     RealMatrix getColumnMatrix(int column)

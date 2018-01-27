@@ -1129,7 +1129,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /**
      * Check if a matrix is addition compatible with the instance.
      *
-     * @param m Matrix to check.
+     * @param m SlimMatrix to check.
      * @throws MatrixDimensionMismatchException if the matrix is not
      * addition-compatible with instance.
      */
@@ -1145,7 +1145,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /**
      * Check if a matrix is subtraction compatible with the instance.
      *
-     * @param m Matrix to check.
+     * @param m SlimMatrix to check.
      * @throws MatrixDimensionMismatchException if the matrix is not
      * subtraction-compatible with instance.
      */
@@ -1161,7 +1161,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /**
      * Check if a matrix is multiplication compatible with the instance.
      *
-     * @param m Matrix to check.
+     * @param m SlimMatrix to check.
      * @throws DimensionMismatchException if the matrix is not
      * multiplication-compatible with instance.
      */

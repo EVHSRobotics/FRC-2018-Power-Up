@@ -110,7 +110,7 @@ public class EigenDecomposition {
      * <p>
      * Supports decomposition of a general matrix since 3.1.
      *
-     * @param matrix Matrix to decompose.
+     * @param matrix SlimMatrix to decompose.
      * @throws MaxCountExceededException if the algorithm fails to converge.
      * @throws MathArithmeticException if the decomposition of a general matrix
      * results in a matrix with zero norm
@@ -546,7 +546,7 @@ public class EigenDecomposition {
     /**
      * Transforms the matrix to tridiagonal form.
      *
-     * @param matrix Matrix to transform.
+     * @param matrix SlimMatrix to transform.
      */
     private void transformToTridiagonal(final RealMatrix matrix) {
         // transform the matrix to tridiagonal
@@ -715,7 +715,7 @@ public class EigenDecomposition {
     /**
      * Transforms the matrix to Schur form and calculates the eigenvalues.
      *
-     * @param matrix Matrix to transform.
+     * @param matrix SlimMatrix to transform.
      * @return the {@link SchurTransformer Shur transform} for this matrix
      */
     private SchurTransformer transformToSchur(final RealMatrix matrix) {

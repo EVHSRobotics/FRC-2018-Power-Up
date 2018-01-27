@@ -392,7 +392,7 @@ public class MatrixUtils {
     /**
      * Checks whether a matrix is symmetric, within a given relative tolerance.
      *
-     * @param matrix Matrix to check.
+     * @param matrix SlimMatrix to check.
      * @param relativeTolerance Tolerance of the symmetry check.
      * @param raiseException If {@code true}, an exception will be raised if
      * the matrix is not symmetric.
@@ -431,7 +431,7 @@ public class MatrixUtils {
     /**
      * Checks whether a matrix is symmetric.
      *
-     * @param matrix Matrix to check.
+     * @param matrix SlimMatrix to check.
      * @param eps Relative tolerance.
      * @throws NonSquareMatrixException if the matrix is not square.
      * @throws NonSymmetricMatrixException if the matrix is not symmetric.
@@ -445,7 +445,7 @@ public class MatrixUtils {
     /**
      * Checks whether a matrix is symmetric.
      *
-     * @param matrix Matrix to check.
+     * @param matrix SlimMatrix to check.
      * @param eps Relative tolerance.
      * @return {@code true} if {@code matrix} is symmetric.
      * @since 3.1
@@ -458,7 +458,7 @@ public class MatrixUtils {
     /**
      * Check if matrix indices are valid.
      *
-     * @param m Matrix.
+     * @param m SlimMatrix.
      * @param row Row index to check.
      * @param column Column index to check.
      * @throws OutOfRangeException if {@code row} or {@code column} is not
@@ -474,7 +474,7 @@ public class MatrixUtils {
     /**
      * Check if a row index is valid.
      *
-     * @param m Matrix.
+     * @param m SlimMatrix.
      * @param row Row index to check.
      * @throws OutOfRangeException if {@code row} is not a valid index.
      */
@@ -490,7 +490,7 @@ public class MatrixUtils {
     /**
      * Check if a column index is valid.
      *
-     * @param m Matrix.
+     * @param m SlimMatrix.
      * @param column Column index to check.
      * @throws OutOfRangeException if {@code column} is not a valid index.
      */
@@ -506,7 +506,7 @@ public class MatrixUtils {
      * Check if submatrix ranges indices are valid.
      * Rows and columns are indicated counting from 0 to {@code n - 1}.
      *
-     * @param m Matrix.
+     * @param m SlimMatrix.
      * @param startRow Initial row index.
      * @param endRow Final row index.
      * @param startColumn Initial column index.
@@ -540,7 +540,7 @@ public class MatrixUtils {
      * Check if submatrix ranges indices are valid.
      * Rows and columns are indicated counting from 0 to n-1.
      *
-     * @param m Matrix.
+     * @param m SlimMatrix.
      * @param selectedRows Array of row indices.
      * @param selectedColumns Array of column indices.
      * @throws NullArgumentException if {@code selectedRows} or
@@ -627,7 +627,7 @@ public class MatrixUtils {
 
     /**
      * Convert a {@link FieldMatrix}/{@link Fraction} matrix to a {@link RealMatrix}.
-     * @param m Matrix to convert.
+     * @param m SlimMatrix to convert.
      * @return the converted matrix.
      */
     public static Array2DRowRealMatrix fractionMatrixToRealMatrix(final FieldMatrix<Fraction> m) {
@@ -672,7 +672,7 @@ public class MatrixUtils {
     /**
      * Convert a {@link FieldMatrix}/{@link BigFraction} matrix to a {@link RealMatrix}.
      *
-     * @param m Matrix to convert.
+     * @param m SlimMatrix to convert.
      * @return the converted matrix.
      */
     public static Array2DRowRealMatrix bigFractionMatrixToRealMatrix(final FieldMatrix<BigFraction> m) {
@@ -920,7 +920,7 @@ public class MatrixUtils {
         }
     }
 
-    /**Solve  a  system of composed of a Lower Triangular Matrix
+    /**Solve  a  system of composed of a Lower Triangular SlimMatrix
      * {@link RealMatrix}.
      * <p>
      * This method is called to solve systems of equations which are
@@ -964,7 +964,7 @@ public class MatrixUtils {
         }
     }
 
-    /** Solver a  system composed  of an Upper Triangular Matrix
+    /** Solver a  system composed  of an Upper Triangular SlimMatrix
      * {@link RealMatrix}.
      * <p>
      * This method is called to solve systems of equations which are
@@ -1013,7 +1013,7 @@ public class MatrixUtils {
      * Computes the inverse of the given matrix by splitting it into
      * 4 sub-matrices.
      *
-     * @param m Matrix whose inverse must be computed.
+     * @param m SlimMatrix whose inverse must be computed.
      * @param splitIndex Index that determines the "split" line and
      * column.
      * The element corresponding to this index will part of the
@@ -1087,7 +1087,7 @@ public class MatrixUtils {
      * Note: this method will use a singularity threshold of 0,
      * use {@link #inverse(RealMatrix, double)} if a different threshold is needed.
      *
-     * @param matrix Matrix whose inverse shall be computed
+     * @param matrix SlimMatrix whose inverse shall be computed
      * @return the inverse of {@code matrix}
      * @throws NullArgumentException if {@code matrix} is {@code null}
      * @throws SingularMatrixException if m is singular
@@ -1105,7 +1105,7 @@ public class MatrixUtils {
      * By default, the inverse of the matrix is computed using the QR-decomposition,
      * unless a more efficient method can be determined for the input matrix.
      *
-     * @param matrix Matrix whose inverse shall be computed
+     * @param matrix SlimMatrix whose inverse shall be computed
      * @param threshold Singularity threshold
      * @return the inverse of {@code m}
      * @throws NullArgumentException if {@code matrix} is {@code null}

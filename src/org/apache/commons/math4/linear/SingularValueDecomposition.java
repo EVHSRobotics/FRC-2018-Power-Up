@@ -82,7 +82,7 @@ public class SingularValueDecomposition {
     /**
      * Calculates the compact Singular Value Decomposition of the given matrix.
      *
-     * @param matrix Matrix to decompose.
+     * @param matrix SlimMatrix to decompose.
      */
     public SingularValueDecomposition(final RealMatrix matrix) {
         final double[][] A;

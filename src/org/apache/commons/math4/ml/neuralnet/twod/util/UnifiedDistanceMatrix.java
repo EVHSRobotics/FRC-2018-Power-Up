@@ -24,7 +24,7 @@ import org.apache.commons.math4.ml.neuralnet.twod.NeuronSquareMesh2D;
 import org.apache.commons.math4.ml.distance.DistanceMeasure;
 
 /**
- * <a href="http://en.wikipedia.org/wiki/U-Matrix">U-Matrix</a>
+ * <a href="http://en.wikipedia.org/wiki/U-Matrix">U-SlimMatrix</a>
  * visualization of high-dimensional data projection.
  * @since 3.6
  */

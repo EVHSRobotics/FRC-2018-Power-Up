@@ -109,7 +109,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /**
      * Compute the sum of this matrix and {@code m}.
      *
-     * @param m Matrix to be added.
+     * @param m SlimMatrix to be added.
      * @return {@code this} + {@code m}.
      * @throws MatrixDimensionMismatchException if {@code m} is not the same
      * size as {@code this}.
@@ -145,7 +145,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /**
      * Subtract {@code m} from this matrix.
      *
-     * @param m Matrix to be subtracted.
+     * @param m SlimMatrix to be subtracted.
      * @return {@code this} - {@code m}.
      * @throws MatrixDimensionMismatchException if {@code m} is not the same
      * size as {@code this}.
@@ -201,7 +201,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /**
      * Postmultiply this matrix by {@code m}.
      *
-     * @param m Matrix to postmultiply by.
+     * @param m SlimMatrix to postmultiply by.
      * @return {@code this} * {@code m}.
      * @throws DimensionMismatchException if the number of rows of {@code m}
      * differ from the number of columns of {@code this} matrix.

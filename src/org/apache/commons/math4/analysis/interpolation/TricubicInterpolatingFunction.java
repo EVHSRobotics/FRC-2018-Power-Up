@@ -38,7 +38,7 @@ import org.apache.commons.math4.util.MathArrays;
 public class TricubicInterpolatingFunction
     implements TrivariateFunction {
     /**
-     * Matrix to compute the spline coefficients from the function values
+     * SlimMatrix to compute the spline coefficients from the function values
      * and function derivatives values
      */
     private static final double[][] AINV = {

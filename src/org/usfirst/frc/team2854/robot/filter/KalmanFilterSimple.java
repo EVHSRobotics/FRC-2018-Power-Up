@@ -85,7 +85,7 @@ public class KalmanFilterSimple implements KalmanFilter{
     @Override
     public DMatrixRMaj getState() {
         return x.getMatrix();
-    }
+    } 
 
     @Override
     public DMatrixRMaj getCovariance() {

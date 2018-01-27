@@ -38,7 +38,7 @@ public class BicubicInterpolatingFunction
     /** Number of coefficients. */
     private static final int NUM_COEFF = 16;
     /**
-     * Matrix to compute the spline coefficients from the function values
+     * SlimMatrix to compute the spline coefficients from the function values
      * and function derivatives values
      */
     private static final double[][] AINV = {

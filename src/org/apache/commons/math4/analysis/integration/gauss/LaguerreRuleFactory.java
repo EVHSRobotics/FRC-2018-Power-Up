@@ -61,7 +61,7 @@ public class LaguerreRuleFactory extends BaseRuleFactory<Double> {
     }
 
     /**
-     * @param degree Matrix dimension.
+     * @param degree SlimMatrix dimension.
      * @return a square matrix.
      */
     private RealMatrix companionMatrix(final int degree) {

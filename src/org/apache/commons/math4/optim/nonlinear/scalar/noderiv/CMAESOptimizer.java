@@ -42,7 +42,7 @@ import org.apache.commons.math4.util.FastMath;
 import org.apache.commons.math4.util.MathArrays;
 
 /**
- * An implementation of the active Covariance Matrix Adaptation Evolution Strategy (CMA-ES)
+ * An implementation of the active Covariance SlimMatrix Adaptation Evolution Strategy (CMA-ES)
  * for non-linear, non-convex, non-smooth, global function minimization.
  * <p>
  * The CMA-Evolution Strategy (CMA-ES) is a reliable stochastic optimization method
@@ -1014,11 +1014,11 @@ public class CMAESOptimizer
         }
     }
 
-    // -----Matrix utility functions similar to the Matlab build in functions------
+    // -----SlimMatrix utility functions similar to the Matlab build in functions------
 
     /**
      * @param m Input matrix
-     * @return Matrix representing the element-wise logarithm of m.
+     * @return SlimMatrix representing the element-wise logarithm of m.
      */
     private static RealMatrix log(final RealMatrix m) {
         final double[][] d = new double[m.getRowDimension()][m.getColumnDimension()];
@@ -1032,7 +1032,7 @@ public class CMAESOptimizer
 
     /**
      * @param m Input matrix.
-     * @return Matrix representing the element-wise square root of m.
+     * @return SlimMatrix representing the element-wise square root of m.
      */
     private static RealMatrix sqrt(final RealMatrix m) {
         final double[][] d = new double[m.getRowDimension()][m.getColumnDimension()];
@@ -1046,7 +1046,7 @@ public class CMAESOptimizer
 
     /**
      * @param m Input matrix.
-     * @return Matrix representing the element-wise square of m.
+     * @return SlimMatrix representing the element-wise square of m.
      */
     private static RealMatrix square(final RealMatrix m) {
         final double[][] d = new double[m.getRowDimension()][m.getColumnDimension()];
@@ -1077,7 +1077,7 @@ public class CMAESOptimizer
     /**
      * @param m Input matrix 1.
      * @param n Input matrix 2.
-     * @return Matrix where the elements of m and n are element-wise divided.
+     * @return SlimMatrix where the elements of m and n are element-wise divided.
      */
     private static RealMatrix divide(final RealMatrix m, final RealMatrix n) {
         final double[][] d = new double[m.getRowDimension()][m.getColumnDimension()];
@@ -1092,7 +1092,7 @@ public class CMAESOptimizer
     /**
      * @param m Input matrix.
      * @param cols Columns to select.
-     * @return Matrix representing the selected columns.
+     * @return SlimMatrix representing the selected columns.
      */
     private static RealMatrix selectColumns(final RealMatrix m, final int[] cols) {
         final double[][] d = new double[m.getRowDimension()][cols.length];

@@ -112,9 +112,9 @@ public class SpearmansCorrelation {
     }
 
     /**
-     * Calculate the Spearman Rank Correlation Matrix.
+     * Calculate the Spearman Rank Correlation SlimMatrix.
      *
-     * @return Spearman Rank Correlation Matrix
+     * @return Spearman Rank Correlation SlimMatrix
      * @throws NullPointerException if this instance was created with no data
      */
     public RealMatrix getCorrelationMatrix() {
