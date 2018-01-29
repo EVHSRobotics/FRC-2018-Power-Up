@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.communication.NIRioStatus;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -56,6 +57,7 @@ public class Robot extends IterativeRobot {
 	private static HashMap<SubsystemNames, Subsystem> subsystems;	
 	private static SensorBoard sensors;
 
+	private Vision vision;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -63,12 +65,15 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		System.out.println("STARTING");
 		subsystems = new HashMap<SubsystemNames, Subsystem>();	
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 		
-		Vision vis = new Vision(new Scalar(85, 100, 100), new Scalar(100, 255, 255));
-		Thread visT = new Thread(vis);
+		System.out.println("Robot init");
+//		vision = new Vision(new Scalar(85, 100, 100), new Scalar(100, 255, 255));
+		
+		
+		vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
+		Thread visT = new Thread(vision);
 		visT.start();
 	 
 
@@ -79,6 +84,10 @@ public class Robot extends IterativeRobot {
 				((Restartabale) s).enable();
 			}
 		}
+//		
+		//SmartDashboard.putNumber("lowerHue", vision.getLowerBoundValue().val[0]);
+		//SmartDashboard.putNumber("upperHue", vision.getUpperBoundValue().val[0]);
+
 		
 //		double fieldWidth = 5;
 //		double fieldHeight = 5;
@@ -86,7 +95,12 @@ public class Robot extends IterativeRobot {
 //		MapInput input = new EncoderBased();
 //		FieldMapDriver mapDrive = new FieldMapDriver(map, 720, 720, input);
 //		
-		UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		//UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+	}
+	
+	@Override
+	public void robotPeriodic() {
+		
 	}
 	/**
 	 * This function is called once each time the robot enters Disabled mode. You
@@ -154,6 +168,21 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		
+		
+//		
+//		SmartDashboard.putNumber("kRIOStatusBufferInvalidSize", NIRioStatus.kRIOStatusBufferInvalidSize);
+//		SmartDashboard.putNumber("kRIOStatusFeatureNotSupported", NIRioStatus.kRIOStatusFeatureNotSupported);
+//		SmartDashboard.putNumber("kRioStatusOffset", NIRioStatus.kRioStatusOffset);
+//		SmartDashboard.putNumber("kRIOStatusOperationTimedOut", NIRioStatus.kRIOStatusOperationTimedOut);
+//		SmartDashboard.putNumber("kRIOStatusResourceNotInitialized", NIRioStatus.kRIOStatusResourceNotInitialized);
+//		SmartDashboard.putNumber("kRioStatusSuccess", NIRioStatus.kRioStatusSuccess);
+		
+		
+//		vision.setLowerBoundHue((int) SmartDashboard.getNumber("lowerHue", 0));
+//		vision.setUpperBoundHue((int) SmartDashboard.getNumber("upperHue", 255));
+
+		
 		SmartDashboard.putBoolean("NavX is Connected", sensors.getNavX().isConnected());
 		SmartDashboard.putBoolean("NavX is Calibrating", sensors.getNavX().isCalibrating());
 

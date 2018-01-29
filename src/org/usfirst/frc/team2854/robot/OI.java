@@ -1,15 +1,14 @@
 package org.usfirst.frc.team2854.robot;
 
+import org.usfirst.frc.team2854.robot.commands.DriveDan;
+import org.usfirst.frc.team2854.robot.commands.EncoderTurn;
+import org.usfirst.frc.team2854.robot.commands.MotionProfileTurn;
+import org.usfirst.frc.team2854.robot.commands.ToggleShift;
+
+import com.ctre.phoenix.motion.MotionProfileStatus;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-
-import org.usfirst.frc.team2854.robot.commands.DriveCarpet;
-import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
-import org.usfirst.frc.team2854.robot.commands.DriveTest;
-import org.usfirst.frc.team2854.robot.commands.DriveThottle;
-import org.usfirst.frc.team2854.robot.commands.EncoderTurn;
-import org.usfirst.frc.team2854.robot.commands.PIDTurn;
-import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -24,8 +23,8 @@ public class OI {
 
 	static {
 
-		OI.buttonA.whenPressed(new EncoderTurn(-79.25/4d));
-		OI.buttonB.whenPressed(new DriveTest());
+		OI.buttonA.whenPressed(new MotionProfileTurn(0, Config.lowTarget/2f, 12, 90, true));
+		OI.buttonB.whenPressed(new DriveDan());
 		OI.rTrigger.whenPressed(new ToggleShift());
 	}
 

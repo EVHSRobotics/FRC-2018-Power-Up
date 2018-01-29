@@ -33,8 +33,8 @@ public class EncoderTurn extends Command {
 		drive.drive(-revs, revs, ControlMode.MotionMagic);
 		leftTarget = (-revs * drive.getDriveConstant()) + drive.getLeftEncoder();
 		rightTarget = (revs * drive.getDriveConstant()) + drive.getRightEncoder();
-	
-
+		setTimeout(1);
+		
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -47,8 +47,8 @@ public class EncoderTurn extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
 		SmartDashboard.putNumber("turn error", Math.abs(drive.getLeftEncoder() - leftTarget));
-		return Math.abs(drive.getLeftEncoder() - leftTarget) < 	300
-				&& Math.abs(drive.getRightEncoder() - rightTarget) < 300;
+		return (Math.abs(drive.getLeftEncoder() - leftTarget) < 	300
+				&& Math.abs(drive.getRightEncoder() - rightTarget) < 300) || isTimedOut();
 	}
 
 	// Called once after isFinished returns true

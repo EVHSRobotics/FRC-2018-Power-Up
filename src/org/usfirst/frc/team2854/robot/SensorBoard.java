@@ -66,7 +66,6 @@ public class SensorBoard {
 
 		//System.out.println(type);
 		navX = new AHRS(I2C.Port.kMXP);
-		System.out.println("Navx connection: " + navX.isConnected());
 		// spiGyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS1);
 		builtInacc = new BuiltInAccelerometer();
 		// gyro = new DualSensor("Gyro");

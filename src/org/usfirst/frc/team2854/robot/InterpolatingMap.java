@@ -10,6 +10,7 @@ public class InterpolatingMap{
 	private LinkedHashMap<Double, OutputValue> data;
 	private ArrayList<Double> sortedInputs;
 	private double minInput, maxInput;
+	private double averageSlope;
 	
 	private class OutputValue {
 		int count = 0;
@@ -42,11 +43,14 @@ public class InterpolatingMap{
 		Collections.sort(sortedInputs);
 		minInput = sortedInputs.get(0);
 		maxInput = sortedInputs.get(sortedInputs.size()-1);
+		averageSlope = (data.get(maxInput).value - data.get(minInput).value) / (maxInput - minInput);
 	}
 	
 	public double getValue(Double input) {
 		if(input < minInput || input > maxInput) {
-			throw new RuntimeException("Can not Extrapolate data! The value " + input + " must be in range [" + minInput + ", " + maxInput + "]" );
+			//throw new RuntimeException("Can not Extrapolate data! The value " + input + " must be in range [" + minInput + ", " + maxInput + "]" );
+			//System.out.println("Extrapolating! results probably will contain significant error");
+			return (input - minInput) * averageSlope + data.get(minInput).value;
 		}
 		if(data.containsKey(input)) {
 			return data.get(input).value;

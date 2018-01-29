@@ -26,16 +26,17 @@ import java.util.TimerTask;
 
 import javax.management.RuntimeErrorException;
 
+import org.usfirst.frc.team2854.PID.CustomProfile;
 import org.usfirst.frc.team2854.PID.DummyPIDOutput;
 import org.usfirst.frc.team2854.PID.PIDConstant;
 import org.usfirst.frc.team2854.PID.PIDUtil;
+import org.usfirst.frc.team2854.PID.ProfileNotifier;
 import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
 /** */
 public class DriveTrain extends Subsystem implements Restartabale {
-
 
 	// Put methods for controlling this subsyWstem
 	// here. Call these from Commands.
@@ -86,7 +87,6 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		setDefaultCommand(new JoystickDrive());
 	}
 
-
 	public DriveTrain() {
 		leftT1 = new TalonSRX(RobotMap.leftTalonID1);
 		leftT1.setInverted(side);
@@ -117,13 +117,13 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	public void enable() {
-		System.out.println("Enabling drive train");
+		//System.out.println("Enabling drive train");
 		// turnController.enable();
 		applyShift(GearState.LOW, -10); // TODO 10 more attempts because of start up time?
 	}
 
 	public void disable() {
-		System.out.println("Disableing drive train");
+		//System.out.println("Disableing drive train");
 		// turnController.disable();
 	}
 
@@ -184,7 +184,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	private void applyShift(GearState desiredState, int attempt) {
 		if (attempt > 10) {
-			System.err.println("Shifter is not shifting to " + desiredState + " at attempt " + attempt);
+			//System.err.println("Shifter is not shifting to " + desiredState + " at attempt " + attempt);
 			return;
 		}
 		shifter.set(GearState.gearToValue(desiredState));
@@ -260,7 +260,6 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	public void driveStraight(double left, double right, ControlMode mode) {
-		double output = turnController.get();
 		// double error = rightT2.getSelectedSensorPosition(0) -
 		// leftT2.getSelectedSensorPosition(0);
 		drive(left, right, mode);
@@ -271,115 +270,18 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		leftT2.setNeutralMode(mode);
 	}
 
+	public ProfileNotifier generateTurnProfile(double cruzVel, double vOut, double turnR, boolean right,
+			double turnAngle) {
+		return CustomProfile.generateTurnMotionControl(cruzVel, vOut, turnR, turnAngle, right, leftT2, rightT2);
+	}
+
 	public void drive(double left, double right) {
 		drive(left, right, ControlMode.PercentOutput);
+
 	}
 
 	public void stop() {
 		drive(0, 0);
-	}
-
-	public void generateTurnMotionControl(double cruzV, double outV, double turnR, double turnAngle, boolean right,
-			MotionProfileStatus status) {
-		if (Config.robotWidth == 0) {
-			throw new RuntimeException("measure the robot width");
-		}
-		TalonSRX outer = (right ? leftT2 : rightT2);
-		TalonSRX inner = (right ? rightT2 : leftT2);
-		double angle = Math.toRadians(turnAngle);
-		double outerDist = inchesToCycles(turnR + Config.robotWidth) * angle;
-		double innerDist = inchesToCycles(turnR) * angle;
-
-		double inVelOuter = outer.getSelectedSensorVelocity(0);
-		double inVelInner = inner.getSelectedSensorPosition(0);
-
-		double v1 = (inVelOuter + cruzV) / 8d;
-		double v2 = cruzV / 2d;
-		double v3 = (cruzV + outV) / 8d;
-
-		double time = outerDist / (v1 + v2 + v3); // cycles / (cycles / 100ms) -> 100ms
-
-		double firstAccelerationTime = time / 4d;
-		double cruzTime = time / 2d;
-		double secondAccelerationTime = time / 4d;
-
-		double innerCruzVel = 4 * ((innerDist / time) - (inVelInner / 8d) - (outV / 8d)) / 3d;
-
-		double firstAccelerationOuter = (cruzV - inVelOuter) / firstAccelerationTime;
-		double secondAccelerationOuter = (outV - cruzV) / secondAccelerationTime;
-
-		double firstAccelerationInner = (innerCruzVel - inVelInner) / firstAccelerationTime;
-		double secondAccelerationInner = (outV - innerCruzVel) / secondAccelerationTime;
-
-		TrajectoryPoint outerPoint = new TrajectoryPoint();
-		TrajectoryPoint innerPoint = new TrajectoryPoint();
-
-		double timer = 0;
-		double stepSize = 10;
-
-		double outerCurrentVel = inVelOuter;
-		double innerCurrentVel = inVelInner;
-		double outerCurrentPos = outer.getSelectedSensorPosition(0);
-		double innerCurrentPos = inner.getSelectedSensorPosition(0);
-
-		boolean isFirst = true;
-
-		while (timer < time) {
-
-			timer += 10;
-
-			if (timer < firstAccelerationTime) {
-				outerCurrentVel += firstAccelerationOuter * stepSize;
-				outerCurrentPos += outerCurrentVel * stepSize;
-				innerCurrentVel += firstAccelerationInner * stepSize;
-				innerCurrentPos += outerCurrentVel * stepSize;
-
-				outerPoint.isLastPoint = false;
-				outerPoint.zeroPos = false;
-				outerPoint.velocity = outerCurrentVel;
-				outerPoint.position = outerCurrentPos;
-				outerPoint.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
-
-				innerPoint.isLastPoint = false;
-				outerPoint.zeroPos = false;
-				innerPoint.velocity = innerCurrentVel;
-				innerPoint.position = innerCurrentPos;
-				innerPoint.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
-
-				if (isFirst) {
-					outerPoint.zeroPos = true;
-					innerPoint.zeroPos = true;
-					isFirst = false;
-				}
-
-			} else if (timer < firstAccelerationTime + cruzTime) {
-				outerCurrentVel += cruzV;
-				outerCurrentPos += outerCurrentVel * stepSize;
-				innerCurrentVel += innerCruzVel;
-				innerCurrentPos += outerCurrentVel * stepSize;
-
-				outerPoint.isLastPoint = false;
-				outerPoint.zeroPos = false;
-				outerPoint.velocity = outerCurrentVel;
-				outerPoint.position = outerCurrentPos;
-				outerPoint.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
-
-				innerPoint.isLastPoint = false;
-				outerPoint.zeroPos = false;
-				innerPoint.velocity = innerCurrentVel;
-				innerPoint.position = innerCurrentPos;
-				innerPoint.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
-
-			} else if (timer < firstAccelerationTime + cruzTime + secondAccelerationTime) {
-
-			} else if (timer >= time) {
-
-			}
-
-			inner.pushMotionProfileTrajectory(innerPoint);
-			outer.pushMotionProfileTrajectory(outerPoint);
-		}
-
 	}
 
 	public double getAvgEncoder() {

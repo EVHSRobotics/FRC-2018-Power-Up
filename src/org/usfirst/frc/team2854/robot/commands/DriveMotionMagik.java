@@ -39,7 +39,7 @@ public class DriveMotionMagik extends Command {
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return Math.abs(drive.getAvgEncoder() - targetPos) < 255;
+		return Math.abs(drive.getAvgEncoder() - targetPos) < 500;
 	}
 
 	// Called once after isFinished returns true
