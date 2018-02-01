@@ -34,7 +34,7 @@ public class CustomProfile {
 		double v2 = cruzV / 2d;
 		double v3 = (cruzV + outV) / 8d;
 
-		double time = outerDist / (v1 + v2 + v3); // cycles / (cycles / 100ms) -> 100ms
+		double time = outerDist / (v1 + v2 + v3) * 100; // cycles / (cycles / 100ms) -> 100ms
 
 		double firstAccelerationTime = time / 4d;
 		double cruzTime = time / 2d;
@@ -66,18 +66,30 @@ public class CustomProfile {
 
 		outerPoint.profileSlotSelect0 = 0;
 		innerPoint.profileSlotSelect0 = 0;
-
+		outerPoint.headingDeg = 0;
+		innerPoint.profileSlotSelect0 = 0;
+		outerPoint.profileSlotSelect1 = 1;
+		innerPoint.profileSlotSelect1 = 1;
+		
+		
 		ProfileNotifier pNotifier = new ProfileNotifier(10, innerDist, outerDist, inner, outer);
 
-		leftT2.configMotionProfileTrajectoryPeriod(0, 10);
-		rightT2.configMotionProfileTrajectoryPeriod(0, 10);
+		//leftT2.configMotionProfileTrajectoryPeriod(0, 10);
+		//rightT2.configMotionProfileTrajectoryPeriod(0, 10);
+		
+		
+		System.out.println("first acc time: " + firstAccelerationTime);
+		System.out.println("first acc time: " + cruzTime);
+		System.out.println("first acc time: " + secondAccelerationTime);
 
 		
 		while (timer < time) {
-
-			timer += 10;
+			System.out.println("happy face one");
+			timer += .1;
 
 			if (timer < firstAccelerationTime) {
+				System.out.println("happy face two");
+
 				outerCurrentVel += firstAccelerationOuter * stepSize;
 				outerCurrentPos += outerCurrentVel * stepSize;
 				innerCurrentVel += firstAccelerationInner * stepSize;
@@ -153,7 +165,12 @@ public class CustomProfile {
 			
 			//inner.getMotionProfileStatus(status);
 			//System.out.println(status.topBufferCnt);
-			System.out.println("generating");
+			System.out.println("generating " + (inner == null) + " " + (innerPoint==null));
+			
+			printPoint(innerPoint);
+			
+			
+			
 			inner.pushMotionProfileTrajectory(innerPoint);
 			outer.pushMotionProfileTrajectory(outerPoint);
 		}
@@ -162,5 +179,18 @@ public class CustomProfile {
 
 		return pNotifier;
 	}
+	
+	public static void printPoint(TrajectoryPoint trajPt) {
+		System.out.println(trajPt.position);
+		System.out.println(trajPt.velocity);
+		System.out.println(trajPt.headingDeg);
+		System.out.println(trajPt.profileSlotSelect0);
+		System.out.println(trajPt.profileSlotSelect1);
+		System.out.println(trajPt.isLastPoint);
+		System.out.println(trajPt.zeroPos);
+		System.out.println(trajPt.timeDur == null);
+		System.out.println(trajPt.timeDur.value);
+	}
+	
 
 }

@@ -24,6 +24,8 @@ public class MotionProfileTurn extends Command {
 	
     public MotionProfileTurn(double outV, double cruzV, double turnR, double turnAngle, boolean right) {
     	requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
+    	
+    	System.out.println("Creating command obj");
     	this.outV = outV;
     	this.cruzV = cruzV;
     	this.turnR = turnR;
@@ -33,6 +35,7 @@ public class MotionProfileTurn extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	System.out.println("initing to command");
     	drive = (DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN);
     	notifier = drive.generateTurnProfile(cruzV, outV, turnR, right, turnAngle);
     }

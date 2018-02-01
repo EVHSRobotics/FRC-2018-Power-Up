@@ -20,12 +20,13 @@ import javax.swing.JLabel;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team2854.robot.Vision;
+
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -36,12 +37,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.HashMap;
 
+import org.usfirst.frc.team2854.lidar.LidarReader;
 import org.usfirst.frc.team2854.map.EncoderBased;
 import org.usfirst.frc.team2854.map.FieldMapDriver;
 import org.usfirst.frc.team2854.map.MapInput;
 import org.usfirst.frc.team2854.map.elements.FieldMap;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
+import org.usfirst.frc.team2854.vision.Vision;
+
+import com.kauailabs.sf2.frc.navXSensor;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -57,7 +62,7 @@ public class Robot extends IterativeRobot {
 	private static HashMap<SubsystemNames, Subsystem> subsystems;	
 	private static SensorBoard sensors;
 
-	private Vision vision;
+	private static Vision vision;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -69,15 +74,23 @@ public class Robot extends IterativeRobot {
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 		
 		System.out.println("Robot init");
-//		vision = new Vision(new Scalar(85, 100, 100), new Scalar(100, 255, 255));
-		
-		
+
 		vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
 		Thread visT = new Thread(vision);
 		visT.start();
 	 
-
+		vision.setShouldRun(false);
+		
+//		LidarReader lidar = new LidarReader(Port.kOnboard);
+//		
+//		CvSource lidarOut = CameraServer.getInstance().putVideo("lidar", lidar.getWidth(), lidar.getHeight());  
+//		new Thread(() ->  {while(true) {Mat m = lidar.getMat();lidarOut.putFrame(m);m.release();}}).start();
+//
+//		new Thread(lidar).start();
+		
 		sensors = new SensorBoard();
+		navXSensor navX = new navXSensor(sensors.getNavX(), "test navx");
+		
 		
 		for(Subsystem s : subsystems.values()) {
 			if(s instanceof Restartabale) {
@@ -208,6 +221,10 @@ public class Robot extends IterativeRobot {
 	}
 	public static SensorBoard getSensors() {
 		return sensors;
+	}
+
+	public static Vision getVision() {
+		return vision;
 	}
 
 }

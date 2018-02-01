@@ -1,11 +1,9 @@
 package org.usfirst.frc.team2854.robot;
 
-import org.usfirst.frc.team2854.robot.commands.DriveDan;
-import org.usfirst.frc.team2854.robot.commands.EncoderTurn;
+import org.usfirst.frc.team2854.robot.commands.DriveToBox;
 import org.usfirst.frc.team2854.robot.commands.MotionProfileTurn;
+import org.usfirst.frc.team2854.robot.commands.PIDTurn;
 import org.usfirst.frc.team2854.robot.commands.ToggleShift;
-
-import com.ctre.phoenix.motion.MotionProfileStatus;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -19,12 +17,14 @@ public class OI {
 	public static Joystick joystick = new Joystick(0);	
 	public static JoystickButton buttonA = new JoystickButton(joystick, 1);
 	public static JoystickButton buttonB = new JoystickButton(joystick, 2);
+	public static JoystickButton buttonX = new JoystickButton(joystick, 3);
 	public static JoystickButton rTrigger = new JoystickButton(joystick, 6);
 
 	static {
 
 		OI.buttonA.whenPressed(new MotionProfileTurn(0, Config.lowTarget/2f, 12, 90, true));
-		OI.buttonB.whenPressed(new DriveDan());
+		OI.buttonB.whenPressed(new PIDTurn(3600, 1, true));
+		OI.buttonX.whenPressed(new DriveToBox(0));
 		OI.rTrigger.whenPressed(new ToggleShift());
 	}
 

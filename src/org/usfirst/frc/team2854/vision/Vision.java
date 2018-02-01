@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2854.robot;
+package org.usfirst.frc.team2854.vision;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -37,6 +37,10 @@ public class Vision implements Runnable {
 	private final int imgWidth = 756;
 	private Double distance;
 	private double angle;
+	
+	private double distanceToBox;
+	
+	private boolean shouldRun = true;
 
 	public Vision(Scalar lowerBoundVal, Scalar upperBoundVal) {
 		data = new InterpolatingMap();
@@ -54,11 +58,14 @@ public class Vision implements Runnable {
 		// data.addDataPoint(87d, 8d);
 		// data.addDataPoint(77d, 9d);
 
-		
-		data.addDataPoint(9300d, 45d);
-		data.addDataPoint(10700d, 43d);
-		data.addDataPoint(21250d, 27.5d);
-		data.addDataPoint(12350d, 38.5d);
+		data.addDataPoint(563d, 27.5);
+		data.addDataPoint(548d, 28.5);
+		data.addDataPoint(309d, 48d);
+		data.addDataPoint(270d, 57d);
+		data.addDataPoint(235d, 66d);
+		data.addDataPoint(183d, 82.5d);
+		data.addDataPoint(150d, 96d);
+		data.addDataPoint(141d, 102d);
 
 		upperBoundValue = upperBoundVal;
 		lowerBoundValue = lowerBoundVal;
@@ -93,6 +100,15 @@ public class Vision implements Runnable {
 
 		GripPipeline pipeLine = new GripPipeline();
 		while (true) {
+			if(!shouldRun) {
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				continue;
+			}
 			Mat output = new Mat();
 			// System.out.println("running " + Math.random());
 			if (cvSink.grabFrame(m) == 0) {
@@ -101,24 +117,23 @@ public class Vision implements Runnable {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 				continue;
 			}
 			output = m.clone();
 			pipeLine.process(m);
-
+			
 			ArrayList<MatOfPoint> filterContours = pipeLine.findContoursOutput();
-			// ArrayList<MatOfPoint> proxContour = aproxPoly(filterContours);
-			//output = Mat.zeros(new Size(1280, 720), CvType.CV_8UC3);
+
 			drawContours(filterContours, output);
 			Rect box = getLargestBoundingBox(filterContours);
 			Imgproc.rectangle(output, new Point(box.x, box.y), new Point(box.x + box.width, box.y + box.height),
-					new Scalar(255, 0, 0));
-			System.out.println(box.area());
-			System.out.println("Distance: " + data.getValue(box.area()));
-			outputStream2.putFrame(pipeLine.hslThresholdOutput());
+					new Scalar(0, 0, 255), 4);
+			//System.out.println(box.area());
+			//System.out.println("Distance: " + data.getValue(box.area()));
+			SmartDashboard.putNumber("Box Width", box.width);
+			distanceToBox = data.getValue((double) box.width);
+			SmartDashboard.putNumber("Distance", distanceToBox);
 			if (output.empty()) {
 				System.out.println("Empty mat");
 			} else {
@@ -132,7 +147,7 @@ public class Vision implements Runnable {
 	public void drawContours(List<MatOfPoint> contours, Mat img) {
 		Random r = new Random();
 		for (int i = 0; i < contours.size(); i++) {
-			Imgproc.drawContours(img, contours, i, new Scalar(0, 255, 0));
+			Imgproc.drawContours(img, contours, i, new Scalar(0, 255, 0), 2);
 		}
 
 	}
@@ -359,6 +374,18 @@ public class Vision implements Runnable {
 
 	public Scalar getLowerBoundValue() {
 		return lowerBoundValue;
+	}
+
+	public double getDistanceToBox() {
+		return distanceToBox;
+	}
+
+	public boolean isShouldRun() {
+		return shouldRun;
+	}
+
+	public void setShouldRun(boolean shouldRun) {
+		this.shouldRun = shouldRun;
 	}
 
 }

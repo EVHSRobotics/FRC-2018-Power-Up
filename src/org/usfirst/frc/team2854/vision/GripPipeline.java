@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2854.robot;
+package org.usfirst.frc.team2854.vision;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -31,6 +31,7 @@ public class GripPipeline {
 	private Mat cvErodeOutput = new Mat();
 	private Mat cvDilateOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
+	private Mat maskOutput = new Mat();
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -43,21 +44,21 @@ public class GripPipeline {
 		// Step Blur0:
 		Mat blurInput = source0;
 		BlurType blurType = BlurType.get("Box Blur");
-		double blurRadius = 6.306306306306296;
+		double blurRadius = 7.207207207207212;
 		blur(blurInput, blurType, blurRadius, blurOutput);
 
 		// Step HSL_Threshold0:
 		Mat hslThresholdInput = blurOutput;
-		double[] hslThresholdHue = {24.280575539568353, 57.27272727272726};
-		double[] hslThresholdSaturation = {75.67446043165468, 255.0};
-		double[] hslThresholdLuminance = {110.07194244604317, 222.80303030303028};
+		double[] hslThresholdHue = {27.5179856115108, 55.75757575757575};
+		double[] hslThresholdSaturation = {34.39748201438849, 233.53535353535355};
+		double[] hslThresholdLuminance = {0.0, 200.97474747474743};
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, hslThresholdOutput);
 
 		// Step CV_erode0:
 		Mat cvErodeSrc = hslThresholdOutput;
 		Mat cvErodeKernel = new Mat();
 		Point cvErodeAnchor = new Point(-1, -1);
-		double cvErodeIterations = 5.0;
+		double cvErodeIterations = 7.0;
 		int cvErodeBordertype = Core.BORDER_CONSTANT;
 		Scalar cvErodeBordervalue = new Scalar(-1);
 		cvErode(cvErodeSrc, cvErodeKernel, cvErodeAnchor, cvErodeIterations, cvErodeBordertype, cvErodeBordervalue, cvErodeOutput);
@@ -66,7 +67,7 @@ public class GripPipeline {
 		Mat cvDilateSrc = cvErodeOutput;
 		Mat cvDilateKernel = new Mat();
 		Point cvDilateAnchor = new Point(-1, -1);
-		double cvDilateIterations = 10.0;
+		double cvDilateIterations = 8.0;
 		int cvDilateBordertype = Core.BORDER_CONSTANT;
 		Scalar cvDilateBordervalue = new Scalar(-1);
 		cvDilate(cvDilateSrc, cvDilateKernel, cvDilateAnchor, cvDilateIterations, cvDilateBordertype, cvDilateBordervalue, cvDilateOutput);
@@ -75,16 +76,25 @@ public class GripPipeline {
 		Mat findContoursInput = cvDilateOutput;
 		boolean findContoursExternalOnly = false;
 		findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
+
+		// Step Mask0:
+		Mat maskInput = source0;
+		Mat maskMask = cvDilateOutput;
+		mask(maskInput, maskMask, maskOutput);
+		
 		
 		blurInput.release();
 		hslThresholdInput.release();
-		cvErodeSrc.release();
-		cvErodeKernel.release();
-		cvDilateSrc.release();
 		cvDilateKernel.release();
+		cvDilateSrc.release();
+		cvErodeKernel.release();
+		cvErodeSrc.release();
 		findContoursInput.release();
+		maskInput.release();
+		maskMask.release();
 		
 		System.gc();
+
 	}
 
 	/**
@@ -125,6 +135,14 @@ public class GripPipeline {
 	 */
 	public ArrayList<MatOfPoint> findContoursOutput() {
 		return findContoursOutput;
+	}
+
+	/**
+	 * This method is a generated getter for the output of a Mask.
+	 * @return Mat output from Mask.
+	 */
+	public Mat maskOutput() {
+		return maskOutput;
 	}
 
 
@@ -277,6 +295,19 @@ public class GripPipeline {
 		}
 		int method = Imgproc.CHAIN_APPROX_SIMPLE;
 		Imgproc.findContours(input, contours, hierarchy, mode, method);
+		hierarchy.release();
+	}
+
+	/**
+	 * Filter out an area of an image using a binary mask.
+	 * @param input The image on which the mask filters.
+	 * @param mask The binary image that is used to filter.
+	 * @param output The image in which to store the output.
+	 */
+	private void mask(Mat input, Mat mask, Mat output) {
+		mask.convertTo(mask, CvType.CV_8UC1);
+		Core.bitwise_xor(output, output, output);
+		input.copyTo(output, mask);
 	}
 
 
