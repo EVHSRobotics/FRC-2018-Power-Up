@@ -32,7 +32,9 @@ public class GripPipeline {
 	private Mat cvDilateOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 	private Mat maskOutput = new Mat();
-
+	//private double[] hslThresholdSaturation = {34.39748201438849, 233.53535353535355};
+	//private double[] hslThresholdLuminance = {0.0, 200.97474747474743};
+	
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
@@ -40,6 +42,7 @@ public class GripPipeline {
 	/**
 	 * This is the primary method that runs the entire pipeline and updates the outputs.
 	 */
+	
 	public void process(Mat source0) {
 		// Step Blur0:
 		Mat blurInput = source0;
@@ -50,8 +53,8 @@ public class GripPipeline {
 		// Step HSL_Threshold0:
 		Mat hslThresholdInput = blurOutput;
 		double[] hslThresholdHue = {27.5179856115108, 55.75757575757575};
-		double[] hslThresholdSaturation = {34.39748201438849, 233.53535353535355};
-		double[] hslThresholdLuminance = {0.0, 200.97474747474743};
+		double[] hslThresholdSaturation = getHslThresholdSaturation();
+		double[] hslThresholdLuminance = getHslThresholdLuminance();
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, hslThresholdOutput);
 
 		// Step CV_erode0:
@@ -310,7 +313,27 @@ public class GripPipeline {
 		input.copyTo(output, mask);
 	}
 
-
+	public Scalar setAverageValue() {
+		Mat img = blurOutput;
+		Mat mask = new Mat(new Size(img.height(), img.width()), CvType.CV_8UC1);
+		Scalar mean = Core.mean(img, mask);
+		
+		return mean;
+	}
+	
+	public double[] getHslThresholdLuminance() {
+		double[] hslThreshHoldLuminance = {setAverageValue().val[2] - 20, setAverageValue().val[2] + 20};
+		return hslThreshHoldLuminance;
+		
+		
+	}
+	public double[] getHslThresholdSaturation() {
+		double[] hslThreshHoldSaturation = {setAverageValue().val[1] - 20, setAverageValue().val[1] + 20};
+		return hslThreshHoldSaturation;
+		
+		
+	}
+	
 
 
 }

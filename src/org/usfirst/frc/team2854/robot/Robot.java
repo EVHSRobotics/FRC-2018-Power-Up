@@ -46,7 +46,7 @@ import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
 import org.usfirst.frc.team2854.vision.Vision;
 
-import com.kauailabs.sf2.frc.navXSensor;
+//import com.kauailabs.sf2.frc.navXSensor;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -89,7 +89,7 @@ public class Robot extends IterativeRobot {
 //		new Thread(lidar).start();
 		
 		sensors = new SensorBoard();
-		navXSensor navX = new navXSensor(sensors.getNavX(), "test navx");
+		//navXSensor navX = new navXSensor(sensors.getNavX(), "test navx");
 		
 		
 		for(Subsystem s : subsystems.values()) {

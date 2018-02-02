@@ -57,15 +57,15 @@ public class Vision implements Runnable {
 		// data.addDataPoint(95d, 7d);
 		// data.addDataPoint(87d, 8d);
 		// data.addDataPoint(77d, 9d);
-
-		data.addDataPoint(563d, 27.5);
-		data.addDataPoint(548d, 28.5);
-		data.addDataPoint(309d, 48d);
-		data.addDataPoint(270d, 57d);
-		data.addDataPoint(235d, 66d);
-		data.addDataPoint(183d, 82.5d);
-		data.addDataPoint(150d, 96d);
-		data.addDataPoint(141d, 102d);
+		
+		data.addDataPoint(563d, 27.5, data.getDataVertical());
+		data.addDataPoint(548d, 28.5, data.getDataVertical() );
+		data.addDataPoint(309d, 48d,  data.getDataVertical());
+		data.addDataPoint(270d, 57d,  data.getDataVertical());
+		data.addDataPoint(235d, 66d,  data.getDataVertical());
+		data.addDataPoint(183d, 82.5d,  data.getDataVertical());
+		data.addDataPoint(150d, 96d,  data.getDataVertical());
+		data.addDataPoint(141d, 102d,  data.getDataVertical());
 
 		upperBoundValue = upperBoundVal;
 		lowerBoundValue = lowerBoundVal;
@@ -132,7 +132,7 @@ public class Vision implements Runnable {
 			//System.out.println(box.area());
 			//System.out.println("Distance: " + data.getValue(box.area()));
 			SmartDashboard.putNumber("Box Width", box.width);
-			distanceToBox = data.getValue((double) box.width);
+			distanceToBox = data.getValue((double) box.width, data.getDataVertical());
 			SmartDashboard.putNumber("Distance", distanceToBox);
 			if (output.empty()) {
 				System.out.println("Empty mat");
@@ -248,8 +248,8 @@ public class Vision implements Runnable {
 													// box
 
 			// if (height > 60) {
-			distance = this.data.getValue((double) height);
-			angle = getAngle(imgHeight, imgWidth, x, y, height, width);
+			distance = this.data.getValue((double) height, this.data.getDataVertical());
+			//angle = getAngle(imgHeight, imgWidth, x, y, height, width);
 
 			Imgproc.putText(inputImg, "Distance(ft): " + new DecimalFormat("##.##").format(distance),
 					new Point(rect.x, rect.y - 20), Core.FONT_HERSHEY_PLAIN, 1.2, new Scalar(250, 0, 0), 1);
@@ -273,8 +273,8 @@ public class Vision implements Runnable {
 			int width = rect.width;
 
 			if (height > 60) {
-				distance = this.data.getValue((double) height);
-				angle = getAngle(imgHeight, imgWidth, x, y, height, width);
+				distance = this.data.getValue((double) height, this.data.getDataVertical());
+				//angle = getAngle(imgHeight, imgWidth, x, y, height, width);
 
 				imgData.add(distance);
 				imgData.add(angle);
@@ -325,8 +325,8 @@ public class Vision implements Runnable {
 																											// box
 
 				if (height > 60) {
-					distance = data.getValue((double) height);
-					angle = getAngle(imgHeight, imgWidth, x, y, height, width);
+					distance = data.getValue((double) height, this.data.getDataVertical());
+				//	angle = getAngle(imgHeight, imgWidth, x, y, height, width);
 					results.add(distance);
 					results.add(angle);
 					// System.out.println(distance + " at height " + height);
@@ -343,14 +343,14 @@ public class Vision implements Runnable {
 		return results;
 
 	}
-
+/*
 	public double getAngle(int imgHeight, int imgWidth, int x, int y, int boxH, int boxW) {
 		int height = imgHeight - (y + boxH);
 		int width = ((x + boxW / 2) - imgWidth / 2); // camera is always at center of frame
 
 		return Math.toDegrees(Math.atan2(width, height)); // angle in degrees
 
-	}
+	}*/
 
 	public void setUpperBoundHue(int hue) {
 		this.upperBoundValue = new Scalar(hue, upperBoundValue.val[1], upperBoundValue.val[2]);
@@ -387,5 +387,47 @@ public class Vision implements Runnable {
 	public void setShouldRun(boolean shouldRun) {
 		this.shouldRun = shouldRun;
 	}
+	/*the following code is in the gripPipeline, as of now, this is not need
+	public Scalar setAverageValue() {
+		Mat img = this.img;
+		Mat mask = new Mat(new Size(img.height(), img.width()), CvType.CV_8UC1);
+		Scalar mean = Core.mean(img, mask);
+		
+	
+		return mean;
+		
+	}
+	
+	public double getAverageLuminance() {
+		return luminanceAvg;
+	}
+	
+	public double getAverageSaturation() {
+		return saturationAvg;
+	}
+	
+	
+	public void setUppperLuminance() {
+	
+		this.upperBoundValue = new Scalar(upperBoundValue.val[0], upperBoundValue.val[1], setAverageValue().val[2] + 20);
+		
+	}
+	public void setLowerLuminance() {
 
+		this.lowerBoundValue = new Scalar(upperBoundValue.val[0], upperBoundValue.val[1], setAverageValue().val[2] - 20);
+		
+	}
+	
+	public void setUpperSaturation() {
+		
+		this.upperBoundValue = new Scalar(upperBoundValue.val[0], saturation + 20, upperBoundValue.val[2]);
+		
+	}
+	public void setLowerSaturation() {
+		
+		this.lowerBoundValue = new Scalar(lowerBoundValue.val[0], setAverageValue().val[1] - 20, lowerBoundValue.val[2]);
+		
+	}*/
+	
+	
 }
