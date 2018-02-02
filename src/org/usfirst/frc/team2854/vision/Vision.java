@@ -36,9 +36,8 @@ public class Vision implements Runnable {
 	private final int imgHeight = 1008;
 	private final int imgWidth = 756;
 	private Double distance;
-	private double angle;
-	
 	private double distanceToBox;
+	private double angleToBox;
 	
 	private boolean shouldRun = true;
 
@@ -110,7 +109,6 @@ public class Vision implements Runnable {
 				continue;
 			}
 			Mat output = new Mat();
-			// System.out.println("running " + Math.random());
 			if (cvSink.grabFrame(m) == 0) {
 				System.out.println(cvSink.getError());
 				System.out.println("Camera thread sleeping for 1 second");
@@ -133,6 +131,8 @@ public class Vision implements Runnable {
 			//System.out.println("Distance: " + data.getValue(box.area()));
 			SmartDashboard.putNumber("Box Width", box.width);
 			distanceToBox = data.getValue((double) box.width, data.getDataVertical());
+			angleToBox = getAngle(box.width);
+			
 			SmartDashboard.putNumber("Distance", distanceToBox);
 			if (output.empty()) {
 				System.out.println("Empty mat");
@@ -143,6 +143,18 @@ public class Vision implements Runnable {
 
 		}
 	}
+	public double getAngle(double boxWidth) {
+		double height = data.getValue(boxWidth , data.getDataVertical());
+		double width = data.getValue(boxWidth ,data.getDataHorizontal());
+		
+		double angle = Math.toDegrees(Math.atan2(width, height));
+		
+		return angle;
+		
+		
+	}
+	
+	
 
 	public void drawContours(List<MatOfPoint> contours, Mat img) {
 		Random r = new Random();
@@ -253,7 +265,7 @@ public class Vision implements Runnable {
 
 			Imgproc.putText(inputImg, "Distance(ft): " + new DecimalFormat("##.##").format(distance),
 					new Point(rect.x, rect.y - 20), Core.FONT_HERSHEY_PLAIN, 1.2, new Scalar(250, 0, 0), 1);
-			Imgproc.putText(inputImg, "Angle(deg) " + new DecimalFormat("##.##").format(angle),
+			Imgproc.putText(inputImg, "Angle(deg) " + new DecimalFormat("##.##").format(angleToBox),
 					new Point(rect.x, rect.y - 40), Core.FONT_HERSHEY_PLAIN, 1.2, new Scalar(250, 0, 0), 1);
 			// }
 		}
@@ -277,7 +289,7 @@ public class Vision implements Runnable {
 				//angle = getAngle(imgHeight, imgWidth, x, y, height, width);
 
 				imgData.add(distance);
-				imgData.add(angle);
+				imgData.add(angleToBox);
 			}
 		}
 
@@ -328,13 +340,13 @@ public class Vision implements Runnable {
 					distance = data.getValue((double) height, this.data.getDataVertical());
 				//	angle = getAngle(imgHeight, imgWidth, x, y, height, width);
 					results.add(distance);
-					results.add(angle);
+					results.add(angleToBox);
 					// System.out.println(distance + " at height " + height);
 					// System.out.println(angle + " degrees");
 
 					Imgproc.putText(hsvImg, "Distance(ft): " + new DecimalFormat("##.##").format(distance),
 							new Point(rect.x, rect.y - 20), Core.FONT_HERSHEY_PLAIN, 1.2, new Scalar(250, 0, 0), 1);
-					Imgproc.putText(hsvImg, "Angle(deg) " + new DecimalFormat("##.##").format(angle),
+					Imgproc.putText(hsvImg, "Angle(deg) " + new DecimalFormat("##.##").format(angleToBox),
 							new Point(rect.x, rect.y - 40), Core.FONT_HERSHEY_PLAIN, 1.2, new Scalar(250, 0, 0), 1);
 				}
 			}
@@ -351,6 +363,8 @@ public class Vision implements Runnable {
 		return Math.toDegrees(Math.atan2(width, height)); // angle in degrees
 
 	}*/
+	
+
 
 	public void setUpperBoundHue(int hue) {
 		this.upperBoundValue = new Scalar(hue, upperBoundValue.val[1], upperBoundValue.val[2]);
