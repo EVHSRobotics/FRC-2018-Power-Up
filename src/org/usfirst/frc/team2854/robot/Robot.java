@@ -75,11 +75,11 @@ public class Robot extends IterativeRobot {
 		
 		System.out.println("Robot init");
 
-		vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
-		Thread visT = new Thread(vision);
-		visT.start();
+		//vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
+		//Thread visT = new Thread(vision);
+		//visT.start();
 	 
-		vision.setShouldRun(false);
+		//vision.setShouldRun(false);
 		
 //		LidarReader lidar = new LidarReader(Port.kOnboard);
 //		

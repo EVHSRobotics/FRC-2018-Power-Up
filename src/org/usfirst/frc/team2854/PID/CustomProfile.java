@@ -14,9 +14,9 @@ public class CustomProfile {
 
 	public static ProfileNotifier generateTurnMotionControl(double cruzV, double outV, double turnR, double turnAngle,
 			boolean right, TalonSRX leftT2, TalonSRX rightT2) {
-		
+
 		System.out.println("Generating profile");
-		
+
 		if (Config.robotWidth == 0) {
 			throw new RuntimeException("measure the robot width");
 		}
@@ -70,19 +70,13 @@ public class CustomProfile {
 		innerPoint.profileSlotSelect0 = 0;
 		outerPoint.profileSlotSelect1 = 1;
 		innerPoint.profileSlotSelect1 = 1;
-		
-		
+
 		ProfileNotifier pNotifier = new ProfileNotifier(10, innerDist, outerDist, inner, outer);
 
-		//leftT2.configMotionProfileTrajectoryPeriod(0, 10);
-		//rightT2.configMotionProfileTrajectoryPeriod(0, 10);
-		
-		
 		System.out.println("first acc time: " + firstAccelerationTime);
 		System.out.println("first acc time: " + cruzTime);
 		System.out.println("first acc time: " + secondAccelerationTime);
 
-		
 		while (timer < time) {
 			System.out.println("happy face one");
 			timer += .1;
@@ -162,24 +156,22 @@ public class CustomProfile {
 				pNotifier.addPoint();
 
 			}
-			
-			//inner.getMotionProfileStatus(status);
-			//System.out.println(status.topBufferCnt);
-			System.out.println("generating " + (inner == null) + " " + (innerPoint==null));
-			
+
+			// inner.getMotionProfileStatus(status);
+			// System.out.println(status.topBufferCnt);
+			System.out.println("generating " + (inner == null) + " " + (innerPoint == null));
+
 			printPoint(innerPoint);
-			
-			
-			
+
 			inner.pushMotionProfileTrajectory(innerPoint);
 			outer.pushMotionProfileTrajectory(outerPoint);
 		}
-		
+
 		System.out.println("done generating profile");
 
 		return pNotifier;
 	}
-	
+
 	public static void printPoint(TrajectoryPoint trajPt) {
 		System.out.println(trajPt.position);
 		System.out.println(trajPt.velocity);
@@ -191,6 +183,5 @@ public class CustomProfile {
 		System.out.println(trajPt.timeDur == null);
 		System.out.println(trajPt.timeDur.value);
 	}
-	
 
 }

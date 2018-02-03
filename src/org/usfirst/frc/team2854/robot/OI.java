@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2854.robot;
 
+import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
 import org.usfirst.frc.team2854.robot.commands.DriveToBox;
 import org.usfirst.frc.team2854.robot.commands.MotionProfileTurn;
 import org.usfirst.frc.team2854.robot.commands.PIDTurn;
@@ -23,7 +24,7 @@ public class OI {
 	static {
 
 		OI.buttonA.whenPressed(new MotionProfileTurn(0, Config.lowTarget/2f, 12, 90, true));
-		OI.buttonB.whenPressed(new PIDTurn(3600, 1, true));
+		OI.buttonB.whenPressed(new DriveMotionMagik(-175));
 		OI.buttonX.whenPressed(new DriveToBox(0));
 		OI.rTrigger.whenPressed(new ToggleShift());
 	}

@@ -24,21 +24,24 @@ public class JoystickDrive extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		double speed = OI.joystick.getRawAxis(2) - OI.joystick.getRawAxis(3);
-		// SmartDashboard.putNumber("target val", speed * Config.manuelSpeedMultiplier);
-		// speed *= Config.targetVel;
-		double left = (Math.abs(OI.joystick.getRawAxis(1)) < .1 ? 0 : OI.joystick.getRawAxis(1));
-		// double right = (Math.abs(OI.joystick.getRawAxis(5)) < .1 ? 0 :
-		// OI.joystick.getRawAxis(5)) *
-		// 8400;
-
-		if (Math.abs(OI.joystick.getRawAxis(1)) > .5) {
-			drive.drive(left * Config.manuelSpeedMultiplier, left * Config.manuelSpeedMultiplier,
-					ControlMode.PercentOutput);
-		} else {
-			drive.drive(speed * Config.manuelSpeedMultiplier, speed * Config.manuelSpeedMultiplier,
-					ControlMode.Velocity);
-		}
+//		double speed = OI.joystick.getRawAxis(2) - OI.joystick.getRawAxis(3);
+//		// SmartDashboard.putNumber("target val", speed * Config.manuelSpeedMultiplier);
+//		// speed *= Config.targetVel;
+//		double left = (Math.abs(OI.joystick.getRawAxis(1)) < .1 ? 0 : OI.joystick.getRawAxis(1));
+//		// double right = (Math.abs(OI.joystick.getRawAxis(5)) < .1 ? 0 :
+//		// OI.joystick.getRawAxis(5)) *
+//		// 8400;
+//		
+					drive.drive(OI.joystick.getRawAxis(1) * Config.manuelSpeedMultiplier, OI.joystick.getRawAxis(5) * Config.manuelSpeedMultiplier,
+		ControlMode.PercentOutput);
+//
+//		if (Math.abs(OI.joystick.getRawAxis(1)) > .5) {
+//			drive.drive(OI.joystick.getRawAxis(1) * Config.manuelSpeedMultiplier, OI.joystick.getRawAxis(5) * Config.manuelSpeedMultiplier,
+//					ControlMode.PercentOutput);
+//		} else {
+//			drive.drive(speed * Config.manuelSpeedMultiplier, speed * Config.manuelSpeedMultiplier,
+//					ControlMode.Velocity);
+//		}
 
 		// drive.drive(speed, speed, ControlMode.PercentOutput);
 	}
