@@ -1,19 +1,16 @@
 package org.usfirst.frc.team2854.vision;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
-public class InterpolatingMap {
-
+public class InterpolatingMapHorizontalDistance {
 	private LinkedHashMap<Double, OutputValue> data;
-
 	private ArrayList<Double> sortedInputs;
 	private double minInput, maxInput;
 	private double averageSlope;
 
-	public class OutputValue {
+	private class OutputValue {
 		int count = 0;
 		double value;
 
@@ -30,7 +27,7 @@ public class InterpolatingMap {
 		}
 	}
 
-	public InterpolatingMap() {
+	public InterpolatingMapHorizontalDistance() {
 		data = new LinkedHashMap<>();
 
 	}
@@ -49,40 +46,32 @@ public class InterpolatingMap {
 		averageSlope = (data.get(maxInput).value - data.get(minInput).value) / (maxInput - minInput);
 
 	}
-
 	public double getValue(Double input) {
-		if (input < minInput || input > maxInput) {
-			// throw new RuntimeException("Can not Extrapolate data! The value " + input + "
-			// must be in range [" + minInput + ", " + maxInput + "]" );
-			// System.out.println("Extrapolating! results probably will contain significant
-			// error");
+		if(input < minInput || input > maxInput) {
+			//throw new RuntimeException("Can not Extrapolate data! The value " + input + " must be in range [" + minInput + ", " + maxInput + "]" );
+			//System.out.println("Extrapolating! results probably will contain significant error");
 			return (input - minInput) * averageSlope + data.get(minInput).value;
 		}
-		if (data.containsKey(input)) {
+		if(data.containsKey(input)) {
 			return data.get(input).value;
 		} else {
 			Double closestMinInput = 0d, closestMaxInput = 0d;
-
-			for (int i = 1; i < sortedInputs.size(); i++) { // TODO replcae with binary search for the effeciencies
-				if (sortedInputs.get(i) > input) {
-					closestMinInput = sortedInputs.get(i - 1);
+			
+			
+			for(int i = 1; i < sortedInputs.size(); i++) { //TODO replcae with binary search for the effeciencies
+				if(sortedInputs.get(i) > input) {
+					closestMinInput = sortedInputs.get(i-1);
 					closestMaxInput = sortedInputs.get(i);
 					break;
 				}
 			}
-
+			
 			Double closestMinOutput = data.get(closestMinInput).value;
 			Double closestMaxOutput = data.get(closestMinInput).value;
 
-			double slope = (closestMaxOutput - closestMinOutput) / (closestMaxInput - closestMinInput);
-
+			double slope = (closestMaxOutput - closestMinOutput)/(closestMaxInput - closestMinInput);
+			
 			return (input - closestMinInput) * slope + closestMinOutput;
 		}
 	}
-
-	
-
-
-	
-
 }

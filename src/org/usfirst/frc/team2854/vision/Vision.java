@@ -29,7 +29,8 @@ public class Vision implements Runnable {
 	// Mat source;
 	// Mat output;
 
-	InterpolatingMap data;
+	InterpolatingMap dataY;
+	InterpolatingMapHorizontalDistance dataX;
 	private Mat img;
 	private Scalar upperBoundValue;
 	private Scalar lowerBoundValue;
@@ -42,7 +43,7 @@ public class Vision implements Runnable {
 	private boolean shouldRun = true;
 
 	public Vision(Scalar lowerBoundVal, Scalar upperBoundVal) {
-		data = new InterpolatingMap();
+		dataY = new InterpolatingMap();
 
 		// data.addDataPoint(608d, 1d);
 		// data.addDataPoint(70d, 10d);
@@ -57,14 +58,14 @@ public class Vision implements Runnable {
 		// data.addDataPoint(87d, 8d);
 		// data.addDataPoint(77d, 9d);
 		
-		data.addDataPoint(563d, 27.5, data.getDataVertical());
-		data.addDataPoint(548d, 28.5, data.getDataVertical() );
-		data.addDataPoint(309d, 48d,  data.getDataVertical());
-		data.addDataPoint(270d, 57d,  data.getDataVertical());
-		data.addDataPoint(235d, 66d,  data.getDataVertical());
-		data.addDataPoint(183d, 82.5d,  data.getDataVertical());
-		data.addDataPoint(150d, 96d,  data.getDataVertical());
-		data.addDataPoint(141d, 102d,  data.getDataVertical());
+		dataY.addDataPoint(563d, 27.5);
+		dataY.addDataPoint(548d, 28.5);
+		dataY.addDataPoint(309d, 48d);
+		dataY.addDataPoint(270d, 57d);
+		dataY.addDataPoint(235d, 66d);
+		dataY.addDataPoint(183d, 82.5d);
+		dataY.addDataPoint(150d, 96d);
+		dataY.addDataPoint(141d, 102d);
 
 		upperBoundValue = upperBoundVal;
 		lowerBoundValue = lowerBoundVal;
@@ -130,7 +131,7 @@ public class Vision implements Runnable {
 			//System.out.println(box.area());
 			//System.out.println("Distance: " + data.getValue(box.area()));
 			SmartDashboard.putNumber("Box Width", box.width);
-			distanceToBox = data.getValue((double) box.width, data.getDataVertical());
+			distanceToBox = dataY.getValue((double) box.width);
 			angleToBox = getAngle(box.width);
 			
 			SmartDashboard.putNumber("Distance", distanceToBox);
@@ -144,8 +145,8 @@ public class Vision implements Runnable {
 		}
 	}
 	public double getAngle(double boxWidth) {
-		double height = data.getValue(boxWidth , data.getDataVertical());
-		double width = data.getValue(boxWidth ,data.getDataHorizontal());
+		double height = dataY.getValue(boxWidth);
+		double width = dataX.getValue(boxWidth);
 		
 		double angle = Math.toDegrees(Math.atan2(width, height));
 		
@@ -260,7 +261,7 @@ public class Vision implements Runnable {
 													// box
 
 			// if (height > 60) {
-			distance = this.data.getValue((double) height, this.data.getDataVertical());
+			distance = this.dataY.getValue((double) height);
 			//angle = getAngle(imgHeight, imgWidth, x, y, height, width);
 
 			Imgproc.putText(inputImg, "Distance(ft): " + new DecimalFormat("##.##").format(distance),
@@ -285,7 +286,7 @@ public class Vision implements Runnable {
 			int width = rect.width;
 
 			if (height > 60) {
-				distance = this.data.getValue((double) height, this.data.getDataVertical());
+				distance = this.dataY.getValue((double) height);
 				//angle = getAngle(imgHeight, imgWidth, x, y, height, width);
 
 				imgData.add(distance);
@@ -337,7 +338,7 @@ public class Vision implements Runnable {
 																											// box
 
 				if (height > 60) {
-					distance = data.getValue((double) height, this.data.getDataVertical());
+					distance = dataY.getValue((double) height);
 				//	angle = getAngle(imgHeight, imgWidth, x, y, height, width);
 					results.add(distance);
 					results.add(angleToBox);
