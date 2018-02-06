@@ -31,6 +31,7 @@ public class Vision implements Runnable {
 
 	InterpolatingMap dataY;
 	InterpolatingMapHorizontalDistance dataX;
+		
 	private Mat img;
 	private Scalar upperBoundValue;
 	private Scalar lowerBoundValue;
@@ -109,7 +110,7 @@ public class Vision implements Runnable {
 				}
 				continue;
 			}
-			Mat output = new Mat();
+			
 			if (cvSink.grabFrame(m) == 0) {
 				System.out.println(cvSink.getError());
 				System.out.println("Camera thread sleeping for 1 second");
@@ -118,31 +119,28 @@ public class Vision implements Runnable {
 				} catch (InterruptedException e) {
 				}
 				continue;
-			}
-			output = m.clone();
-			pipeLine.process(m);
+			} 
+//			pipeLine.process(m);
+//			SmartDashboard.putNumber("running", Math.random());
 			
-			ArrayList<MatOfPoint> filterContours = pipeLine.findContoursOutput();
-
-			drawContours(filterContours, output);
-			Rect box = getLargestBoundingBox(filterContours);
-			Imgproc.rectangle(output, new Point(box.x, box.y), new Point(box.x + box.width, box.y + box.height),
-					new Scalar(0, 0, 255), 4);
-			//System.out.println(box.area());
-			//System.out.println("Distance: " + data.getValue(box.area()));
-			SmartDashboard.putNumber("Box Width", box.width);
-			distanceToBox = dataY.getValue((double) box.width);
-			angleToBox = getAngle(box.width);
-			
-			SmartDashboard.putNumber("Distance", distanceToBox);
-			if (output.empty()) {
-				System.out.println("Empty mat");
-			} else {
-				outputStream1.putFrame(output);
-			}
-			output.release();
+//			ArrayList<MatOfPoint> filterContours = pipeLine.findContoursOutput();
+		//	System.out.println(filterContours.size());
+			//drawContours(filterContours, output);
+//			Rect box = getLargestBoundingBox(filterContours);
+			//Imgproc.rectangle(output, new Point(box.x, box.y), new Point(box.x + box.width, box.y + box.height),
+			//		new Scalar(0, 0, 255), 4);
+//			SmartDashboard.putNumber("Box Width", box.width);
+//			distanceToBox = dataY.getValue((double) box.width);
+//			
+//			SmartDashboard.putNumber("Distance", distanceToBox);
+//			if (pipeLine.maskOutput().empty()) {
+//				System.out.println("Empty mat");
+//			} else {
+//				outputStream1.putFrame(pipeLine.maskOutput());
+//			}
 
 		}
+
 	}
 	public double getAngle(double boxWidth) {
 		double height = dataY.getValue(boxWidth);

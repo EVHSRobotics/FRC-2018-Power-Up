@@ -40,10 +40,14 @@ public class ProfileNotifier {
 
 	public void startNotifier() {
 		enabled = true;
-		notifier.setHandler(() -> {
+		notifier = new Notifier(() -> {
+			System.out.println("running");
 			rightT.processMotionProfileBuffer();
 			leftT.processMotionProfileBuffer();
-		});
+		}
+
+		);
+
 		notifier.startPeriodic(updateTime / 2d / 1000d);
 	}
 

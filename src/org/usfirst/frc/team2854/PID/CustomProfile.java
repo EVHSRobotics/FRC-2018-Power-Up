@@ -85,7 +85,7 @@ public class CustomProfile {
 		
 		while (timer < time) {
 			System.out.println("happy face one");
-			timer += .1;
+			timer += .01;
 
 			if (timer < firstAccelerationTime) {
 				System.out.println("happy face two");
