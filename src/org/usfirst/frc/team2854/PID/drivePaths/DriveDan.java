@@ -1,6 +1,9 @@
-package org.usfirst.frc.team2854.robot.commands;
+package org.usfirst.frc.team2854.PID.drivePaths;
 
 import org.usfirst.frc.team2854.robot.Robot;
+import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
+import org.usfirst.frc.team2854.robot.commands.EncoderTurn;
+import org.usfirst.frc.team2854.robot.commands.GyroTurn;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -21,24 +24,24 @@ public class DriveDan extends CommandGroup {
 			
 			addSequential(new EncoderTurn(79.25 / 4d));
 			ang += 90;
-			addSequential(new PIDTurn(ang, 1, false));
+			addSequential(new GyroTurn(ang, 1, false));
 			
 			addSequential(new DriveMotionMagik(21 * 12));
 			
 			addSequential(new EncoderTurn(79.25 / 4d));
 			ang += 90;
-			addSequential(new PIDTurn(ang, 1, false));
+			addSequential(new GyroTurn(ang, 1, false));
 
 			addSequential(new DriveMotionMagik(16 * 12));
 
 			addSequential(new EncoderTurn(79.25 / 4d));
 			ang += 90;
-			addSequential(new PIDTurn(ang, 1, false));
+			addSequential(new GyroTurn(ang, 1, false));
 
 			addSequential(new DriveMotionMagik(21 * 12));
 			addSequential(new EncoderTurn(79.25 / 4d));
 			ang += 90;
-			addSequential(new PIDTurn(ang, 1, false));
+			addSequential(new GyroTurn(ang, 1, false));
 
 			addSequential(new DriveMotionMagik(6 * 12 - 6));
 			

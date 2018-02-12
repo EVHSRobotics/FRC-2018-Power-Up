@@ -26,6 +26,8 @@ import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -46,6 +48,7 @@ import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
 import org.usfirst.frc.team2854.vision.Vision;
 
+import com.kauailabs.sf2.frc.RoboRIO;
 import com.kauailabs.sf2.frc.navXSensor;
 
 /**
@@ -63,6 +66,7 @@ public class Robot extends IterativeRobot {
 	private static SensorBoard sensors;
 
 	private static Vision vision;
+	private static Thread visT;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -74,13 +78,13 @@ public class Robot extends IterativeRobot {
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 		
 		System.out.println("Robot init");
-
-		vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
-		Thread visT = new Thread(vision);
-		visT.start();
-	 
-		vision.setShouldRun(false);
-		
+//
+//		vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
+//		visT = new Thread(vision);
+//		visT.start();	
+//		
+//		vision.setShouldRun(false);
+//	
 //		LidarReader lidar = new LidarReader(Port.kOnboard);
 //		
 //		CvSource lidarOut = CameraServer.getInstance().putVideo("lidar", lidar.getWidth(), lidar.getHeight());  
@@ -97,6 +101,10 @@ public class Robot extends IterativeRobot {
 				((Restartabale) s).enable();
 			}
 		}
+		
+	
+		
+		
 //		
 		//SmartDashboard.putNumber("lowerHue", vision.getLowerBoundValue().val[0]);
 		//SmartDashboard.putNumber("upperHue", vision.getUpperBoundValue().val[0]);
@@ -127,6 +135,8 @@ public class Robot extends IterativeRobot {
 				((Restartabale) s).disable();
 			}
 		}
+		
+		
 	}
 
 	@Override
@@ -151,7 +161,7 @@ public class Robot extends IterativeRobot {
 		for(Subsystem s : subsystems.values()) {
 			if(s instanceof Restartabale) {
 				((Restartabale) s).enable();
-			}
+			} 
 		}
 		
 	}
@@ -171,6 +181,8 @@ public class Robot extends IterativeRobot {
 				((Restartabale) s).enable();
 			}
 		}
+		
+ 
 		
 		//OI.buttonA.whenPressed(new DriveMotionMagik());
 

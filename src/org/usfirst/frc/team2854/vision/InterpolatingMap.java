@@ -16,6 +16,7 @@ public class InterpolatingMap{
 		int count = 0;
 		double value;
 		
+		
 		public OutputValue(double value) {
 			this.value = value;
 			count++;
@@ -33,6 +34,10 @@ public class InterpolatingMap{
 		data = new LinkedHashMap<>();
 	}
 	
+	public void addDataPoint(double input, double output) {
+		addDataPoint(input, output);
+	}
+	
 	public void addDataPoint(Double input, double output) {
 		if(data.containsKey(input)) {
 			data.get(input).addPoint(output);
@@ -44,6 +49,8 @@ public class InterpolatingMap{
 		minInput = sortedInputs.get(0);
 		maxInput = sortedInputs.get(sortedInputs.size()-1);
 		averageSlope = (data.get(maxInput).value - data.get(minInput).value) / (maxInput - minInput);
+		
+		
 	}
 	
 	public double getValue(Double input) {

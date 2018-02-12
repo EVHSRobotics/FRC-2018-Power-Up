@@ -1,4 +1,6 @@
-package org.usfirst.frc.team2854.robot.commands;
+package org.usfirst.frc.team2854.PID.drivePaths;
+
+import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 

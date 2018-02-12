@@ -37,9 +37,9 @@ public class Vision implements Runnable {
 	private final int imgWidth = 756;
 	private Double distance;
 	private double angle;
-	
+
 	private double distanceToBox;
-	
+
 	private boolean shouldRun = true;
 
 	public Vision(Scalar lowerBoundVal, Scalar upperBoundVal) {
@@ -58,15 +58,21 @@ public class Vision implements Runnable {
 		// data.addDataPoint(87d, 8d);
 		// data.addDataPoint(77d, 9d);
 
-		data.addDataPoint(563d, 27.5);
-		data.addDataPoint(548d, 28.5);
-		data.addDataPoint(309d, 48d);
-		data.addDataPoint(270d, 57d);
-		data.addDataPoint(235d, 66d);
-		data.addDataPoint(183d, 82.5d);
-		data.addDataPoint(150d, 96d);
-		data.addDataPoint(141d, 102d);
+		data.addDataPoint(96,  46.5);
+		data.addDataPoint(119, 63);
+		data.addDataPoint(156, 51);
+		data.addDataPoint(270, 35.5);
+		data.addDataPoint(365, 22.5);
+		data.addDataPoint(553, 16.5);
+		data.addDataPoint(282, 29);
+		data.addDataPoint(124, 61);
+		data.addDataPoint(38, 126.5);
 
+
+
+
+
+		
 		upperBoundValue = upperBoundVal;
 		lowerBoundValue = lowerBoundVal;
 		System.out.println("Creating object");
@@ -76,16 +82,14 @@ public class Vision implements Runnable {
 	public void run() {
 		System.out.println("Starting thread");
 		camera = CameraServer.getInstance().startAutomaticCapture();
-		camera.setResolution(1280, 720);
+		camera.setResolution(640, 480);
 		camera.setExposureAuto();
 		camera.setWhiteBalanceAuto();
 
 		cvSink = CameraServer.getInstance().getVideo();
-		CvSource outputStream1 = CameraServer.getInstance().putVideo("Distance", 1280, 720);
-		CvSource outputStream2 = CameraServer.getInstance().putVideo("Filter", 1280, 720);
+		CvSource outputStream1 = CameraServer.getInstance().putVideo("Distance", 640, 480);
 
 		// camera.setResolution(imgWidth, imgHeight);
-		Mat source = new Mat();
 		// output = new Mat();
 
 		try {
@@ -93,54 +97,56 @@ public class Vision implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		Mat m = new Mat();
 
 		System.out.println("lower: " + lowerBoundValue);
 		System.out.println("upper: " + upperBoundValue);
 
 		GripPipeline pipeLine = new GripPipeline();
-		while (true) {
-			if(!shouldRun) {
-				try {
+		Mat input = new Mat();
+		Mat inputCopy = new Mat();
+		try {
+
+			while (true) {
+				
+				if(!shouldRun) {
 					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					continue;
 				}
-				continue;
-			}
-			Mat output = new Mat();
-			// System.out.println("running " + Math.random());
-			if (cvSink.grabFrame(m) == 0) {
-				System.out.println(cvSink.getError());
-				System.out.println("Camera thread sleeping for 1 second");
-				try {
+				
+				long error = (int) cvSink.grabFrame(input);
+				cvSink.grabFrame(inputCopy);
+				if (error == 0 || input.empty()) {
+					System.out.println("Error grabbing frame or frame is empty, sleeping for 1 second");
+					System.out.println(cvSink.getError());
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+					continue;
 				}
-				continue;
-			}
-			output = m.clone();
-			pipeLine.process(m);
-			
-			ArrayList<MatOfPoint> filterContours = pipeLine.findContoursOutput();
+				SmartDashboard.putNumber("running", Math.random());
+				pipeLine.process(input);
+				ArrayList<MatOfPoint> contours = pipeLine.findContoursOutput();
+				if (!contours.isEmpty()) {
+					Rect largest = getLargestBoundingBox(contours);
 
-			drawContours(filterContours, output);
-			Rect box = getLargestBoundingBox(filterContours);
-			Imgproc.rectangle(output, new Point(box.x, box.y), new Point(box.x + box.width, box.y + box.height),
-					new Scalar(0, 0, 255), 4);
-			//System.out.println(box.area());
-			//System.out.println("Distance: " + data.getValue(box.area()));
-			SmartDashboard.putNumber("Box Width", box.width);
-			distanceToBox = data.getValue((double) box.width);
-			SmartDashboard.putNumber("Distance", distanceToBox);
-			if (output.empty()) {
-				System.out.println("Empty mat");
-			} else {
-				outputStream1.putFrame(output);
-			}
-			output.release();
+					SmartDashboard.putNumber("Box Width", largest.width);
+					SmartDashboard.putNumber("Distance", data.getValue((double) largest.width));
 
+					Imgproc.rectangle(inputCopy, largest.tl(), largest.br(), new Scalar(0, 255, 0), 3);
+					if (!inputCopy.empty()) {
+						SmartDashboard.putBoolean("Found", true);
+						outputStream1.putFrame(inputCopy);
+					} else {
+						SmartDashboard.putBoolean("Found", false);
+						outputStream1.putFrame(inputCopy);
+					}
+				} else {
+					SmartDashboard.putBoolean("Found", false);
+					outputStream1.putFrame(inputCopy);
+				}
+
+			}
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 

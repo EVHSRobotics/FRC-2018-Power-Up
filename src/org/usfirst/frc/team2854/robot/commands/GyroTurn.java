@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class PIDTurn extends Command {
+public class GyroTurn extends Command {
 
 	private static PIDConstant pid = PIDConstant.autoTurn;
 	private AHRS navX = Robot.getSensors().getNavX();
@@ -34,7 +34,7 @@ public class PIDTurn extends Command {
 	private PIDController pidController;
 	private DummyPIDOutput out;
 
-	public PIDTurn(double target, double thresh, boolean relative) {
+	public GyroTurn(double target, double thresh, boolean relative) {
 		requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
 		driveTrain = (DriveTrain) (Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
 		this.relative = relative;

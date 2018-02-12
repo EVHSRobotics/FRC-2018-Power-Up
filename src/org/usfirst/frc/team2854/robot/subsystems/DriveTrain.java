@@ -177,9 +177,26 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		SmartDashboard.putNumber("Left Throttle", rightT2.getMotorOutputPercent());
 		// SmartDashboard.putNumber("Target", leftT2.getClosedLoopTarget(0));
 
-		SmartDashboard.putBoolean("reset during en?", new StickyFaults().ResetDuringEn);
-		SmartDashboard.putNumber("encoder diff",
-				Math.abs(rightT2.getSelectedSensorPosition(0) - leftT2.getSelectedSensorPosition(0)));
+		//SmartDashboard.putBoolean("reset during en?", new StickyFaults().ResetDuringEn);
+		//SmartDashboard.putNumber("encoder diff",
+		//		Math.abs(rightT2.getSelectedSensorPosition(0) - leftT2.getSelectedSensorPosition(0)));
+		MotionProfileStatus status = new MotionProfileStatus();
+		leftT2.getMotionProfileStatus(status);
+		SmartDashboard.putNumber("bottom buffer", status.btmBufferCnt);
+		SmartDashboard.putNumber("top buffer", status.topBufferCnt);
+		
+		SmartDashboard.putNumber("target trj Vel", leftT2.getActiveTrajectoryVelocity());
+		SmartDashboard.putNumber("target trj Pos", leftT2.getActiveTrajectoryPosition());
+		
+		SmartDashboard.putNumber("left position", leftT2.getSelectedSensorPosition(0));
+		
+		
+		
+		//if(status.isUnderrun) {
+		//	System.out.println("Under running");
+		//}
+
+
 	}
 
 	private void applyShift(GearState desiredState, int attempt) {
@@ -275,6 +292,22 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		return CustomProfile.generateTurnMotionControl(cruzVel, vOut, turnR, turnAngle, right, leftT2, rightT2);
 	}
 
+	public ProfileNotifier generateDriveProfile(double cruzVel, double vOut, double distance) {
+		ProfileNotifier pNotifier = new ProfileNotifier(10, distance, distance, leftT2, rightT2);
+		new Thread( () -> {
+			CustomProfile.generateStraightMotionControl(cruzVel, vOut, distance, leftT2, rightT2, pNotifier);
+		}).start();
+		return pNotifier;
+	}
+	
+	public ProfileNotifier generateTestMotionControl(double cruzV, double outV, double distance) {
+		ProfileNotifier pNotifier = new ProfileNotifier(10, distance, distance, leftT2, rightT2);
+		new Thread( () -> {
+			CustomProfile.generateTestMotionControl(cruzV, outV, distance, leftT2, rightT2, pNotifier);
+		}).start();
+		return pNotifier;
+	}
+	
 	public void drive(double left, double right) {
 		drive(left, right, ControlMode.PercentOutput);
 
@@ -319,5 +352,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	public double getDriveConstant() {
 		return (gear == GearState.HIGH ? Config.highTarget : Config.lowTarget);
 	}
+
+
 
 }
