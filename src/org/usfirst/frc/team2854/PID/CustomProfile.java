@@ -163,10 +163,16 @@ public class CustomProfile {
 
 			// inner.getMotionProfileStatus(status);
 			// System.out.println(status.topBufferCnt);
+<<<<<<< HEAD
 			// System.out.println("generating " + (inner == null) + " " + (innerPoint ==
 			// null));
 
 			// printPoint(innerPoint);
+=======
+			System.out.println("generating " + (inner == null) + " " + (innerPoint == null));
+
+			printPoint(innerPoint);
+>>>>>>> 47c5598916ef906fc96759958b4e6c426fca28f1
 
 			inner.pushMotionProfileTrajectory(innerPoint);
 			outer.pushMotionProfileTrajectory(outerPoint);
@@ -177,6 +183,7 @@ public class CustomProfile {
 		return pNotifier;
 	}
 
+<<<<<<< HEAD
 	public static void generateStraightMotionControl(double cruzV, double outV, double distance, TalonSRX leftT2,
 			TalonSRX rightT2, ProfileNotifier pNotifier) {
 
@@ -358,6 +365,8 @@ public class CustomProfile {
 		System.out.println("done generating profile");
 	}
 
+=======
+>>>>>>> 47c5598916ef906fc96759958b4e6c426fca28f1
 	public static void printPoint(TrajectoryPoint trajPt) {
 		System.out.println(trajPt.position);
 		System.out.println(trajPt.velocity);
