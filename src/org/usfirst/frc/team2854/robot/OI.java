@@ -2,7 +2,6 @@ package org.usfirst.frc.team2854.robot;
 
 import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
 import org.usfirst.frc.team2854.robot.commands.DriveToBox;
-import org.usfirst.frc.team2854.robot.commands.GyroTurn;
 import org.usfirst.frc.team2854.robot.commands.ToggleShift;
 
 import edu.wpi.first.wpilibj.Joystick;

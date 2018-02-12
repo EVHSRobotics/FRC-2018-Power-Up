@@ -27,19 +27,19 @@ public class GyroTurn extends Command {
 	private double thresh;
 	private double ogTarget;
 
-	private boolean relative;
-
 	private DriveTrain driveTrain;
 
 	private PIDController pidController;
 	private DummyPIDOutput out;
+	
+	private static double globalAngle = 0;
 
-	public GyroTurn(double target, double thresh, boolean relative) {
+	public GyroTurn(double target, double thresh) {
 		requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
 		driveTrain = (DriveTrain) (Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
-		this.relative = relative;
 		this.thresh = thresh;
-		this.target = target;
+		globalAngle += target;
+		this.target = globalAngle ;
 		this.ogTarget = target;
 		//System.out.println(navX.getAngle());
 		//16 8 8 13 4
@@ -48,14 +48,6 @@ public class GyroTurn extends Command {
 	//20 ft forward
 	//9 side
 	public void initialize() {
-		System.out.println("relative target " + target);
-		if (relative) {
-			this.target = ogTarget + navX.getAngle();
-		} else {
-			this.target = target;
-		}
-		//System.out.println("Abosolute target " + target);
-		//System.out.println(target);
 		PIDSource in = new PIDSource() {
 
 			private PIDSourceType type;

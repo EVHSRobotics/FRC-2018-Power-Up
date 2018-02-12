@@ -78,7 +78,6 @@ public class Robot extends IterativeRobot {
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
 		
 		System.out.println("Robot init");
-<<<<<<< HEAD
 //
 //		vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
 //		visT = new Thread(vision);
@@ -86,15 +85,6 @@ public class Robot extends IterativeRobot {
 //		
 //		vision.setShouldRun(false);
 //	
-=======
-
-		//vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
-		//Thread visT = new Thread(vision);
-		//visT.start();
-	 
-		//vision.setShouldRun(false);
-		
->>>>>>> 47c5598916ef906fc96759958b4e6c426fca28f1
 //		LidarReader lidar = new LidarReader(Port.kOnboard);
 //		
 //		CvSource lidarOut = CameraServer.getInstance().putVideo("lidar", lidar.getWidth(), lidar.getHeight());  
