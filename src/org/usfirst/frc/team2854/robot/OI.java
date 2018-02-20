@@ -1,8 +1,17 @@
 package org.usfirst.frc.team2854.robot;
 
-import org.usfirst.frc.team2854.robot.commands.DriveMotionMagik;
-import org.usfirst.frc.team2854.robot.commands.DriveToBox;
+import org.usfirst.frc.team2854.PID.drivePaths.DriveFarNear;
+import org.usfirst.frc.team2854.PID.drivePaths.DriveNearNear;
+import org.usfirst.frc.team2854.robot.commands.ChangeLed;
+import org.usfirst.frc.team2854.robot.commands.ClawSetpoint;
+import org.usfirst.frc.team2854.robot.commands.DriveThottle;
+import org.usfirst.frc.team2854.robot.commands.ElevatorSetPoint;
+import org.usfirst.frc.team2854.robot.commands.Intake;
+import org.usfirst.frc.team2854.robot.commands.IntakeAquire;
+import org.usfirst.frc.team2854.robot.commands.Outtake;
+import org.usfirst.frc.team2854.robot.commands.ToggleClamp;
 import org.usfirst.frc.team2854.robot.commands.ToggleShift;
+import org.usfirst.frc.team2854.robot.commands.Turn;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -13,18 +22,73 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI {
 
-	public static Joystick joystick = new Joystick(0);	
-	public static JoystickButton buttonA = new JoystickButton(joystick, 1);
-	public static JoystickButton buttonB = new JoystickButton(joystick, 2);
-	public static JoystickButton buttonX = new JoystickButton(joystick, 3);
-	public static JoystickButton rTrigger = new JoystickButton(joystick, 6);
+	public static Joystick mainJoystick = new Joystick(0);
+	public static Joystick secondaryJoystick = new Joystick(1);
+	//0,500,3750,4500
+	public static JoystickButton buttonA1 = new JoystickButton(mainJoystick, 1);
+	public static JoystickButton buttonB1 = new JoystickButton(mainJoystick, 2);
+	public static JoystickButton buttonX1 = new JoystickButton(mainJoystick, 3);
+	public static JoystickButton buttonY1 = new JoystickButton(mainJoystick, 4);
+	public static JoystickButton lTrigger1 = new JoystickButton(mainJoystick, 5);
+	public static JoystickButton rTrigger1 = new JoystickButton(mainJoystick, 6);
+
+	public static JoystickButton buttonA2 = new JoystickButton(secondaryJoystick, 1);
+	public static JoystickButton buttonB2 = new JoystickButton(secondaryJoystick, 2);
+	public static JoystickButton buttonX2 = new JoystickButton(secondaryJoystick, 3);
+	public static JoystickButton buttonY2 = new JoystickButton(secondaryJoystick, 4);
+	public static JoystickButton lTrigger2 = new JoystickButton(secondaryJoystick, 5);
+	public static JoystickButton rTrigger2 = new JoystickButton(secondaryJoystick, 6);
+
+	// rishi drive
+	// B toggle intake
+	// hold A intake
+	// hold X out
+
+	// second controler
+	// triggers climb
+	// 1 elevator Y B A elevator set point
+	// 5 claw up down
 
 	static {
 
-		OI.buttonA.whenPressed(new DriveToBox(0));
-		OI.buttonB.whenPressed(new DriveMotionMagik(175));
-		OI.buttonX.whenPressed(new DriveToBox(0));
-		OI.rTrigger.whenPressed(new ToggleShift());
+		// Actual Robo code VVV
+
+		buttonX2.whenPressed(new ToggleClamp());
+		//buttonX1.whileHeld(new Intake());
+		//buttonA1.whileHeld(new Outtake());
+		buttonA1.whenPressed(new IntakeAquire());
+		rTrigger1.whenPressed(new ToggleShift());
+		
+		//OI.buttonA2.whenPressed(new DriveNearNear());
+		
+		//0,500,3750,4500
+
+		//-5400 -> 1 inches
+		// buttonA2.whenPressed(new ElevatorSetPoint(-100));
+		 //buttonB2.whenPressed(new ElevatorSetPoint(-5800));
+		
+		
+		 buttonA2.whenPressed(new ClawSetpoint(0));
+		 buttonB2.whenPressed(new ClawSetpoint(1000));
+		 buttonY2.whenPressed(new ClawSetpoint(3000));
+
+
+		// Auto Code tsting stuff VVVVVVV
+
+//		 buttonA.whenPressed(new DriveToPos(0));
+//		 buttonB.whenPressed(new DriveToPos(-10000));
+//		 buttonY.whenPressed(new DriveToPos(-20000));
+		// OI.buttonX.whenPressed(new DriveThottle(.5));
+		// OI.rTrigger.whenPressed(new ToggleShift());
+		// OI.buttonB.whenPressed(new ChangeLed());
+		//
+		
+		
+		//OI.buttonA2.whenPressed(new DriveNearNear());
+		
+		
+		// OI.buttonY.whenPressed(new DriveFarNear());
+
 	}
 
 	//// CREATING BUTTONS

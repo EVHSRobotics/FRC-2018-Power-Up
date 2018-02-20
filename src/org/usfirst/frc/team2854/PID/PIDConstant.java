@@ -6,23 +6,40 @@ import org.usfirst.frc.team2854.robot.Config;
 
 public class PIDConstant {
 
-	public static PIDConstant lowDrive, highDrive, autoTurn;
+	public static PIDConstant slowDrive, fastDrive, autoTurn;
 
 	static {
-		// ty richard
-		double P_Drive_LOW = 0.6;
-		double I_Drive_LOW = 1.7E-4;
-		double D_Drive_LOW = 5.8;
-		double F_Drive_LOW = 1023d / Config.lowTarget;
-
-		lowDrive = new PIDConstant(P_Drive_LOW, I_Drive_LOW, D_Drive_LOW, F_Drive_LOW, Config.lowTarget);
-
-		double P_Drive_HIGH = .22;
-		double I_Drive_HIGH = .0014;
-		double D_Drive_HIGH = 1.5;
-		double F_Drive_HIGH = 1023 / Config.highTarget;
 		
-		highDrive = new PIDConstant(P_Drive_HIGH, I_Drive_HIGH, D_Drive_HIGH, F_Drive_HIGH, Config.highTarget);
+		//These were for programming robot  (Autobot)
+		
+		// ty richard
+//		double P_Drive_LOW = 0.6;
+//		double I_Drive_LOW = 1.7E-4;
+//		double D_Drive_LOW = 5.8;
+//		double F_Drive_LOW = 1023d / Config.lowTarget;
+//
+//		lowDrive = new PIDConstant(P_Drive_LOW, I_Drive_LOW, D_Drive_LOW, F_Drive_LOW, Config.lowTarget);
+//
+//		double P_Drive_HIGH = .22;
+//		double I_Drive_HIGH = .0014;
+//		double D_Drive_HIGH = 1.5;
+//		double F_Drive_HIGH = 1023 / Config.highTarget;
+//		
+//		highDrive = new PIDConstant(P_Drive_HIGH, I_Drive_HIGH, D_Drive_HIGH, F_Drive_HIGH, Config.highTarget);
+		
+		double P_Drive_LOW = 0.45;
+		double I_Drive_LOW = 1.8E-4;
+		double D_Drive_LOW =  2;
+		double F_Drive_LOW = 1023d / Config.slowTarget;
+
+		slowDrive = new PIDConstant(P_Drive_LOW, I_Drive_LOW, D_Drive_LOW, F_Drive_LOW, Config.slowTarget);
+
+		double P_Drive_HIGH = 0;
+		double I_Drive_HIGH = 0;
+		double D_Drive_HIGH = 0;
+		double F_Drive_HIGH = 1023 / Config.fastTarget;
+		
+		fastDrive = new PIDConstant(P_Drive_HIGH, I_Drive_HIGH, D_Drive_HIGH, F_Drive_HIGH, Config.fastTarget);
 		
 		//TODO TUNE
 		//ty matt

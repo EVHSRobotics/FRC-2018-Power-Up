@@ -1,61 +1,61 @@
 package org.usfirst.frc.team2854.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.usfirst.frc.team2854.robot.Config;
-import org.usfirst.frc.team2854.robot.OI;
 import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 
-/** */
-public class JoystickDrive extends Command {
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
+import edu.wpi.first.wpilibj.command.Command;
+
+/**
+ *
+ */
+public class DriveStraight extends Command {
 
 	private DriveTrain drive;
+	private double speed, heading, distance, ogDistancce;
+	private double startingDistance;
 
-	public JoystickDrive() {
+	public DriveStraight(double speed, double distance) {
 		requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
+		this.distance = distance;
+		this.ogDistancce = distance;
+		this.speed = speed;
+		this.heading = heading;
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		drive = (DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN);
+		this.distance = Config.cyclesToInches * ogDistancce;
+		startingDistance = drive.getAvgEncoder();
+		drive.setNeutralMode(NeutralMode.Brake);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-
-		double value = OI.mainJoystick.getRawAxis(3) - OI.mainJoystick.getRawAxis(2);
-		SmartDashboard.putNumber("joystick", value);
-		value = Math.abs(value) < .1 ? 0 : value;
-
-		double turn = OI.mainJoystick.getRawAxis(0);
-		turn = Math.abs(turn) < .1 ? 0 : turn;
-
-		drive.drive(sig(value - turn) * .75, sig(value + turn) * .75, ControlMode.PercentOutput);
-
-	}
-
-	public double sig(double val) {
-		return 2/(1 + Math.pow(Math.E, -7 * Math.pow(val, 3))) - 1;
+		double angle = Robot.getSensors().getNavX().getAngle();
+		double diff = (heading - angle) / 90;
+		drive.drive(speed, speed, ControlMode.Velocity);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return false;
+		System.out.println(drive.getAvgEncoder() + " " + startingDistance + " " + distance);
+		return Math.abs(drive.getAvgEncoder() - startingDistance) > Math.abs(distance);
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
+		System.out.println("Reached " + distance);
 		drive.stop();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-		drive.stop();
 	}
-
 }

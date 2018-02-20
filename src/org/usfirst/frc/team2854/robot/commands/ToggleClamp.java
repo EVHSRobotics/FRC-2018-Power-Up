@@ -1,30 +1,38 @@
 package org.usfirst.frc.team2854.robot.commands;
 
 import org.usfirst.frc.team2854.robot.Robot;
+import org.usfirst.frc.team2854.robot.subsystems.Claw;
 import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 
-import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class Delay extends TimedCommand {
+public class ToggleClamp extends Command {
 
-    public Delay(double timeout) {
-        super(timeout);
-       requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
+	private Claw claw;
+	
+    public ToggleClamp() {
+        requires(Robot.getSubsystem(SubsystemNames.CLAW));
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	claw = (Claw) Robot.getSubsystem(SubsystemNames.CLAW);
+    	claw.toggleClamp();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//System.out.println("Sleeping " + Math.random());
     }
 
-    // Called once after timeout
+    // Make this return true when this Command no longer needs to run execute()
+    protected boolean isFinished() {
+        return true;
+    }
+
+    // Called once after isFinished returns true
     protected void end() {
     }
 

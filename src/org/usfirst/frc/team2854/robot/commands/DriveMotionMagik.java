@@ -6,8 +6,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.Robot;
-import org.usfirst.frc.team2854.robot.SubsystemNames;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 
 /** */
 public class DriveMotionMagik extends Command {
@@ -15,6 +15,8 @@ public class DriveMotionMagik extends Command {
 	private DriveTrain drive;
 	private double revs, inchs;
 	private double targetPos;
+	
+	public boolean shouldShouldStop = false;
 
 	public DriveMotionMagik(double inchs) {
 		requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
@@ -39,7 +41,7 @@ public class DriveMotionMagik extends Command {
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return Math.abs(drive.getAvgEncoder() - targetPos) < 500;
+		return Math.abs(drive.getAvgEncoder() - targetPos) < 500 || shouldShouldStop;
 	}
 
 	// Called once after isFinished returns true

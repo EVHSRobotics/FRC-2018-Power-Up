@@ -1,7 +1,7 @@
 
 package org.usfirst.frc.team2854.robot.subsystems;
 
-public interface Restartabale {
+public interface Restartable {
 
   public void enable();
 

@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.Robot;
-import org.usfirst.frc.team2854.robot.SubsystemNames;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 
 /** */
 public class EncoderTurn extends Command {
@@ -18,9 +18,9 @@ public class EncoderTurn extends Command {
 	private double revs, inchs;
 	private double leftTarget, rightTarget;
 
-	public EncoderTurn(double inchs) {
+	public EncoderTurn(double angle) {
 		requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
-		this.inchs = inchs;
+		this.inchs = 79.25 * angle / 360d;
 	}
 
 	// Called just before this Command runs
@@ -34,7 +34,7 @@ public class EncoderTurn extends Command {
 		leftTarget = (-revs * drive.getDriveConstant()) + drive.getLeftEncoder();
 		rightTarget = (revs * drive.getDriveConstant()) + drive.getRightEncoder();
 		setTimeout(1);
-		
+
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -47,7 +47,7 @@ public class EncoderTurn extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
 		SmartDashboard.putNumber("turn error", Math.abs(drive.getLeftEncoder() - leftTarget));
-		return (Math.abs(drive.getLeftEncoder() - leftTarget) < 	300
+		return (Math.abs(drive.getLeftEncoder() - leftTarget) < 300
 				&& Math.abs(drive.getRightEncoder() - rightTarget) < 300) || isTimedOut();
 	}
 

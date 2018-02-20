@@ -1,17 +1,12 @@
 package org.usfirst.frc.team2854.robot.subsystems;
 
-import com.ctre.phoenix.motion.MotionProfileStatus;
-import com.ctre.phoenix.motion.TrajectoryPoint;
-import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
-import java.util.ResourceBundle.Control;
-
 import org.usfirst.frc.team2854.robot.Config;
+import org.usfirst.frc.team2854.robot.OI;
 import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StickyFaults;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -19,24 +14,16 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.TimerTask;
 
-import javax.management.RuntimeErrorException;
-
-import org.usfirst.frc.team2854.PID.CustomProfile;
 import org.usfirst.frc.team2854.PID.DummyPIDOutput;
 import org.usfirst.frc.team2854.PID.PIDConstant;
 import org.usfirst.frc.team2854.PID.PIDUtil;
-import org.usfirst.frc.team2854.PID.ProfileNotifier;
-import org.usfirst.frc.team2854.robot.Config;
-import org.usfirst.frc.team2854.robot.RobotMap;
-import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 
 /** */
-public class DriveTrain extends Subsystem implements Restartabale {
+public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 
 	// Put methods for controlling this subsyWstem
 	// here. Call these from Commands.
@@ -54,14 +41,16 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 	private boolean autoShift = true;
 
-	enum GearState {
-		LOW, HIGH, UNKNOWN;
+	private double driveMultiplier = 1;
+
+	public enum GearState {
+		SLOW, FAST, UNKNOWN;
 
 		public static Value gearToValue(GearState state) {
 			switch (state) {
-			case HIGH:
+			case SLOW:
 				return Value.kForward;
-			case LOW:
+			case FAST:
 				return Value.kReverse;
 			case UNKNOWN:
 			default:
@@ -72,11 +61,11 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		public static GearState valueToGear(Value value) {
 			switch (value) {
 			case kReverse:
-				return GearState.LOW;
+				return GearState.FAST;
 			case kOff:
 				return GearState.UNKNOWN;
 			case kForward:
-				return GearState.HIGH;
+				return GearState.SLOW;
 			default:
 				return GearState.UNKNOWN;
 			}
@@ -88,17 +77,17 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	public DriveTrain() {
-		leftT1 = new TalonSRX(RobotMap.leftTalonID1);
-		leftT1.setInverted(side);
-
-		leftT2 = new TalonSRX(RobotMap.leftTalonID2);
+		leftT2 = new TalonSRX(RobotMap.leftTalonID1);
 		leftT2.setInverted(side);
 
-		rightT1 = new TalonSRX(RobotMap.rightTalonID1);
-		rightT1.setInverted(!side);
+		leftT1 = new TalonSRX(RobotMap.leftTalonID2);
+		leftT1.setInverted(side);
 
-		rightT2 = new TalonSRX(RobotMap.rightTalonID2);
+		rightT2 = new TalonSRX(RobotMap.rightTalonID1);
 		rightT2.setInverted(!side);
+
+		rightT1 = new TalonSRX(RobotMap.rightTalonID2);
+		rightT1.setInverted(!side);
 
 		shifter = new DoubleSolenoid(RobotMap.shifterUp, RobotMap.shifterDown);
 
@@ -114,16 +103,23 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 		// PIDConstant.startSmartDashboardInput(PIDConstant.highDrive, leftT2, rightT2);
 
+		NeutralMode mode = NeutralMode.Coast;
+
+		leftT1.setNeutralMode(mode);
+		leftT2.setNeutralMode(mode);
+		rightT1.setNeutralMode(mode);
+		rightT2.setNeutralMode(mode);
+
 	}
 
 	public void enable() {
-		//System.out.println("Enabling drive train");
+		// System.out.println("Enabling drive train");
 		// turnController.enable();
-		applyShift(GearState.LOW, -10); // TODO 10 more attempts because of start up time?
+		applyShift(GearState.SLOW, -10); // TODO 10 more attempts because of start up time?
 	}
 
 	public void disable() {
-		//System.out.println("Disableing drive train");
+		// System.out.println("Disableing drive train");
 		// turnController.disable();
 	}
 
@@ -177,31 +173,21 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		SmartDashboard.putNumber("Left Throttle", rightT2.getMotorOutputPercent());
 		// SmartDashboard.putNumber("Target", leftT2.getClosedLoopTarget(0));
 
-		//SmartDashboard.putBoolean("reset during en?", new StickyFaults().ResetDuringEn);
-		//SmartDashboard.putNumber("encoder diff",
-		//		Math.abs(rightT2.getSelectedSensorPosition(0) - leftT2.getSelectedSensorPosition(0)));
-		MotionProfileStatus status = new MotionProfileStatus();
-		leftT2.getMotionProfileStatus(status);
-		SmartDashboard.putNumber("bottom buffer", status.btmBufferCnt);
-		SmartDashboard.putNumber("top buffer", status.topBufferCnt);
-		
-		SmartDashboard.putNumber("target trj Vel", leftT2.getActiveTrajectoryVelocity());
-		SmartDashboard.putNumber("target trj Pos", leftT2.getActiveTrajectoryPosition());
-		
-		SmartDashboard.putNumber("left position", leftT2.getSelectedSensorPosition(0));
-		
-		
-		
-		//if(status.isUnderrun) {
-		//	System.out.println("Under running");
-		//}
+		// SmartDashboard.putBoolean("reset during en?", new
+		// StickyFaults().ResetDuringEn);
+		// SmartDashboard.putNumber("encoder diff",
+		// Math.abs(rightT2.getSelectedSensorPosition(0) -
+		// leftT2.getSelectedSensorPosition(0)));
 
+		SmartDashboard.putString("Gear", gear.toString());
+
+		SmartDashboard.putNumber("average Pos", getAvgEncoder());
 
 	}
 
 	private void applyShift(GearState desiredState, int attempt) {
 		if (attempt > 10) {
-			//System.err.println("Shifter is not shifting to " + desiredState + " at attempt " + attempt);
+			System.err.println("Shifter is not shifting to " + desiredState + " at attempt " + attempt);
 			return;
 		}
 		shifter.set(GearState.gearToValue(desiredState));
@@ -221,9 +207,8 @@ public class DriveTrain extends Subsystem implements Restartabale {
 
 		} else {
 			System.out.println("shifted to " + desiredState);
-			SmartDashboard.putString("Gear", desiredState.toString());
 			gear = desiredState;
-			PIDConstant constant = (gear == GearState.HIGH ? PIDConstant.highDrive : PIDConstant.lowDrive);
+			PIDConstant constant = (gear == GearState.SLOW ? PIDConstant.slowDrive : PIDConstant.fastDrive);
 			PIDUtil.updatePID(rightT2, constant);
 			PIDUtil.updatePID(leftT2, constant);
 		}
@@ -238,32 +223,45 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	public void toggleShift() {
-		if (gear == GearState.HIGH) {
-			applyShift(GearState.LOW, 0);
-		} else if (gear == GearState.LOW) {
-			applyShift(GearState.HIGH, 0);
+		if (gear == GearState.SLOW) {
+			applyShift(GearState.FAST, 0);
+		} else if (gear == GearState.FAST) {
+			applyShift(GearState.SLOW, 0);
 		} else {
 			System.out.println("In unknown state, defaulting to LOW");
-			applyShift(GearState.LOW, 0);
+			applyShift(GearState.FAST, 0);
 		}
+
+	}
+
+	public void shiftFast() {
+
+		applyShift(GearState.FAST, 0);
+
+	}
+
+	public void shiftSlow() {
+
+		applyShift(GearState.SLOW, 0);
 
 	}
 
 	public void drive(double left, double right, ControlMode mode) {
 		// System.out.println(mode.toString() + " " + ControlMode.Velocity + " " +
 		// mode.equals(ControlMode.Velocity));
+		SmartDashboard.putNumber("left output Init", left);
+		SmartDashboard.putNumber("right output Init", right);
+
+		if (mode.equals(ControlMode.PercentOutput) || mode.equals(ControlMode.Velocity)) {
+			left *= driveMultiplier;
+			right *= driveMultiplier;
+		}
 
 		if (mode.equals(ControlMode.Velocity) || mode.equals(ControlMode.MotionMagic)
-				|| mode.equals(ControlMode.Position)) {
-			if (gear == GearState.LOW) {
-				// System.out.println("Using low target");
-				left *= Config.lowTarget;
-				right *= Config.lowTarget;
-			} else {
-				// System.out.println("Using high target");
-				left *= Config.highTarget;
-				right *= Config.highTarget;
-			}
+				|| mode.equals(ControlMode.Position)) {	
+
+			left *= getDriveConstant();
+			right *= getDriveConstant();
 		}
 		if (mode.equals(ControlMode.Position) || mode.equals(ControlMode.MotionMagic)) {
 			left += leftT2.getSelectedSensorPosition(0);
@@ -271,11 +269,26 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		}
 		// System.out.println("target left + " + left);
 		// System.out.println(left + " " + right);
+
+		SmartDashboard.putNumber("left output", left);
+		SmartDashboard.putNumber("right output", right);
+
+		SmartDashboard.putNumber("Ltrigger", OI.mainJoystick.getRawAxis(2));
+		SmartDashboard.putNumber("Rtrigger", OI.mainJoystick.getRawAxis(3));
+		SmartDashboard.putNumber("turn ", OI.mainJoystick.getRawAxis(0));
+
 		leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);
 		rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);
 
 	}
 
+	/**
+	 * UNIMPLEMENTED
+	 * 
+	 * @param left
+	 * @param right
+	 * @param mode
+	 */
 	public void driveStraight(double left, double right, ControlMode mode) {
 		// double error = rightT2.getSelectedSensorPosition(0) -
 		// leftT2.getSelectedSensorPosition(0);
@@ -287,27 +300,6 @@ public class DriveTrain extends Subsystem implements Restartabale {
 		leftT2.setNeutralMode(mode);
 	}
 
-	public ProfileNotifier generateTurnProfile(double cruzVel, double vOut, double turnR, boolean right,
-			double turnAngle) {
-		return CustomProfile.generateTurnMotionControl(cruzVel, vOut, turnR, turnAngle, right, leftT2, rightT2);
-	}
-
-	public ProfileNotifier generateDriveProfile(double cruzVel, double vOut, double distance) {
-		ProfileNotifier pNotifier = new ProfileNotifier(10, distance, distance, leftT2, rightT2);
-		new Thread( () -> {
-			CustomProfile.generateStraightMotionControl(cruzVel, vOut, distance, leftT2, rightT2, pNotifier);
-		}).start();
-		return pNotifier;
-	}
-	
-	public ProfileNotifier generateTestMotionControl(double cruzV, double outV, double distance) {
-		ProfileNotifier pNotifier = new ProfileNotifier(10, distance, distance, leftT2, rightT2);
-		new Thread( () -> {
-			CustomProfile.generateTestMotionControl(cruzV, outV, distance, leftT2, rightT2, pNotifier);
-		}).start();
-		return pNotifier;
-	}
-	
 	public void drive(double left, double right) {
 		drive(left, right, ControlMode.PercentOutput);
 
@@ -334,7 +326,7 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	public double inchesToCycles(double d) { // TODO finish this
-		if (gear == GearState.LOW) {
+		if (gear == GearState.SLOW) {
 			return (d + .997) / 6.96d;
 		} else {
 			throw new RuntimeException("Need to calibrate distance for " + gear.toString());
@@ -350,9 +342,27 @@ public class DriveTrain extends Subsystem implements Restartabale {
 	}
 
 	public double getDriveConstant() {
-		return (gear == GearState.HIGH ? Config.highTarget : Config.lowTarget);
+		return (gear == GearState.SLOW ? Config.slowTarget : Config.fastTarget);
 	}
 
+	@Override
+	public void savePower() {
+		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void normalPower() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public double getDriveMultiplier() {
+		return driveMultiplier;
+	}
+
+	public void setDriveMultiplier(double driveMultiplier) {
+		this.driveMultiplier = driveMultiplier;
+	}
 
 }

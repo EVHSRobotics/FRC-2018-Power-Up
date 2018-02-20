@@ -2,9 +2,11 @@ package org.usfirst.frc.team2854.robot.commands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Command;
+
+import org.usfirst.frc.team2854.robot.OI;
 import org.usfirst.frc.team2854.robot.Robot;
-import org.usfirst.frc.team2854.robot.SubsystemNames;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 
 /** */
 public class DriveThottle extends Command {
@@ -30,7 +32,7 @@ public class DriveThottle extends Command {
 
   // Make this return true when this Command no longer needs to run execute()
   protected boolean isFinished() {
-    return false;
+    return OI.mainJoystick.getRawButton(10);
   }
 
   // Called once after isFinished returns true

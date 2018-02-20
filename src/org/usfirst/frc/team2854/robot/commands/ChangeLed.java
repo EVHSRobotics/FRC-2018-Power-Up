@@ -1,30 +1,39 @@
 package org.usfirst.frc.team2854.robot.commands;
 
 import org.usfirst.frc.team2854.robot.Robot;
+import org.usfirst.frc.team2854.robot.RobotMap;
+import org.usfirst.frc.team2854.robot.subsystems.LED;
 import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 
-import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class Delay extends TimedCommand {
+public class ChangeLed extends Command {
 
-    public Delay(double timeout) {
-        super(timeout);
-       requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
+	private LED led;
+	
+    public ChangeLed() {
+        requires(Robot.getSubsystem(SubsystemNames.LED));
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	led = (LED) Robot.getSubsystem(SubsystemNames.LED);
+    	led.toggleMode();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//System.out.println("Sleeping " + Math.random());
     }
 
-    // Called once after timeout
+    // Make this return true when this Command no longer needs to run execute()
+    protected boolean isFinished() {
+        return true;
+    }
+
+    // Called once after isFinished returns true
     protected void end() {
     }
 

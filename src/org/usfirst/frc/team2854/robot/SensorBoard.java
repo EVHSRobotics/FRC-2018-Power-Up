@@ -3,6 +3,7 @@ package org.usfirst.frc.team2854.robot;
 import java.io.SerializablePermission;
 
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -23,7 +24,8 @@ public class SensorBoard {
 	public SensorBoard() {
 
 		// navX = new AHRS(I2C.Port.kMXP);
-		String type = null;
+		
+//		String type = null;
 //		navXLoop: {
 //			for (I2C.Port p : I2C.Port.values()) {
 //				try {
@@ -64,7 +66,7 @@ public class SensorBoard {
 //			}
 //		}
 
-		//System.out.println(type);
+//		System.out.println(type);
 		navX = new AHRS(I2C.Port.kMXP);
 		// spiGyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS1);
 		builtInacc = new BuiltInAccelerometer();

@@ -41,8 +41,12 @@ public class Vision implements Runnable {
 	private double distanceToBox;
 
 	private boolean shouldRun = true;
+	
+	public boolean hasProcessed = true;
+	
+	private CvSource outputStream1;
 
-	public Vision(Scalar lowerBoundVal, Scalar upperBoundVal) {
+	public Vision() {
 		data = new InterpolatingMap();
 
 		// data.addDataPoint(608d, 1d);
@@ -57,8 +61,8 @@ public class Vision implements Runnable {
 		// data.addDataPoint(95d, 7d);
 		// data.addDataPoint(87d, 8d);
 		// data.addDataPoint(77d, 9d);
-
-		data.addDataPoint(96,  46.5);
+		System.out.println("starting to create point list");
+		data.addDataPoint(96, 46.5);
 		data.addDataPoint(119, 63);
 		data.addDataPoint(156, 51);
 		data.addDataPoint(270, 35.5);
@@ -67,27 +71,22 @@ public class Vision implements Runnable {
 		data.addDataPoint(282, 29);
 		data.addDataPoint(124, 61);
 		data.addDataPoint(38, 126.5);
-
-
-
-
-
 		
-		upperBoundValue = upperBoundVal;
-		lowerBoundValue = lowerBoundVal;
-		System.out.println("Creating object");
-
-	}
-
-	public void run() {
-		System.out.println("Starting thread");
 		camera = CameraServer.getInstance().startAutomaticCapture();
 		camera.setResolution(640, 480);
 		camera.setExposureAuto();
 		camera.setWhiteBalanceAuto();
 
 		cvSink = CameraServer.getInstance().getVideo();
-		CvSource outputStream1 = CameraServer.getInstance().putVideo("Distance", 640, 480);
+		outputStream1 = CameraServer.getInstance().putVideo("Distance", 640, 480);
+
+		System.out.println("Creating object");
+
+	}
+
+	public void run() {
+		System.out.println("Starting thread");
+	
 
 		// camera.setResolution(imgWidth, imgHeight);
 		// output = new Mat();
@@ -98,8 +97,6 @@ public class Vision implements Runnable {
 			e.printStackTrace();
 		}
 
-		System.out.println("lower: " + lowerBoundValue);
-		System.out.println("upper: " + upperBoundValue);
 
 		GripPipeline pipeLine = new GripPipeline();
 		Mat input = new Mat();
@@ -107,18 +104,19 @@ public class Vision implements Runnable {
 		try {
 
 			while (true) {
-				
-				if(!shouldRun) {
+
+				if (!shouldRun) {
+					//System.out.println("Sleeping " + Math.random());
 					Thread.sleep(500);
 					continue;
 				}
-				
+
 				long error = (int) cvSink.grabFrame(input);
 				cvSink.grabFrame(inputCopy);
 				if (error == 0 || input.empty()) {
 					System.out.println("Error grabbing frame or frame is empty, sleeping for 1 second");
 					System.out.println(cvSink.getError());
-					Thread.sleep(1000);
+					Thread.sleep(250);
 					continue;
 				}
 				SmartDashboard.putNumber("running", Math.random());
@@ -127,15 +125,17 @@ public class Vision implements Runnable {
 				if (!contours.isEmpty()) {
 					Rect largest = getLargestBoundingBox(contours);
 
-					SmartDashboard.putNumber("Box Width", largest.width);
-					SmartDashboard.putNumber("Distance", data.getValue((double) largest.width));
-
+					//SmartDashboard.putNumber("Box Width", largest.width);
+					//SmartDashboard.putNumber("Distance", data.getValue((double) largest.width));
+					
+					distanceToBox = data.getValue((double) largest.width);
+					hasProcessed = true;
 					Imgproc.rectangle(inputCopy, largest.tl(), largest.br(), new Scalar(0, 255, 0), 3);
 					if (!inputCopy.empty()) {
-						SmartDashboard.putBoolean("Found", true);
+						//SmartDashboard.putBoolean("Found", true);
 						outputStream1.putFrame(inputCopy);
 					} else {
-						SmartDashboard.putBoolean("Found", false);
+						//SmartDashboard.putBoolean("Found", false);
 						outputStream1.putFrame(inputCopy);
 					}
 				} else {
@@ -392,6 +392,14 @@ public class Vision implements Runnable {
 
 	public void setShouldRun(boolean shouldRun) {
 		this.shouldRun = shouldRun;
+	}
+
+	public boolean isHasProcessed() {
+		return hasProcessed;
+	}
+
+	public void setHasProcessed(boolean hasProcessed) {
+		this.hasProcessed = hasProcessed;
 	}
 
 }

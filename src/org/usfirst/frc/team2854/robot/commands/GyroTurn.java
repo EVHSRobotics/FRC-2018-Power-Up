@@ -3,8 +3,8 @@ package org.usfirst.frc.team2854.robot.commands;
 import org.usfirst.frc.team2854.PID.DummyPIDOutput;
 import org.usfirst.frc.team2854.PID.PIDConstant;
 import org.usfirst.frc.team2854.robot.Robot;
-import org.usfirst.frc.team2854.robot.SubsystemNames;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -31,23 +31,25 @@ public class GyroTurn extends Command {
 
 	private PIDController pidController;
 	private DummyPIDOutput out;
-	
+
 	private static double globalAngle = 0;
 
 	public GyroTurn(double target, double thresh) {
 		requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
 		driveTrain = (DriveTrain) (Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
 		this.thresh = thresh;
-		globalAngle += target;
-		this.target = globalAngle ;
+		// this.target = globalAngle;
 		this.ogTarget = target;
-		//System.out.println(navX.getAngle());
-		//16 8 8 13 4
+		// System.out.println(navX.getAngle());
+		// 16 8 8 13 4
 	}
 
-	//20 ft forward
-	//9 side
+	// 20 ft forward
+	// 9 side
 	public void initialize() {
+		globalAngle += ogTarget;
+		target = globalAngle;
+		System.out.println(navX.getAngle() + " " + target);
 		PIDSource in = new PIDSource() {
 
 			private PIDSourceType type;
@@ -81,19 +83,19 @@ public class GyroTurn extends Command {
 		pidController.setAbsoluteTolerance(thresh);
 		pidController.enable();
 		driveTrain.setNeutralMode(NeutralMode.Brake);
-	
+
 	}
 
 	public void execute() {
-//		System.out.println("Connected " + navX.isConnected());
-//		System.out.println("angle" + navX.getFusedHeading());
+		// System.out.println("Connected " + navX.isConnected());
+		// System.out.println("angle" + navX.getFusedHeading());
 
 		double value = pidController.get();
 
-	//	System.out.println("Error: " + pidController.getError()
-	//			+ " output: " + value );
+		// System.out.println("Error: " + pidController.getError()
+		// + " output: " + value );
 
-		driveTrain.drive(-value/2, value/2, ControlMode.PercentOutput);
+		driveTrain.drive(-value / 2, value / 2, ControlMode.PercentOutput);
 	}
 
 	@Override

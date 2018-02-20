@@ -24,24 +24,24 @@ public class DriveDan extends CommandGroup {
 			
 			addSequential(new EncoderTurn(79.25 / 4d));
 			ang += 90;
-			addSequential(new GyroTurn(ang, 1, false));
+			addSequential(new GyroTurn(ang, 1));
 			
 			addSequential(new DriveMotionMagik(21 * 12));
 			
 			addSequential(new EncoderTurn(79.25 / 4d));
 			ang += 90;
-			addSequential(new GyroTurn(ang, 1, false));
+			addSequential(new GyroTurn(ang, 1));
 
 			addSequential(new DriveMotionMagik(16 * 12));
 
 			addSequential(new EncoderTurn(79.25 / 4d));
 			ang += 90;
-			addSequential(new GyroTurn(ang, 1, false));
+			addSequential(new GyroTurn(ang, 1));
 
 			addSequential(new DriveMotionMagik(21 * 12));
 			addSequential(new EncoderTurn(79.25 / 4d));
 			ang += 90;
-			addSequential(new GyroTurn(ang, 1, false));
+			addSequential(new GyroTurn(ang, 1));
 
 			addSequential(new DriveMotionMagik(6 * 12 - 6));
 			

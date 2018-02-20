@@ -2,8 +2,8 @@ package org.usfirst.frc.team2854.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team2854.robot.Robot;
-import org.usfirst.frc.team2854.robot.SubsystemNames;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 
 /** */
 public class ToggleShift extends Command {

@@ -35,7 +35,7 @@ public class InterpolatingMap{
 	}
 	
 	public void addDataPoint(double input, double output) {
-		addDataPoint(input, output);
+		addDataPoint(new Double(input), output);
 	}
 	
 	public void addDataPoint(Double input, double output) {

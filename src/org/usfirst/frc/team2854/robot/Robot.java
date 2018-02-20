@@ -1,72 +1,53 @@
 package org.usfirst.frc.team2854.robot;
 
-
-
-import java.awt.FlowLayout;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.util.HashMap;
 
-
-import org.usfirst.frc.team2854.robot.commands.ToggleShift;
+import org.usfirst.frc.team2854.PID.drivePaths.DriveFarFar;
+import org.usfirst.frc.team2854.PID.drivePaths.DriveFarNear;
+import org.usfirst.frc.team2854.PID.drivePaths.DriveNearFar;
+import org.usfirst.frc.team2854.PID.drivePaths.DriveNearNear;
+import org.usfirst.frc.team2854.robot.subsystems.Claw;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team2854.robot.subsystems.Elevator;
+import org.usfirst.frc.team2854.robot.subsystems.LED;
+import org.usfirst.frc.team2854.robot.subsystems.Restartable;
+import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
+import org.usfirst.frc.team2854.vision.Vision;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.kauailabs.sf2.frc.navXSensor;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
-import org.opencv.core.Mat;
-import org.opencv.core.Scalar;
-import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
-
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.communication.NIRioStatus;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.util.HashMap;
-
-import org.usfirst.frc.team2854.lidar.LidarReader;
-import org.usfirst.frc.team2854.map.EncoderBased;
-import org.usfirst.frc.team2854.map.FieldMapDriver;
-import org.usfirst.frc.team2854.map.MapInput;
-import org.usfirst.frc.team2854.map.elements.FieldMap;
-import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team2854.robot.subsystems.Restartabale;
-import org.usfirst.frc.team2854.vision.Vision;
-
-import com.kauailabs.sf2.frc.RoboRIO;
-import com.kauailabs.sf2.frc.navXSensor;
-
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the IterativeRobot documentation. If you change the name of this class
- * or the package after creating this project, you must also update the manifest file in the
- * resource directory.
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the IterativeRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the manifest file in the resource
+ * directory.
  */
 public class Robot extends IterativeRobot {
 
 	public static OI oi;
 	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
-	private static HashMap<SubsystemNames, Subsystem> subsystems;	
+	private static HashMap<SubsystemNames, Subsystem> subsystems;
 	private static SensorBoard sensors;
+
+	public static Compressor compressor;
 
 	private static Vision vision;
 	private static Thread visT;
+
+	SendableChooser<String> sideChooser, advancedChooser;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -74,55 +55,72 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		subsystems = new HashMap<SubsystemNames, Subsystem>();	
+		subsystems = new HashMap<SubsystemNames, Subsystem>();
+
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
-		
+		subsystems.put(SubsystemNames.ELEVATOR, new Elevator());
+		subsystems.put(SubsystemNames.LED, new LED());
+		subsystems.put(SubsystemNames.CLAW, new Claw());
+
+		compressor = new Compressor(0);
+
 		System.out.println("Robot init");
-//
-//		vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
-//		visT = new Thread(vision);
-//		visT.start();	
-//		
-//		vision.setShouldRun(false);
-//	
-//		LidarReader lidar = new LidarReader(Port.kOnboard);
-//		
-//		CvSource lidarOut = CameraServer.getInstance().putVideo("lidar", lidar.getWidth(), lidar.getHeight());  
-//		new Thread(() ->  {while(true) {Mat m = lidar.getMat();lidarOut.putFrame(m);m.release();}}).start();
-//
-//		new Thread(lidar).start();
-		
+
+		sideChooser = new SendableChooser<String>();
+		advancedChooser = new SendableChooser<String>();
+		SmartDashboard.putData("auto", sideChooser);
+
+		sideChooser.addDefault("right", "right");
+		sideChooser.addObject("left", "left");
+
+		advancedChooser.addDefault("advanced", "advanced");
+		advancedChooser.addObject("basic", "basic");
+
+		// vision = new Vision();
+		// visT = new Thread(vision);
+		// visT.start();
+		//
+		// vision.setShouldRun(false);
+
+		//
+		// vision.setShouldRun(false);
+		//
+		// LidarReader lidar = new LidarReader(Port.kOnboard);
+		//
+		// CvSource lidarOut = CameraServer.getInstance().putVideo("lidar",
+		// lidar.getWidth(), lidar.getHeight());
+		// new Thread(() -> {while(true) {Mat m =
+		// lidar.getMat();lidarOut.putFrame(m);m.release();}}).start();
+		//
+		// new Thread(lidar).start();
+
 		sensors = new SensorBoard();
 		navXSensor navX = new navXSensor(sensors.getNavX(), "test navx");
-		
-		
-		for(Subsystem s : subsystems.values()) {
-			if(s instanceof Restartabale) {
-				((Restartabale) s).enable();
+
+		for (Subsystem s : subsystems.values()) {
+			if (s instanceof Restartable) {
+				((Restartable) s).enable();
 			}
 		}
-		
-	
-		
-		
-//		
-		//SmartDashboard.putNumber("lowerHue", vision.getLowerBoundValue().val[0]);
-		//SmartDashboard.putNumber("upperHue", vision.getUpperBoundValue().val[0]);
 
-		
-//		double fieldWidth = 5;
-//		double fieldHeight = 5;
-//		FieldMap map = new FieldMap(fieldWidth, fieldHeight);
-//		MapInput input = new EncoderBased();
-//		FieldMapDriver mapDrive = new FieldMapDriver(map, 720, 720, input);
-//		
-		//UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
+		//
+		// SmartDashboard.putNumber("lowerHue", vision.getLowerBoundValue().val[0]);
+		// SmartDashboard.putNumber("upperHue", vision.getUpperBoundValue().val[0]);
+
+		// double fieldWidth = 5;
+		// double fieldHeight = 5;
+		// FieldMap map = new FieldMap(fieldWidth, fieldHeight);
+		// MapInput input = new EncoderBased();
+		// FieldMapDriver mapDrive = new FieldMapDriver(map, 720, 720, input);
+		//
+		// UsbCamera cam = CameraServer.getInstance().startAutomaticCapture();
 	}
-	
+
 	@Override
 	public void robotPeriodic() {
-		
+
 	}
+
 	/**
 	 * This function is called once each time the robot enters Disabled mode. You
 	 * can use it to reset any subsystem information you want to clear when the
@@ -130,13 +128,14 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void disabledInit() {
-		for(Subsystem s : subsystems.values()) {
-			if(s instanceof Restartabale) {
-				((Restartabale) s).disable();
+		for (Subsystem s : subsystems.values()) {
+			if (s instanceof Restartable) {
+				((Restartable) s).disable();
 			}
 		}
-		
-		
+
+		((DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN)).shiftFast();
+
 	}
 
 	@Override
@@ -158,12 +157,69 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		for(Subsystem s : subsystems.values()) {
-			if(s instanceof Restartabale) {
-				((Restartabale) s).enable();
-			} 
+		for (Subsystem s : subsystems.values()) {
+			if (s instanceof Restartable) {
+				((Restartable) s).enable();
+			}
 		}
+		getSensors().getNavX().zeroYaw();
+
+		String side = sideChooser.getSelected();
+		String advanced = advancedChooser.getSelected();
+		String game = DriverStation.getInstance().getGameSpecificMessage();
+		char switchChar = game.charAt(0);
+		char scaleChar = game.charAt(1);
 		
+		
+		System.out.println(advanced + " " + side + " " + switchChar + " " + scaleChar);
+		
+		if(advanced.equals("advanced")) {
+			if (game.length() > 0) {
+				if (side.equals("left") && switchChar == 'L' && scaleChar == 'L') {
+					// left near near
+				} else if (side.equals("left") && switchChar == 'L' && scaleChar == 'R') {
+					// left near far
+				} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'L') {
+					// left far near
+				} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'R') {
+					// left far far
+				} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'L') {
+					new DriveFarFar().start();
+				} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'R') {
+					new DriveFarNear().start();
+				} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'L') {
+					new DriveNearFar().start();
+				} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'R') {
+					(new DriveNearNear()).start();
+				} else {
+					// smt is wrong, run some deafult command
+				}
+			}
+		} else {
+			if (game.length() > 0) {
+				if (side.equals("left") && switchChar == 'L' && scaleChar == 'L') {
+					// left near near
+				} else if (side.equals("left") && switchChar == 'L' && scaleChar == 'R') {
+					// left near far
+				} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'L') {
+					// left far near
+				} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'R') {
+					// left far far
+				} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'L') {
+					new DriveFarFar().start();
+				} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'R') {
+					new DriveFarNear().start();
+				} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'L') {
+					new DriveNearFar().start();
+				} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'R') {
+					(new DriveNearNear()).start();
+				} else {
+					// smt is wrong, run some deafult command
+				}
+			}
+		}
+
+
 	}
 
 	/**
@@ -176,15 +232,18 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-		for(Subsystem s : subsystems.values()) {
-			if(s instanceof Restartabale) {
-				((Restartabale) s).enable();
+		for (Subsystem s : subsystems.values()) {
+			if (s instanceof Restartable) {
+				((Restartable) s).enable();
 			}
 		}
-		
- 
-		
-		//OI.buttonA.whenPressed(new DriveMotionMagik());
+
+		// 0,500,3750,4500
+
+		// getSensors().getNavX().zeroYaw();
+		((Claw) Robot.getSubsystem(SubsystemNames.CLAW)).zeroEncoder();
+		((DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN)).setNeutralMode(NeutralMode.Coast);
+		// OI.buttonA.whenPressed(new DriveMotionMagik());
 
 	}
 
@@ -193,31 +252,39 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		
-		
-//		
-//		SmartDashboard.putNumber("kRIOStatusBufferInvalidSize", NIRioStatus.kRIOStatusBufferInvalidSize);
-//		SmartDashboard.putNumber("kRIOStatusFeatureNotSupported", NIRioStatus.kRIOStatusFeatureNotSupported);
-//		SmartDashboard.putNumber("kRioStatusOffset", NIRioStatus.kRioStatusOffset);
-//		SmartDashboard.putNumber("kRIOStatusOperationTimedOut", NIRioStatus.kRIOStatusOperationTimedOut);
-//		SmartDashboard.putNumber("kRIOStatusResourceNotInitialized", NIRioStatus.kRIOStatusResourceNotInitialized);
-//		SmartDashboard.putNumber("kRioStatusSuccess", NIRioStatus.kRioStatusSuccess);
-		
-		
-//		vision.setLowerBoundHue((int) SmartDashboard.getNumber("lowerHue", 0));
-//		vision.setUpperBoundHue((int) SmartDashboard.getNumber("upperHue", 255));
 
-		
 		SmartDashboard.putBoolean("NavX is Connected", sensors.getNavX().isConnected());
 		SmartDashboard.putBoolean("NavX is Calibrating", sensors.getNavX().isCalibrating());
 
-		((DriveTrain)getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
-		
+		((DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
+		((Claw) getSubsystem(SubsystemNames.CLAW)).writeToDashboard();
+		((Elevator) getSubsystem(SubsystemNames.ELEVATOR)).writeToDashboard();
+
 		double angle = sensors.getNavX().getAngle();
 		SmartDashboard.putNumber("Gyro", angle);
 
-		
-		Scheduler.getInstance().run();		
+		Scheduler.getInstance().run();
+
+		DriveTrain drive = (DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN);
+		Elevator elevator = (Elevator) Robot.getSubsystem(SubsystemNames.ELEVATOR);
+		if (Math.abs(elevator.getPos()) > Math.abs(Config.highElevator)) {
+			drive.setDriveMultiplier(.25);
+		} else if (Math.abs(elevator.getPos()) > Math.abs(Config.midElevator)) {
+			drive.setDriveMultiplier(.5d);
+		} else if (Math.abs(elevator.getPos()) > Math.abs(Config.lowElevator)) {
+			drive.setDriveMultiplier(.75);
+		} else {
+			drive.setDriveMultiplier(1);
+		}
+
+		if (RobotController.getBatteryVoltage() < 9) {
+			compressor.stop();
+		} else {
+			compressor.start();
+		}
+		if (RobotController.getBatteryVoltage() < 7) {
+			drive.setDriveMultiplier(0);
+		}
 	}
 
 	/**
@@ -231,6 +298,7 @@ public class Robot extends IterativeRobot {
 	public static Subsystem getSubsystem(SubsystemNames name) {
 		return subsystems.get(name);
 	}
+
 	public static SensorBoard getSensors() {
 		return sensors;
 	}
