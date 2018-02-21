@@ -33,17 +33,18 @@ import org.ejml.simple.SimpleMatrix;
 public class KalmanFilterSimple implements KalmanFilter {
 
   // kinematics description
-  private SimpleMatrix F; //model for change in the state
-  private SimpleMatrix Q; //process noise covariance e.g., turbulence
-  private SimpleMatrix H; //measurement model (i.e., matrix of sensor values) OR C idk
+  private SimpleMatrix F; // model for change in the state
+  private SimpleMatrix Q; // process noise covariance e.g., turbulence
+  private SimpleMatrix H; // measurement model (i.e., matrix of sensor values) OR C idk
 
   // system state estimate
   private SimpleMatrix x; // state vector
   private SimpleMatrix P; // prediction error covariance that is computed recursively
+  private double numberOfSensors = 1;
 
   /**
-   * Specify the kinematics model of the Kalman filter.  This must be called
-   * first before any other functions.
+   * Specify the kinematics model of the Kalman filter. This must be called first before any other
+   * functions.
    *
    * @param F State transition matrix.
    * @param Q process noise covariance matrix
@@ -56,6 +57,12 @@ public class KalmanFilterSimple implements KalmanFilter {
     this.H = new SimpleMatrix(H);
   }
 
+  public void configure(DMatrixRMaj F, DMatrixRMaj Q, DMatrixRMaj H, int numberOfSensors) {
+    this.F = new SimpleMatrix(F);
+    this.Q = new SimpleMatrix(Q);
+    this.H = new SimpleMatrix(H);
+    this.numberOfSensors = numberOfSensors;
+  }
   /**
    * The prior state estimate and covariance.
    *
@@ -69,60 +76,73 @@ public class KalmanFilterSimple implements KalmanFilter {
   }
 
   /**
-   * First step of Kalman filter
-   * Predicts the state of the system forward one time step. Entirely based on the state transition matrix (i.e., mathematical model).
+   * First step of Kalman filter Predicts the state of the system forward one time step. Entirely
+   * based on the state transition matrix (i.e., mathematical model).
    */
   @Override
   public void predict() {
     // x = F x
+    System.out.println("Initial x: " + getStateVar());
     x = F.mult(x);
 
     // P = F P F' + Q
     P = F.mult(P).mult(F.transpose()).plus(Q);
+    System.out.println("Predicted x: " + getStateVar());
   }
 
   /**
-   * Second step of Kalman filter
-   * Updates the state provided the observation from a sensor(s).
+   * Second step of Kalman filter Updates the state provided the observation from a sensor(s).
+   *
    * @param _z Measurement matrix
    * @param _R Measurement covariance
    */
   @Override
   public void update(DMatrixRMaj _z, DMatrixRMaj _R) {
+    //Original code
     // a fast way to make the matrices usable by SimpleMatrix
-//    SimpleMatrix z = SimpleMatrix.wrap(_z);
-//    SimpleMatrix R = SimpleMatrix.wrap(_R);
-//
-//    // y = z - H x
-//    SimpleMatrix y = z.minus(H.mult(x));
-//
-//    // S = H P H' + R
-//    SimpleMatrix S = H.mult(P).mult(H.transpose()).plus(R);
-//
-//    // K = PH'S^(-1)
-//    SimpleMatrix K = P.mult(H.transpose().mult(S.invert()));
-//
-//    // x = x + Ky
-//    x = x.plus(K.mult(y));
-//
-//    // P = (I-kH)P = P - KHP
-//    P = P.minus(K.mult(H).mult(P));
+    //    SimpleMatrix z = SimpleMatrix.wrap(_z);
+    //    SimpleMatrix R = SimpleMatrix.wrap(_R);
+    //
+    //    // y = z - H x
+    //    SimpleMatrix y = z.minus(H.mult(x));
+    //
+    //    // S = H P H' + R
+    //    SimpleMatrix S = H.mult(P).mult(H.transpose()).plus(R);
+    //
+    //    // K = PH'S^(-1)
+    //    SimpleMatrix K = P.mult(H.transpose().mult(S.invert()));
+    //
+    //    // x = x + Ky
+    //    x = x.plus(K.mult(y));
+    //
+    //    // P = (I-kH)P = P - KHP
+    //    P = P.minus(K.mult(H).mult(P));
     SimpleMatrix z = SimpleMatrix.wrap(_z);
     SimpleMatrix R = SimpleMatrix.wrap(_R);
 
     // y = z - H x
     SimpleMatrix y = z.minus(H.mult(x));
-//    System.out.println("y: " + y);
-//
-//    // S = H P H' + R
-//    System.out.println("H.H.mult(P).mult(H.transpose()): " + H.mult(P).mult(H.transpose()));
+    //    System.out.print("x: " + x);
+    //    System.out.print("H: " + H);
+    //    System.out.print("z: " + z);
+    //    System.out.print("y: " + y);
+    //
+    //    // S = H P H' + R
     SimpleMatrix S = H.mult(P).mult(H.transpose()).plus(R);
 
     // K = PH'S^(-1)
-    System.out.print("K: " + P.mult(H.transpose().mult(S.invert())));
-    SimpleMatrix K = P.mult(H.transpose().mult(S.invert()));
+
+    SimpleMatrix K = P.mult(H.transpose().mult(S.invert())); // uncomment if done testing
+    //    double[][] assumeKIsOne = {{1, 1}};
+    //    SimpleMatrix K = new SimpleMatrix(assumeKIsOne);
+    System.out.print("K: " + K);
+    // set y to y / numberOfSensors -> impromptu patching
+    double[][] divisionByNumberOfSensors = {{1.0 / numberOfSensors}};
+    y = y.mult(new SimpleMatrix(divisionByNumberOfSensors));
+//    System.out.print("y / numberOfSensors : " + y);
 
     // x = x + Ky
+
     x = x.plus(K.mult(y));
 
     // P = (I-kH)P = P - KHP
@@ -135,12 +155,11 @@ public class KalmanFilterSimple implements KalmanFilter {
   }
 
   public double getStateVar() {
-    return x.get(0,0);
+    return x.get(0, 0);
   }
 
   @Override
   public DMatrixRMaj getCovariance() {
     return P.getMatrix();
   }
-
 }
