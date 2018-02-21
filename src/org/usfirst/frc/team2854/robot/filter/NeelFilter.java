@@ -1,6 +1,9 @@
 package org.usfirst.frc.team2854.robot.filter;
 
-public class KalmanFilter {
+/**For reference only, as this only considers 1 state variable and 1 sensor.
+ *
+ */
+public class NeelFilter {
     double x, a, b, z, w, gain, u, c; //g around 0.7, x = current prediction, xlast is previous, p around 1
     double r; //published accuracy of the sensor
     double p; //prediction error
@@ -17,7 +20,7 @@ public class KalmanFilter {
      * @param b
      * @param c
      */
-    public KalmanFilter(double g, double noise, double prediction_error, double input, double a, double u, double b, double c){
+    public NeelFilter(double g, double noise, double prediction_error, double input, double a, double u, double b, double c){
         gain = g;
         r = noise;
         p = prediction_error;

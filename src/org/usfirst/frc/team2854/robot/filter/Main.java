@@ -18,7 +18,7 @@ public class Main {
       i++;
     }
     i = 1;
-    KalmanFilter kf = new KalmanFilter(0.7, 200, 1, withNoise[0], 0.5, 1, 1, 1);
+    NeelFilter kf = new NeelFilter(0.7, 200, 1, withNoise[0], 0.5, 1, 1, 1);
     System.out.println();
     System.out.println();
     System.out.println("Filter:");

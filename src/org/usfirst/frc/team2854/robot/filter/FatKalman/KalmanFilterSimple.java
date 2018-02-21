@@ -34,12 +34,12 @@ public class KalmanFilterSimple implements KalmanFilter {
 
   // kinematics description
   private SimpleMatrix F; //model for change in the state
-  private SimpleMatrix Q; //process noise covariance matrix e.g., turbulence
-  private SimpleMatrix H; //measurement matrix (i.e., matrix of sensor values) OR C idk
+  private SimpleMatrix Q; //process noise covariance e.g., turbulence
+  private SimpleMatrix H; //measurement model (i.e., matrix of sensor values) OR C idk
 
   // system state estimate
-  private SimpleMatrix x; // state matrix
-  private SimpleMatrix P; // prediction error covariance matrix that is computed recursively
+  private SimpleMatrix x; // state vector
+  private SimpleMatrix P; // prediction error covariance that is computed recursively
 
   /**
    * Specify the kinematics model of the Kalman filter.  This must be called
