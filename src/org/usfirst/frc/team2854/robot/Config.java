@@ -9,6 +9,14 @@ public class Config {
   public static double manuelSpeedMultiplier = 1;
   public static double totalDriveSpeedMultiplier = 1;
 
+
+  public static double driveEncoderCyclesPerRevolution = 256;  //TODO use this value in speed calculations
+
   public static double highTarget = 8750; // in units per 100 ms
   public static double lowTarget = 3000;
+
+  public static double turnDistance;
+
+  public static double robotWidth = 24.5; //center of wheel to center of wheel
+
 }

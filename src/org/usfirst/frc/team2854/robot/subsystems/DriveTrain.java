@@ -1,19 +1,36 @@
 package org.usfirst.frc.team2854.robot.subsystems;
 
+import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.TrajectoryPoint;
+import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
+import java.util.ResourceBundle.Control;
+
+import org.usfirst.frc.team2854.robot.Config;
+import org.usfirst.frc.team2854.robot.RobotMap;
+import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StickyFaults;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.TimerTask;
+
+import javax.management.RuntimeErrorException;
+
+import org.usfirst.frc.team2854.PID.CustomProfile;
 import org.usfirst.frc.team2854.PID.DummyPIDOutput;
 import org.usfirst.frc.team2854.PID.PIDConstant;
 import org.usfirst.frc.team2854.PID.PIDUtil;
+import org.usfirst.frc.team2854.PID.ProfileNotifier;
 import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
@@ -21,8 +38,8 @@ import org.usfirst.frc.team2854.robot.commands.JoystickDrive;
 /** */
 public class DriveTrain extends Subsystem implements Restartable {
 
-	// Put methods for controlling this subsyWstem
-	// here. Call these from Commands.
+  // Put methods for controlling this subsyWstem
+  // here. Call these from Commands.
 
   private TalonSRX leftT1, leftT2, rightT1, rightT2;
 
@@ -35,10 +52,10 @@ public class DriveTrain extends Subsystem implements Restartable {
 
   private GearState gear;
 
+  private boolean autoShift = true;
+
   enum GearState {
-    LOW,
-    HIGH,
-    UNKNOWN;
+    LOW, HIGH, UNKNOWN;
 
     public static Value gearToValue(GearState state) {
       switch (state) {
@@ -100,40 +117,39 @@ public class DriveTrain extends Subsystem implements Restartable {
   }
 
   public void enable() {
-    System.out.println("Enabling drive train");
+    //System.out.println("Enabling drive train");
     // turnController.enable();
     applyShift(GearState.LOW, -10); // TODO 10 more attempts because of start up time?
   }
 
   public void disable() {
-    System.out.println("Disableing drive train");
+    //System.out.println("Disableing drive train");
     // turnController.disable();
   }
 
   public void initTurnPID(double P, double I, double D, double F) {
-    PIDSource turnSource =
-        new PIDSource() {
+    PIDSource turnSource = new PIDSource() {
 
-          private PIDSourceType type;
+      private PIDSourceType type;
 
-          @Override
-          public void setPIDSourceType(PIDSourceType pidSource) {
-            this.type = pidSource;
-          }
+      @Override
+      public void setPIDSourceType(PIDSourceType pidSource) {
+        this.type = pidSource;
+      }
 
-          @Override
-          public double pidGet() {
-            // System.out.println("Calling PID get " + Math.random());
-            return rightT2.getSelectedSensorVelocity(0) - leftT2.getSelectedSensorVelocity(0);
-          }
+      @Override
+      public double pidGet() {
+        // System.out.println("Calling PID get " + Math.random());
+        return rightT2.getSelectedSensorPosition(0) - leftT2.getSelectedSensorPosition(0);
+      }
 
-          @Override
-          public PIDSourceType getPIDSourceType() {
-            return type;
-          }
-        };
+      @Override
+      public PIDSourceType getPIDSourceType() {
+        return type;
+      }
+    };
 
-    turnSource.setPIDSourceType(PIDSourceType.kRate);
+    turnSource.setPIDSourceType(PIDSourceType.kDisplacement);
 
     turnOut = new DummyPIDOutput();
 
@@ -161,37 +177,36 @@ public class DriveTrain extends Subsystem implements Restartable {
     SmartDashboard.putNumber("Left Throttle", rightT2.getMotorOutputPercent());
     // SmartDashboard.putNumber("Target", leftT2.getClosedLoopTarget(0));
 
+    SmartDashboard.putBoolean("reset during en?", new StickyFaults().ResetDuringEn);
+    SmartDashboard.putNumber("encoder diff",
+            Math.abs(rightT2.getSelectedSensorPosition(0) - leftT2.getSelectedSensorPosition(0)));
   }
 
   private void applyShift(GearState desiredState, int attempt) {
     if (attempt > 10) {
-      System.err.println("Shifter is not shifting to " + desiredState + " at attempt " + attempt);
+      //System.err.println("Shifter is not shifting to " + desiredState + " at attempt " + attempt);
       return;
     }
     shifter.set(GearState.gearToValue(desiredState));
 
     // Timer.delay(.005);
-    if (!shifter
-        .get()
-        .equals(
-            GearState.gearToValue(desiredState))) { // did not shift for some reason //TODO check
+    if (!shifter.get().equals(GearState.gearToValue(desiredState))) { // did not shift for some reason //TODO check
       // compressor pressure
       java.util.Timer taskTimer = new java.util.Timer();
-      TimerTask task =
-          new TimerTask() {
+      TimerTask task = new TimerTask() {
 
-            @Override
-            public void run() {
-              applyShift(desiredState, attempt + 1);
-            }
-          };
+        @Override
+        public void run() {
+          applyShift(desiredState, attempt + 1);
+        }
+      };
       taskTimer.schedule(task, 5); // try to shift again in half a second
 
     } else {
       System.out.println("shifted to " + desiredState);
+      SmartDashboard.putString("Gear", desiredState.toString());
       gear = desiredState;
-      PIDConstant constant =
-          (gear == GearState.HIGH ? PIDConstant.highDrive : PIDConstant.lowDrive);
+      PIDConstant constant = (gear == GearState.HIGH ? PIDConstant.highDrive : PIDConstant.lowDrive);
       PIDUtil.updatePID(rightT2, constant);
       PIDUtil.updatePID(leftT2, constant);
     }
@@ -199,7 +214,7 @@ public class DriveTrain extends Subsystem implements Restartable {
     // P_Drive = .2;
     // I_Drive = .003;
     // D_Drive = 0;
-    // low ^ high v
+    // low ^ high vs
     // P_Drive = .2;
     // I_Drive = .001;
     // D_Drive = .02;
@@ -214,13 +229,15 @@ public class DriveTrain extends Subsystem implements Restartable {
       System.out.println("In unknown state, defaulting to LOW");
       applyShift(GearState.LOW, 0);
     }
+
   }
 
   public void drive(double left, double right, ControlMode mode) {
     // System.out.println(mode.toString() + " " + ControlMode.Velocity + " " +
     // mode.equals(ControlMode.Velocity));
 
-    if (mode.equals(ControlMode.Velocity) || mode.equals(ControlMode.MotionMagic)) {
+    if (mode.equals(ControlMode.Velocity) || mode.equals(ControlMode.MotionMagic)
+            || mode.equals(ControlMode.Position)) {
       if (gear == GearState.LOW) {
         // System.out.println("Using low target");
         left *= Config.lowTarget;
@@ -235,24 +252,72 @@ public class DriveTrain extends Subsystem implements Restartable {
       left += leftT2.getSelectedSensorPosition(0);
       right += rightT2.getSelectedSensorPosition(0);
     }
+    // System.out.println("target left + " + left);
     // System.out.println(left + " " + right);
     leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);
     rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);
-    leftT2.pushMotionProfileTrajectory(new TrajectoryPoint());
+
   }
 
   public void driveStraight(double left, double right, ControlMode mode) {
-    double output = turnController.get();
-    System.out.println(output);
-    turnController.setSetpoint(0);
+    // double error = rightT2.getSelectedSensorPosition(0) -
+    // leftT2.getSelectedSensorPosition(0);
+    drive(left, right, mode);
+  }
+
+  public void setNeutralMode(NeutralMode mode) {
+    rightT2.setNeutralMode(mode);
+    leftT2.setNeutralMode(mode);
+  }
+
+  public ProfileNotifier generateTurnProfile(double cruzVel, double vOut, double turnR, boolean right,
+                                             double turnAngle) {
+    return CustomProfile.generateTurnMotionControl(cruzVel, vOut, turnR, turnAngle, right, leftT2, rightT2);
   }
 
   public void drive(double left, double right) {
     drive(left, right, ControlMode.PercentOutput);
+
   }
 
   public void stop() {
     drive(0, 0);
+  }
+
+  public double getAvgEncoder() {
+    return (rightT2.getSelectedSensorPosition(0) + leftT2.getSelectedSensorPosition(0)) / 2d;
+  }
+
+  public double getLeftEncoder() {
+    return leftT2.getSelectedSensorPosition(0);
+  }
+
+  public double getRightEncoder() {
+    return rightT2.getSelectedSensorPosition(0);
+  }
+
+  public double getAvgVelocity() {
+    return (rightT2.getSelectedSensorVelocity(0) + leftT2.getSelectedSensorVelocity(0)) / 2d;
+  }
+
+  public double inchesToCycles(double d) { // TODO finish this
+    if (gear == GearState.LOW) {
+      return (d + .997) / 6.96d;
+    } else {
+      throw new RuntimeException("Need to calibrate distance for " + gear.toString());
+    }
+  }
+
+  public boolean isAutoShift() {
+    return autoShift;
+  }
+
+  public void setAutoShift(boolean autoShift) {
+    this.autoShift = autoShift;
+  }
+
+  public double getDriveConstant() {
+    return (gear == GearState.HIGH ? Config.highTarget : Config.lowTarget);
   }
 
 }
