@@ -136,9 +136,10 @@ public class KalmanFilterSimple implements KalmanFilter {
     //    double[][] assumeKIsOne = {{1, 1}};
     //    SimpleMatrix K = new SimpleMatrix(assumeKIsOne);
     System.out.print("K: " + K);
-    // set y to y / numberOfSensors -> impromptu patching
-    double[][] divisionByNumberOfSensors = {{1.0 / numberOfSensors}};
-    y = y.mult(new SimpleMatrix(divisionByNumberOfSensors));
+
+    // set y to y / numberOfSensors -> impromptu patching by tommy -- not real Kalman code
+//    double[][] divisionByNumberOfSensors = {{1.0 / numberOfSensors}};
+//    y = y.mult(new SimpleMatrix(divisionByNumberOfSensors));
 //    System.out.print("y / numberOfSensors : " + y);
 
     // x = x + Ky
