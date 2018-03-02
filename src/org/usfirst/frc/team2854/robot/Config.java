@@ -16,7 +16,7 @@ public class Config {
 	public static double fastTarget = 8500; // in units per 100 ms
 	public static double slowTarget = 4000;
 
-	public static double upTargetSpeed = 15000 *  1 / 2d;
+	public static double upTargetSpeed = 24000 *  1 / 2d;
 
 	public static double downTargetSpeed = -24000 * 1 / 3d;
 

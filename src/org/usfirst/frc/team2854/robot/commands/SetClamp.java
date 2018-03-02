@@ -1,63 +1,50 @@
 package org.usfirst.frc.team2854.robot.commands;
 
-import org.usfirst.frc.team2854.robot.Config;
-import org.usfirst.frc.team2854.robot.OI;
 import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.subsystems.Claw;
 import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class JoystickDriveClaw extends Command {
+public class SetClamp extends Command {
 
 	private Claw claw;
+	
+	private boolean open;
 
-	public JoystickDriveClaw() {
+	public SetClamp(boolean open) {
 		requires(Robot.getSubsystem(SubsystemNames.CLAW));
+		this.open = open;
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		claw = (Claw) Robot.getSubsystem(SubsystemNames.CLAW);
+		if(open) {
+			claw.open();
+		} else {
+			claw.close();
+		}
 	}
 
-	// 0,500,3750,4500
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		double value = (OI.secondaryJoystick.getRawAxis(5));
-		value = Math.abs(value) < .05 ? 0 : value;
-		if (claw.getClawPos() > Config.upperClawLimit && value < 0) {
-			value = 0;
-		}
-		// System.out.println("Claw Hold is running");
-		claw.driveClaw(value * .65 - .08, ControlMode.PercentOutput);
-
-		// double clawValue = OI.secondaryJoystick.getRawAxis(1);
-		double clawValue = OI.secondaryJoystick.getRawAxis(2) - OI.secondaryJoystick.getRawAxis(3);
-		clawValue = Math.abs(clawValue) < .05 ? claw.getIntakeSpeed() : clawValue * 1d;
-		claw.runIntake(clawValue);
-
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
-		claw.driveClaw(0, ControlMode.PercentOutput);
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-		claw.driveClaw(0, ControlMode.PercentOutput);
-
 	}
 }

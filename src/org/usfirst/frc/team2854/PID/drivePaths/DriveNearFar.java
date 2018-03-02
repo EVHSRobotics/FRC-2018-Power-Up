@@ -20,7 +20,7 @@ public class DriveNearFar extends CommandGroup {
 		addSequential(new Delay(0.5));
 		addSequential(new EncoderTurn(-90));
 		//shoot
-		addSequential(new DriveHeading(.5, 4, -90));
+		addSequential(new DriveHeading(.5, 20, -90));
 		addSequential(new ElevatorSetPoint(-5800));
 		addSequential(new ClawSetpoint(2000));
 		addSequential(new Outtake(1.5, .75d));

@@ -34,7 +34,7 @@ public class JoystickDrive extends Command {
 		double turn = OI.mainJoystick.getRawAxis(0);
 		turn = Math.abs(turn) < .1 ? 0 : turn;
 
-		drive.drive(sig(value - turn) * .75, sig(value + turn) * .75, ControlMode.PercentOutput);
+		drive.drive(sig(value - turn), sig(value + turn), ControlMode.PercentOutput);
 
 	}
 

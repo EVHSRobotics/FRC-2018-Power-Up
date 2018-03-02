@@ -99,7 +99,7 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public boolean isIntakeStalling() {
-		double stallMax = 7;
+		double stallMax = 10;
 		System.out.println(
 				"checking motor stall, current: " + Math.abs(leftIn.getOutputCurrent()) + ", trigger at " + stallMax);
 		return Math.abs(leftIn.getOutputCurrent()) > stallMax;
@@ -113,6 +113,7 @@ public class Claw extends Subsystem implements Restartable {
 		
 		SmartDashboard.putNumber("intake output percent", leftIn.getMotorOutputPercent());
 		SmartDashboard.putNumber("claw output current", leftIn.getOutputCurrent());
+		SmartDashboard.putBoolean("is claw closed", piston.get().equals(Value.kReverse));
 	}
 
 	public void runIntake(double speed) {
@@ -134,6 +135,7 @@ public class Claw extends Subsystem implements Restartable {
 			piston.set(Value.kReverse);
 		} else if (piston.get().equals(Value.kReverse)) {
 			piston.set(Value.kForward);
+			
 		} else {
 			piston.set(Value.kReverse);
 		}

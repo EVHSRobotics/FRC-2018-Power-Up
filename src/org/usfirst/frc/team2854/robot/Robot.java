@@ -268,14 +268,15 @@ public class Robot extends IterativeRobot {
 		DriveTrain drive = (DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN);
 		Elevator elevator = (Elevator) Robot.getSubsystem(SubsystemNames.ELEVATOR);
 		if (Math.abs(elevator.getPos()) > Math.abs(Config.highElevator)) {
-			drive.setDriveMultiplier(.25);
+			drive.setDriveMultiplier(.5);
 		} else if (Math.abs(elevator.getPos()) > Math.abs(Config.midElevator)) {
-			drive.setDriveMultiplier(.5d);
+			drive.setDriveMultiplier(.75d);
 		} else if (Math.abs(elevator.getPos()) > Math.abs(Config.lowElevator)) {
-			drive.setDriveMultiplier(.75);
+			drive.setDriveMultiplier(1);
 		} else {
 			drive.setDriveMultiplier(1);
 		}
+		SmartDashboard.putNumber("drive multiplier", drive.getDriveMultiplier());
 
 		if (RobotController.getBatteryVoltage() < 9) {
 			compressor.stop();

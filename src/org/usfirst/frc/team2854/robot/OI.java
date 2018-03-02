@@ -1,17 +1,12 @@
 package org.usfirst.frc.team2854.robot;
 
-import org.usfirst.frc.team2854.PID.drivePaths.DriveFarNear;
-import org.usfirst.frc.team2854.PID.drivePaths.DriveNearNear;
-import org.usfirst.frc.team2854.robot.commands.ChangeLed;
-import org.usfirst.frc.team2854.robot.commands.ClawSetpoint;
-import org.usfirst.frc.team2854.robot.commands.DriveThottle;
 import org.usfirst.frc.team2854.robot.commands.ElevatorSetPoint;
-import org.usfirst.frc.team2854.robot.commands.Intake;
+import org.usfirst.frc.team2854.robot.commands.FloorAngle;
 import org.usfirst.frc.team2854.robot.commands.IntakeAquire;
-import org.usfirst.frc.team2854.robot.commands.Outtake;
+import org.usfirst.frc.team2854.robot.commands.ScaleAngle;
+import org.usfirst.frc.team2854.robot.commands.SwitchAngle;
 import org.usfirst.frc.team2854.robot.commands.ToggleClamp;
 import org.usfirst.frc.team2854.robot.commands.ToggleShift;
-import org.usfirst.frc.team2854.robot.commands.Turn;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -64,14 +59,15 @@ public class OI {
 		//0,500,3750,4500
 
 		//-5400 -> 1 inches
-		// buttonA2.whenPressed(new ElevatorSetPoint(-100));
-		 //buttonB2.whenPressed(new ElevatorSetPoint(-5800));
+		 buttonA2.whenPressed(new FloorAngle());
+		 buttonB2.whenPressed(new SwitchAngle());
+		 buttonY2.whenPressed(new ScaleAngle());
 		
 		
-		 buttonA2.whenPressed(new ClawSetpoint(0));
-		 buttonB2.whenPressed(new ClawSetpoint(1000));
-		 buttonY2.whenPressed(new ClawSetpoint(3000));
-
+		 //buttonA2.whenPressed(new ClawSetpoint(0));
+		 //buttonB2.whenPressed(new ClawSetpoint(1000));
+		 //buttonY2.whenPressed(new ClawSetpoint(3000));
+   
 
 		// Auto Code tsting stuff VVVVVVV
 
