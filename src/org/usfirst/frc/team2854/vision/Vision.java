@@ -30,7 +30,7 @@ public class Vision implements Runnable {
 	// Mat output;
 
 	InterpolatingMap dataY;
-	InterpolatingMapHorizontalDistance dataX;
+	InterpolatingMap dataX;
 	private Mat img;
 	private Scalar upperBoundValue;
 	private Scalar lowerBoundValue;
@@ -154,8 +154,6 @@ public class Vision implements Runnable {
 		
 		
 	}
-	
-	
 
 	public void drawContours(List<MatOfPoint> contours, Mat img) {
 		Random r = new Random();

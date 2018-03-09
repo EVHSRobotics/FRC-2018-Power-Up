@@ -315,8 +315,8 @@ public class GripPipeline {
 
 	public Scalar setAverageValue() {
 		Mat img = blurOutput;
-		Mat mask = new Mat(new Size(img.height(), img.width()), CvType.CV_8UC1);
-		Scalar mean = Core.mean(img, mask);
+	//	Mat mask = new Mat(new Size(img.height(), img.width()), CvType.CV_8UC1);
+		Scalar mean = Core.mean(img);
 		
 		return mean;
 	}
