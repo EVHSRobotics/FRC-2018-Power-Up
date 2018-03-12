@@ -1,3 +1,4 @@
+
 package org.usfirst.frc.team2854.robot;
 
 
@@ -75,11 +76,11 @@ public class Robot extends IterativeRobot {
 		
 		System.out.println("Robot init");
 
-		vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
-		Thread visT = new Thread(vision);
-		visT.start();
-	 
-		vision.setShouldRun(false);
+//		vision = new Vision(new Scalar(85, 100, 100), new Scalar(125, 255, 255));
+//		Thread visT = new Thread(vision);
+//		visT.start();
+//	 
+//		vision.setShouldRun(true);
 		
 //		LidarReader lidar = new LidarReader(Port.kOnboard);
 //		

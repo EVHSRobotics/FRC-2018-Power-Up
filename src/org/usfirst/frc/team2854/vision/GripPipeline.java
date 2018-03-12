@@ -52,9 +52,12 @@ public class GripPipeline {
 
 		// Step HSL_Threshold0:
 		Mat hslThresholdInput = blurOutput;
+//		double[] hslThresholdHue = {27.5179856115108, 55.75757575757575};
+//		double[] hslThresholdSaturation = getHslThresholdSaturation();
+//		double[] hslThresholdLuminance = getHslThresholdLuminance();
 		double[] hslThresholdHue = {27.5179856115108, 55.75757575757575};
-		double[] hslThresholdSaturation = getHslThresholdSaturation();
-		double[] hslThresholdLuminance = getHslThresholdLuminance();
+		double[] hslThresholdSaturation = {34.39748201438849, 233.53535353535355};
+		double[] hslThresholdLuminance = {0.0, 239.97474747474743};
 		hslThreshold(hslThresholdInput, hslThresholdHue, hslThresholdSaturation, hslThresholdLuminance, hslThresholdOutput);
 
 		// Step CV_erode0:
@@ -93,7 +96,7 @@ public class GripPipeline {
 		cvErodeKernel.release();
 		cvErodeSrc.release();
 		findContoursInput.release();
-		maskInput.release();
+		//maskInput.release();
 		maskMask.release();
 		
 		System.gc();
@@ -315,8 +318,16 @@ public class GripPipeline {
 
 	public Scalar setAverageValue() {
 		Mat img = blurOutput;
+
 	//	Mat mask = new Mat(new Size(img.height(), img.width()), CvType.CV_8UC1);
-		Scalar mean = Core.mean(img);
+	//	Scalar mean = Core.mean(img);
+
+		//Mat mask = new Mat(new Size(img.height(), img.width()), CvType.CV_8UC1);
+		Mat mask = Mat.ones(new Size(img.width(), img.height()),  CvType.CV_8UC1);
+		//System.out.println(img.size());
+		//System.out.println(mask.size());
+		Scalar mean = Core.mean(img, mask);
+
 		
 		return mean;
 	}

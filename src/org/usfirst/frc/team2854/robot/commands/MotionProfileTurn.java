@@ -46,6 +46,7 @@ public class MotionProfileTurn extends Command {
     		notifier.startNotifier();
     		drive.drive(1, 1, ControlMode.MotionProfile);
     		notifier.setEnabled(true);
+    		System.out.println("Starting");
     	}
     }
 
