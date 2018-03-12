@@ -5,14 +5,20 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class FloorAngle extends CommandGroup {
+public class AutoIntake extends CommandGroup {
 
-    public FloorAngle() {
+    public AutoIntake() {
     	
-    	addSequential(new ElevatorSetPoint(-1500));
+    	
+    	addSequential(new SetClamp(true));
+    	addSequential(new ClawSetpoint(-4250));
+    	addSequential(new IntakeTillUltra(7, -.25, false));
+    	addSequential(new SetClamp(false));
+    	addSequential(new IntakeTillUltra(2, -.9, true));
     	addSequential(new ClawSetpoint(-750));
 
-    		
+    	
+    	
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

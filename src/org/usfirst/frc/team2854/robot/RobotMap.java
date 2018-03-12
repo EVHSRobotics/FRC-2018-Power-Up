@@ -7,14 +7,7 @@ package org.usfirst.frc.team2854.robot;
  * floating around.
  */
 public class RobotMap {
-
-	// FIXME Must be remapped for new robot
-
-	// 0 leftMotor, inverted
-	// 1 rightMotor not inverted
-	// 2 rightMotor not inverted
-	// 3 leftMotor, inverted
-
+	
 	public static int leftTalonID1 = 3;
 	public static int leftTalonID2 = 4;
 	public static int rightTalonID1 = 1;
@@ -22,11 +15,11 @@ public class RobotMap {
 
 	public static int elevator = 5; 
 
-	public static int leftIntake = 7;
-	public static int rightIntake = 6;
+	public static int leftIntake = 7; //inverted
+	public static int rightIntake = 9; 
 
-	public static int masterClaw = 8;
-	public static int slaveClaw = 9; //left arm
+	public static int masterClaw = 8; //inverted
+	public static int slaveClaw = 6; //right intake
 	
 	public static int intakeUp = 0;
 	public static int intakeDown = 1;
@@ -35,4 +28,6 @@ public class RobotMap {
 	public static int shifterDown = 3;// 3 1 5
 
 	public static int led = 0;
+	
+	
 }

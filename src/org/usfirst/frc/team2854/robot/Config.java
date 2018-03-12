@@ -13,7 +13,7 @@ public class Config {
 
 	public static double driveEncoderCyclesPerRevolution = 256; // TODO use this value in speed calculations
 
-	public static double fastTarget = 8500; // in units per 100 ms
+	public static double fastTarget = 8250; // in units per 100 ms
 	public static double slowTarget = 4000;
 
 	public static double upTargetSpeed = 24000 *  1 / 2d;

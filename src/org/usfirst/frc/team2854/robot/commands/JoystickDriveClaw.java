@@ -31,13 +31,12 @@ public class JoystickDriveClaw extends Command {
 	protected void execute() {
 		double value = (OI.secondaryJoystick.getRawAxis(5));
 		value = Math.abs(value) < .05 ? 0 : value;
-		if (claw.getClawPos() > Config.upperClawLimit && value < 0) {
-			value = 0;
-		}
-		// System.out.println("Claw Hold is running");
-		claw.driveClaw(value * .65 - .08, ControlMode.PercentOutput);
-
-		// double clawValue = OI.secondaryJoystick.getRawAxis(1);
+		//if (claw.getClawPos() > Config.upperClawLimit && value < 0) {
+		//	value = 0;
+		//}
+		double holdValue = (Robot.getSensors().getUltraDistance() < 3 ? .08 : .04);
+		claw.driveClaw(value * .65 - holdValue, ControlMode.PercentOutput);
+		
 		double clawValue = OI.secondaryJoystick.getRawAxis(2) - OI.secondaryJoystick.getRawAxis(3);
 		clawValue = Math.abs(clawValue) < .05 ? claw.getIntakeSpeed() : clawValue * 1d;
 		claw.runIntake(clawValue);

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2854.robot.commands;
 
+import org.opencv.core.Point;
 import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
@@ -15,19 +16,17 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveToBox extends Command {
 
 	private DriveTrain drive;
-	private Command c;
-	private double revs;
 
-	private double distance;
 	private double targetPos;
 
-	public DriveToBox(double distance) {
-		requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
-		this.distance = distance;
-	}
+	private Point center;
+	private double offset;
+
+	private long startTime;
+	private boolean running = false;
 
 	public DriveToBox() {
-		this(0);
+		requires(Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN));
 	}
 
 	// Called just before this Command runs the first time
@@ -41,27 +40,40 @@ public class DriveToBox extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		// System.out.println("Exewcuting " + Robot.getVision().hasProcessed);
+		System.out.println("Exewcuting " + Robot.getVision().hasProcessed);
 		if (Robot.getVision().hasProcessed == true) {
-			this.revs = drive.inchesToCycles(distance - Robot.getVision().getDistanceToBox());
-			drive.setNeutralMode(NeutralMode.Brake);
-			// System.out.println("Driving");
-			drive.drive(revs, revs, ControlMode.MotionMagic);
-			targetPos = (revs * drive.getDriveConstant()) + drive.getAvgEncoder();
-			Robot.getVision().setShouldRun(false);
+			Robot.getVision().setHasProcessed(false);
+			center = Robot.getVision().getCenter();
 		}
+		if (center != null) {
+			running = true;
+			this.offset = center.x;
+			startTime = System.nanoTime();
+			center = null;
+		}
+
+		if (running) {
+			System.out.println(offset);
+			double normOffset = -offset / 125d;
+			double sensitivty = 2;
+			drive.drive((.75 + normOffset / sensitivty) * -.25d, (.75 - normOffset / sensitivty) * -.25d);
+			if ((System.nanoTime() - startTime) / 1E9d > .5) {
+				running = false;
+				drive.drive(0, 0);
+			}
+		}
+
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return Math.abs(drive.getAvgEncoder() - targetPos) < 500;
+		return Robot.getSensors().getUltraDistance() < 3;
 	}
 
 	// Called once after isFinished returns true
 	protected void end() {
 		System.out.println("Ending");
 		Robot.getVision().setShouldRun(false);
-		c = null;
 	}
 
 	// Called when another command which requires one or more of the same
@@ -70,7 +82,6 @@ public class DriveToBox extends Command {
 	protected void interrupted() {
 		System.out.println("getting interrupted");
 		Robot.getVision().setShouldRun(false);
-		c = null;
 
 	}
 }

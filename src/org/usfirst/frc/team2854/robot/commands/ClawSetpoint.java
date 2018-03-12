@@ -45,10 +45,10 @@ public class ClawSetpoint extends Command {
 		System.out.println("running");
 		if(target > claw.getClawPos()) {
 			System.out.println("Driving claw up " + claw.getClawPos());
-			claw.driveClaw(-1 * Math.abs(target - claw.getClawPos()) / 1000, ControlMode.PercentOutput);
+			claw.driveClaw(-1 * Math.abs(target - claw.getClawPos()) / 2000, ControlMode.PercentOutput);
 		} else {
 			System.out.println("Driving claw down " + claw.getClawPos());
-			claw.driveClaw(+.10, ControlMode.PercentOutput);
+			claw.driveClaw(+.25, ControlMode.PercentOutput);
 		}
 	}
 
@@ -63,13 +63,13 @@ public class ClawSetpoint extends Command {
 		// target + " error: " + Math.abs(Robot.claw.getPos() - target) + " min
 		// error: " + error);
 		System.out.println("Ending");
-		// Robot.claw.stop();
+		claw.driveClaw(0, ControlMode.PercentOutput);
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
 		System.out.println("Intrupting");
-		// Robot.claw.stop();
+		claw.driveClaw(0, ControlMode.PercentOutput);
 	}
 }

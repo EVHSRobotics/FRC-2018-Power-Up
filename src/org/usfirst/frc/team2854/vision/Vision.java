@@ -41,12 +41,15 @@ public class Vision implements Runnable {
 	private double distanceToBox;
 
 	private boolean shouldRun = true;
-	
+
 	public boolean hasProcessed = true;
-	
+
 	private CvSource outputStream1;
 
-	public Vision() {
+	private Point center;
+	
+
+	public Vision(UsbCamera camera) {
 		data = new InterpolatingMap();
 
 		// data.addDataPoint(608d, 1d);
@@ -72,12 +75,13 @@ public class Vision implements Runnable {
 		data.addDataPoint(124, 61);
 		data.addDataPoint(38, 126.5);
 		
-		camera = CameraServer.getInstance().startAutomaticCapture();
+		this.camera = camera;
+
 		camera.setResolution(640, 480);
 		camera.setExposureAuto();
 		camera.setWhiteBalanceAuto();
-
-		cvSink = CameraServer.getInstance().getVideo();
+		System.out.println("Using camera " + camera.getName());
+		cvSink = CameraServer.getInstance().getVideo(camera.getName());
 		outputStream1 = CameraServer.getInstance().putVideo("Distance", 640, 480);
 
 		System.out.println("Creating object");
@@ -86,7 +90,6 @@ public class Vision implements Runnable {
 
 	public void run() {
 		System.out.println("Starting thread");
-	
 
 		// camera.setResolution(imgWidth, imgHeight);
 		// output = new Mat();
@@ -97,7 +100,6 @@ public class Vision implements Runnable {
 			e.printStackTrace();
 		}
 
-
 		GripPipeline pipeLine = new GripPipeline();
 		Mat input = new Mat();
 		Mat inputCopy = new Mat();
@@ -106,7 +108,7 @@ public class Vision implements Runnable {
 			while (true) {
 
 				if (!shouldRun) {
-					//System.out.println("Sleeping " + Math.random());
+					// System.out.println("Sleeping " + Math.random());
 					Thread.sleep(500);
 					continue;
 				}
@@ -114,35 +116,24 @@ public class Vision implements Runnable {
 				long error = (int) cvSink.grabFrame(input);
 				cvSink.grabFrame(inputCopy);
 				if (error == 0 || input.empty()) {
-					System.out.println("Error grabbing frame or frame is empty, sleeping for 1 second");
+					System.out.println("Error grabbing frame or frame is empty, sleeping for .25 seconds");
 					System.out.println(cvSink.getError());
 					Thread.sleep(250);
 					continue;
 				}
 				SmartDashboard.putNumber("running", Math.random());
 				pipeLine.process(input);
-				ArrayList<MatOfPoint> contours = pipeLine.findContoursOutput();
+
+				ArrayList<MatOfPoint> contours = pipeLine.filterContoursOutput();
+				drawContours(contours, inputCopy);
+				outputStream1.putFrame(inputCopy);
 				if (!contours.isEmpty()) {
-					Rect largest = getLargestBoundingBox(contours);
-
-					//SmartDashboard.putNumber("Box Width", largest.width);
-					//SmartDashboard.putNumber("Distance", data.getValue((double) largest.width));
-					
-					distanceToBox = data.getValue((double) largest.width);
+					Rect largestContour = getLargestBoundingBox(contours);
+					Imgproc.rectangle(inputCopy, largestContour.br(), largestContour.tl(), new Scalar(0 , 255, 0), 3);
+					center = new Point(largestContour.x - largestContour.width / 2d,
+							largestContour.y - largestContour.height / 2d);
 					hasProcessed = true;
-					Imgproc.rectangle(inputCopy, largest.tl(), largest.br(), new Scalar(0, 255, 0), 3);
-					if (!inputCopy.empty()) {
-						//SmartDashboard.putBoolean("Found", true);
-						outputStream1.putFrame(inputCopy);
-					} else {
-						//SmartDashboard.putBoolean("Found", false);
-						outputStream1.putFrame(inputCopy);
-					}
-				} else {
-					SmartDashboard.putBoolean("Found", false);
-					outputStream1.putFrame(inputCopy);
 				}
-
 			}
 
 		} catch (InterruptedException e) {
@@ -400,6 +391,10 @@ public class Vision implements Runnable {
 
 	public void setHasProcessed(boolean hasProcessed) {
 		this.hasProcessed = hasProcessed;
+	}
+
+	public Point getCenter() {
+		return center;
 	}
 
 }

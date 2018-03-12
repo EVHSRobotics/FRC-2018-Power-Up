@@ -32,10 +32,18 @@ public class JoystickDrive extends Command {
 		value = Math.abs(value) < .1 ? 0 : value;
 
 		double turn = OI.mainJoystick.getRawAxis(0);
-		turn = Math.abs(turn) < .1 ? 0 : turn;
+		turn = Math.abs(turn) < .2 ? 0 : turn;
 
-		drive.drive(sig(value - turn), sig(value + turn), ControlMode.PercentOutput);
+		drive.drive(sig(value - cubeRoot(turn)), sig(value + cubeRoot(turn)), ControlMode.PercentOutput);
 
+	}
+	
+	public double cubeRoot(double val) {
+		if(val >= 0) {
+			return Math.pow(val,  1/3d);
+		} else {
+			return -Math.pow(-val, 1/3d);
+		}
 	}
 
 	public double sig(double val) {

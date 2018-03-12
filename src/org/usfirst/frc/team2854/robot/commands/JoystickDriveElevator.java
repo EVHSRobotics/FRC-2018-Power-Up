@@ -29,17 +29,18 @@ public class JoystickDriveElevator extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		//double value = (OI.secondaryJoystick.getRawAxis(2) - OI.secondaryJoystick.getRawAxis(3));
-		double value = -OI.secondaryJoystick.getRawAxis(1);
+		// double value = (OI.secondaryJoystick.getRawAxis(2) -
+		// OI.secondaryJoystick.getRawAxis(3));
+		double value = -OI.mainJoystick.getRawAxis(5);
 		value = Math.abs(value) < .05 ? 0 : value;
-		if(value == 0) {
+		if (value == 0) {
 			Robot.compressor.start();
 		} else {
 			Robot.compressor.stop();
 		}
-		double holdValue = .40;
-		double multiplier = .75;
-		if(elevator.getPos() > -1500) {
+		double holdValue = .15; // was .4
+		double multiplier = 1;
+		if (elevator.getPos() > -1500) {
 			holdValue = 0;
 		} else {
 			multiplier = .9;

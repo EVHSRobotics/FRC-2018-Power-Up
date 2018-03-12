@@ -5,18 +5,16 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class FloorAngle extends CommandGroup {
+public class Spit extends CommandGroup {
 
-    public FloorAngle() {
+    public Spit() {
     	
-    	addSequential(new ElevatorSetPoint(-1500));
-    	addSequential(new ClawSetpoint(-750));
-
-    		
+    	addSequential(new SetClamp(true));
+    	addSequential(new Outtake(1, .25));
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
-        // these will run in order.
+        // these will run in order.cuc jk,,
 
         // To run multiple commands at the same time,
         // use addParallel()

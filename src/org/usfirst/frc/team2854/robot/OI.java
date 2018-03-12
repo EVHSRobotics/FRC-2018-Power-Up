@@ -1,9 +1,15 @@
 package org.usfirst.frc.team2854.robot;
 
+import org.usfirst.frc.team2854.robot.commands.AutoIntake;
+import org.usfirst.frc.team2854.robot.commands.ClawSetpoint;
+import org.usfirst.frc.team2854.robot.commands.DriveThottle;
+import org.usfirst.frc.team2854.robot.commands.DriveToBox;
 import org.usfirst.frc.team2854.robot.commands.ElevatorSetPoint;
 import org.usfirst.frc.team2854.robot.commands.FloorAngle;
 import org.usfirst.frc.team2854.robot.commands.IntakeAquire;
+import org.usfirst.frc.team2854.robot.commands.Outtake;
 import org.usfirst.frc.team2854.robot.commands.ScaleAngle;
+import org.usfirst.frc.team2854.robot.commands.Spit;
 import org.usfirst.frc.team2854.robot.commands.SwitchAngle;
 import org.usfirst.frc.team2854.robot.commands.ToggleClamp;
 import org.usfirst.frc.team2854.robot.commands.ToggleShift;
@@ -48,26 +54,31 @@ public class OI {
 
 		// Actual Robo code VVV
 
-		buttonX2.whenPressed(new ToggleClamp());
-		//buttonX1.whileHeld(new Intake());
-		//buttonA1.whileHeld(new Outtake());
-		buttonA1.whenPressed(new IntakeAquire());
+//		buttonX2.whenPressed(new ToggleClamp());
+//
+//		buttonA1.whenPressed(new IntakeAquire());
 		rTrigger1.whenPressed(new ToggleShift());
+//
+//		 buttonA2.whenPressed(new FloorAngle());
+//		 buttonB2.whenPressed(new SwitchAngle());
+//		 buttonY2.whenPressed(new ScaleAngle());
 		
-		//OI.buttonA2.whenPressed(new DriveNearNear());
+		buttonA1.whenPressed(new DriveToBox());
+		buttonX1.whenPressed(new DriveThottle(.5));
+		//Practice bot robo code VVV
 		
-		//0,500,3750,4500
-
-		//-5400 -> 1 inches
-		 buttonA2.whenPressed(new FloorAngle());
-		 buttonB2.whenPressed(new SwitchAngle());
-		 buttonY2.whenPressed(new ScaleAngle());
+		buttonX2.whenPressed(new AutoIntake());
 		
+		//-4k,-2k,-750
+		buttonA2.whenPressed(new FloorAngle());
+		buttonB2.whenPressed(new SwitchAngle());
+		buttonY2.whenPressed(new ScaleAngle());
 		
-		 //buttonA2.whenPressed(new ClawSetpoint(0));
-		 //buttonB2.whenPressed(new ClawSetpoint(1000));
-		 //buttonY2.whenPressed(new ClawSetpoint(3000));
-   
+		lTrigger2.whenPressed(new ToggleClamp());
+		rTrigger2.whenPressed(new Spit());
+		//buttonY1.whenPressed(new ElevatorSetPoint(-22000));
+		//buttonA1.whenPressed(new ElevatorSetPoint(-5400));
+		//buttonB1.whenPressed(new ElevatorSetPoint(-600));
 
 		// Auto Code tsting stuff VVVVVVV
 

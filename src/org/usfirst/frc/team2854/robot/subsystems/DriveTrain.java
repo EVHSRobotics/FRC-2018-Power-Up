@@ -110,6 +110,8 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 		rightT1.setNeutralMode(mode);
 		rightT2.setNeutralMode(mode);
 
+		// PIDConstant.startSmartDashboardInput(PIDConstant.fastDrive, leftT2, rightT2);
+
 	}
 
 	public void enable() {
@@ -182,6 +184,8 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 		SmartDashboard.putString("Gear", gear.toString());
 
 		SmartDashboard.putNumber("average Pos", getAvgEncoder());
+
+		SmartDashboard.putNumber("acumelatpr", leftT2.getIntegralAccumulator(0));
 
 	}
 
@@ -258,7 +262,7 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 		}
 
 		if (mode.equals(ControlMode.Velocity) || mode.equals(ControlMode.MotionMagic)
-				|| mode.equals(ControlMode.Position)) {	
+				|| mode.equals(ControlMode.Position)) {
 
 			left *= getDriveConstant();
 			right *= getDriveConstant();
@@ -296,8 +300,13 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 	}
 
 	public void setNeutralMode(NeutralMode mode) {
+		
+		rightT1.setNeutralMode(mode);
 		rightT2.setNeutralMode(mode);
+		
+		leftT1.setNeutralMode(mode);
 		leftT2.setNeutralMode(mode);
+
 	}
 
 	public void drive(double left, double right) {

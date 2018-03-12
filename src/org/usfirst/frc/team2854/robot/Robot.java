@@ -2,10 +2,12 @@ package org.usfirst.frc.team2854.robot;
 
 import java.util.HashMap;
 
+import org.usfirst.frc.team2854.PID.PIDConstant;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveFarFar;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveFarNear;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveNearFar;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveNearNear;
+import org.usfirst.frc.team2854.robot.commands.RecreateUltra;
 import org.usfirst.frc.team2854.robot.subsystems.Claw;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.Elevator;
@@ -17,6 +19,8 @@ import org.usfirst.frc.team2854.vision.Vision;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.sf2.frc.navXSensor;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -25,6 +29,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -45,7 +50,6 @@ public class Robot extends IterativeRobot {
 	public static Compressor compressor;
 
 	private static Vision vision;
-	private static Thread visT;
 
 	SendableChooser<String> sideChooser, advancedChooser;
 
@@ -75,12 +79,22 @@ public class Robot extends IterativeRobot {
 
 		advancedChooser.addDefault("advanced", "advanced");
 		advancedChooser.addObject("basic", "basic");
+		
+		SmartDashboard.putData("re-create ultra", new RecreateUltra());
 
-		// vision = new Vision();
-		// visT = new Thread(vision);
-		// visT.start();
-		//
-		// vision.setShouldRun(false);
+//		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("intakeCam", 1);
+//		camera.setExposureAuto();
+//		camera.setWhiteBalanceAuto();
+//
+//		UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture("driveCam", 0);
+//		camera1.setExposureAuto();
+//		camera1.setWhiteBalanceAuto();
+//
+//		vision = new Vision(camera);
+//		Thread visT = new Thread(vision);
+//		visT.start();
+//
+//		vision.setShouldRun(false);
 
 		//
 		// vision.setShouldRun(false);
@@ -169,11 +183,10 @@ public class Robot extends IterativeRobot {
 		String game = DriverStation.getInstance().getGameSpecificMessage();
 		char switchChar = game.charAt(0);
 		char scaleChar = game.charAt(1);
-		
-		
+
 		System.out.println(advanced + " " + side + " " + switchChar + " " + scaleChar);
-		
-		if(advanced.equals("advanced")) {
+
+		if (advanced.equals("advanced")) {
 			if (game.length() > 0) {
 				if (side.equals("left") && switchChar == 'L' && scaleChar == 'L') {
 					// left near near
@@ -219,7 +232,6 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
-
 	}
 
 	/**
@@ -237,14 +249,15 @@ public class Robot extends IterativeRobot {
 				((Restartable) s).enable();
 			}
 		}
+		
 
 		// 0,500,3750,4500
 
 		// getSensors().getNavX().zeroYaw();
 		((Claw) Robot.getSubsystem(SubsystemNames.CLAW)).zeroEncoder();
-		((DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN)).setNeutralMode(NeutralMode.Coast);
+		((DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN)).setNeutralMode(NeutralMode.Brake);
 		// OI.buttonA.whenPressed(new DriveMotionMagik());
-
+		Robot.getSensors().reInitUltra();
 	}
 
 	/**
@@ -252,9 +265,18 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		
+		if(OI.mainJoystick.getRawButton(7) ) {
+			Scheduler.getInstance().removeAll();
+		}
 
 		SmartDashboard.putBoolean("NavX is Connected", sensors.getNavX().isConnected());
 		SmartDashboard.putBoolean("NavX is Calibrating", sensors.getNavX().isCalibrating());
+		// if(sensors.getUltra().isRangeValid()) {
+		SmartDashboard.putNumber("Ultra Distance", sensors.getUltraDistance());
+		// }
+		SmartDashboard.putBoolean("is range valid", sensors.getUltra().isRangeValid());
+		SmartDashboard.putBoolean("Is ultra enabled", sensors.getUltra().isEnabled());
 
 		((DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
 		((Claw) getSubsystem(SubsystemNames.CLAW)).writeToDashboard();
@@ -277,15 +299,14 @@ public class Robot extends IterativeRobot {
 			drive.setDriveMultiplier(1);
 		}
 		SmartDashboard.putNumber("drive multiplier", drive.getDriveMultiplier());
+		
 
 		if (RobotController.getBatteryVoltage() < 9) {
 			compressor.stop();
 		} else {
 			compressor.start();
 		}
-		if (RobotController.getBatteryVoltage() < 7) {
-			drive.setDriveMultiplier(0);
-		}
+
 	}
 
 	/**

@@ -23,6 +23,8 @@ public class Claw extends Subsystem implements Restartable {
 	private DoubleSolenoid piston;
 
 	private double startingPos;
+	
+	private int stallCounter = 0;
 
 	private double intakeSpeed = 0;
 
@@ -32,6 +34,9 @@ public class Claw extends Subsystem implements Restartable {
 
 		leftIn = new TalonSRX(RobotMap.leftIntake);
 		rightIn = new TalonSRX(RobotMap.rightIntake);
+		
+		leftIn.setNeutralMode(NeutralMode.Coast);
+		rightIn.setNeutralMode(NeutralMode.Coast);
 
 		rightIn.setInverted(true);
 
@@ -44,25 +49,24 @@ public class Claw extends Subsystem implements Restartable {
 
 		masterClaw.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		masterClaw.setSensorPhase(false);
-		
-		
+
 		startingPos = masterClaw.getSelectedSensorPosition(0);
 
 		masterClaw.setNeutralMode(NeutralMode.Brake);
 		slaveClaw.setNeutralMode(NeutralMode.Brake);
 
-		//leftIn.configOpenloopRamp(.1, 10);
-		//rightIn.configOpenloopRamp(.1, 10);
-		
+		// leftIn.configOpenloopRamp(.1, 10);
+		// rightIn.configOpenloopRamp(.1, 10);
+
 		double P = 1023 / 3750;
 		double I = 0;
 		double D = 0;
-		double F = 1023 / 3750; //3
-		
+		double F = 1023 / 3750; // 3
+
 		updatePID(P, I, D, F, 0);
-		
+
 	}
-	
+
 	public void updateTargetSpeed(double targetSpeed) {
 		masterClaw.configMotionCruiseVelocity((int) targetSpeed / 1, 10);
 		masterClaw.configMotionAcceleration((int) (targetSpeed / .25d), 10);
@@ -79,7 +83,7 @@ public class Claw extends Subsystem implements Restartable {
 		masterClaw.configMotionCruiseVelocity((int) targetSpeed / 1, 10);
 		masterClaw.configMotionAcceleration((int) (targetSpeed / .25d), 10);
 		masterClaw.configAllowableClosedloopError(0, 5, 10);
-		
+
 	}
 
 	public double getClawPos() {
@@ -91,6 +95,10 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public void driveClaw(double speed, ControlMode mode) {
+		if(speed <= 0 && getClawPos() > -400) {
+			speed = .75;
+		}
+		//System.out.println(speed);
 		masterClaw.set(mode, speed);
 	}
 
@@ -99,26 +107,48 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public boolean isIntakeStalling() {
-		double stallMax = 10;
+		double stallMax = 15;
 		System.out.println(
 				"checking motor stall, current: " + Math.abs(leftIn.getOutputCurrent()) + ", trigger at " + stallMax);
 		return Math.abs(leftIn.getOutputCurrent()) > stallMax;
 	}
 
 	public void writeToDashboard() {
-		SmartDashboard.putNumber("Claw encoder", masterClaw.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Claw encoder", getClawPos());
 		SmartDashboard.putNumber("Claw output power", masterClaw.getMotorOutputPercent());
-		//SmartDashboard.putNumber("Claw target", masterClaw.getClosedLoopTarget(0));
+		// SmartDashboard.putNumber("Claw target", masterClaw.getClosedLoopTarget(0));
 		SmartDashboard.putNumber("claw error", masterClaw.getClosedLoopError(0));
-		
+
 		SmartDashboard.putNumber("intake output percent", leftIn.getMotorOutputPercent());
-		SmartDashboard.putNumber("claw output current", leftIn.getOutputCurrent());
+		SmartDashboard.putNumber("claw output current left", leftIn.getOutputCurrent());
+		SmartDashboard.putNumber("claw output current right", rightIn.getOutputCurrent());
+
 		SmartDashboard.putBoolean("is claw closed", piston.get().equals(Value.kReverse));
 	}
 
 	public void runIntake(double speed) {
-		leftIn.set(ControlMode.PercentOutput, speed);
-		rightIn.set(ControlMode.PercentOutput, speed);
+		//System.out.println(leftIn.getOutputCurrent() + " " + rightIn.getOutputCurrent());
+		// SmartDashboard.putNumber(, value)
+		double multiplier = .75;
+		if(speed > 0) {
+			multiplier = 1;
+		}
+		if ((Math.abs((leftIn.getOutputCurrent() + rightIn.getOutputCurrent()) / 2d) > 15) || stallCounter > 0) {
+			
+			if(stallCounter > 0) {
+				stallCounter--;
+			} else {
+				stallCounter = 2;
+			}
+			
+			
+			System.out.println("STALLING");
+			leftIn.set(ControlMode.Current, -Math.signum(speed) * .25);
+			rightIn.set(ControlMode.Current, -Math.signum(speed) * .25);
+		} else {
+			leftIn.set(ControlMode.PercentOutput, speed * multiplier);
+			rightIn.set(ControlMode.PercentOutput, speed * multiplier);
+		}
 	}
 
 	public void close() {
@@ -135,7 +165,7 @@ public class Claw extends Subsystem implements Restartable {
 			piston.set(Value.kReverse);
 		} else if (piston.get().equals(Value.kReverse)) {
 			piston.set(Value.kForward);
-			
+
 		} else {
 			piston.set(Value.kReverse);
 		}
@@ -162,7 +192,8 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public boolean isDone() {
-		System.out.println("Current pos: " + masterClaw.getSelectedSensorPosition(0) + " target: " + masterClaw.getClosedLoopTarget(0));
+		System.out.println("Current pos: " + masterClaw.getSelectedSensorPosition(0) + " target: "
+				+ masterClaw.getClosedLoopTarget(0));
 		return Math.abs(masterClaw.getSelectedSensorPosition(0) - masterClaw.getClosedLoopTarget(0)) < 50;
 	}
 }

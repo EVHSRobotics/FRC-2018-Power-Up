@@ -34,9 +34,9 @@ public class PIDConstant {
 
 		slowDrive = new PIDConstant(P_Drive_LOW, I_Drive_LOW, D_Drive_LOW, F_Drive_LOW, Config.slowTarget);
 
-		double P_Drive_HIGH = 0;
-		double I_Drive_HIGH = 0;
-		double D_Drive_HIGH = 0;
+		double P_Drive_HIGH = 0.35;
+		double I_Drive_HIGH = 1.0E-4;
+		double D_Drive_HIGH = 0.11;
 		double F_Drive_HIGH = 1023 / Config.fastTarget;
 		
 		fastDrive = new PIDConstant(P_Drive_HIGH, I_Drive_HIGH, D_Drive_HIGH, F_Drive_HIGH, Config.fastTarget);

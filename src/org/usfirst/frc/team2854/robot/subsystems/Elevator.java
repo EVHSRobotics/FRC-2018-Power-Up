@@ -46,13 +46,14 @@ public class Elevator extends Subsystem implements Restartable {
 
 		startPos = talon.getSelectedSensorPosition(0);
 
-
+		
 
 	}
 
 	public void updateTargetSpeed(double targetSpeed) {
 		talon.configMotionCruiseVelocity((int) targetSpeed / 1, 10);
 		talon.configMotionAcceleration((int) (targetSpeed / .25d), 10);
+		
 	}
 
 	public void updatePID(double P, double I, double D, double F, double targetSpeed) {
