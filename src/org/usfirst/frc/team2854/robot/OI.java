@@ -39,6 +39,7 @@ public class OI {
 	public static JoystickButton buttonY2 = new JoystickButton(secondaryJoystick, 4);
 	public static JoystickButton lTrigger2 = new JoystickButton(secondaryJoystick, 5);
 	public static JoystickButton rTrigger2 = new JoystickButton(secondaryJoystick, 6);
+	public static JoystickButton rightStickButton2 = new JoystickButton(secondaryJoystick, 10);
 
 	// rishi drive
 	// B toggle intake
@@ -64,7 +65,7 @@ public class OI {
 //		 buttonY2.whenPressed(new ScaleAngle());
 		
 		buttonA1.whenPressed(new DriveToBox());
-		buttonX1.whenPressed(new DriveThottle(.5));
+		//buttonX1.whenPressed(new DriveThottle(.5));
 		//Practice bot robo code VVV
 		
 		buttonX2.whenPressed(new AutoIntake());
@@ -76,6 +77,8 @@ public class OI {
 		
 		lTrigger2.whenPressed(new ToggleClamp());
 		rTrigger2.whenPressed(new Spit());
+		
+		rightStickButton2.whenPressed(new ClawSetpoint(-2000));
 		//buttonY1.whenPressed(new ElevatorSetPoint(-22000));
 		//buttonA1.whenPressed(new ElevatorSetPoint(-5400));
 		//buttonB1.whenPressed(new ElevatorSetPoint(-600));

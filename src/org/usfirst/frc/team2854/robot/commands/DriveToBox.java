@@ -54,9 +54,9 @@ public class DriveToBox extends Command {
 
 		if (running) {
 			System.out.println(offset);
-			double normOffset = -offset / 125d;
+			double normOffset = offset / 125d;
 			double sensitivty = 2;
-			drive.drive((.75 + normOffset / sensitivty) * -.25d, (.75 - normOffset / sensitivty) * -.25d);
+			drive.drive((.75 + normOffset / sensitivty) * -.5d, (.75 - normOffset / sensitivty) * -.5d);
 			if ((System.nanoTime() - startTime) / 1E9d > .5) {
 				running = false;
 				drive.drive(0, 0);

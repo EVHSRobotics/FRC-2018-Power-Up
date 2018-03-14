@@ -29,5 +29,9 @@ public class RobotMap {
 
 	public static int led = 0;
 	
+	public static int climb1 = 0;
+	public static int climb2 = 1;
+
+	
 	
 }

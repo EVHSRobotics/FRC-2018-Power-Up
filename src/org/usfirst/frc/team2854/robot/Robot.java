@@ -7,8 +7,10 @@ import org.usfirst.frc.team2854.PID.drivePaths.DriveFarFar;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveFarNear;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveNearFar;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveNearNear;
+import org.usfirst.frc.team2854.robot.commands.AutoIntake;
 import org.usfirst.frc.team2854.robot.commands.RecreateUltra;
 import org.usfirst.frc.team2854.robot.subsystems.Claw;
+import org.usfirst.frc.team2854.robot.subsystems.Climb;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.Elevator;
 import org.usfirst.frc.team2854.robot.subsystems.LED;
@@ -62,9 +64,10 @@ public class Robot extends IterativeRobot {
 		subsystems = new HashMap<SubsystemNames, Subsystem>();
 
 		subsystems.put(SubsystemNames.DRIVE_TRAIN, new DriveTrain());
-		subsystems.put(SubsystemNames.ELEVATOR, new Elevator());
+		subsystems.put(SubsystemNames.ELEVATOR, new Elevator());      
 		subsystems.put(SubsystemNames.LED, new LED());
 		subsystems.put(SubsystemNames.CLAW, new Claw());
+		subsystems.put(SubsystemNames.CLIMB, new Climb());
 
 		compressor = new Compressor(0);
 
@@ -81,20 +84,21 @@ public class Robot extends IterativeRobot {
 		advancedChooser.addObject("basic", "basic");
 		
 		SmartDashboard.putData("re-create ultra", new RecreateUltra());
+		SmartDashboard.putData("auto intake", new AutoIntake());
 
-//		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("intakeCam", 1);
-//		camera.setExposureAuto();
-//		camera.setWhiteBalanceAuto();
-//
-//		UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture("driveCam", 0);
-//		camera1.setExposureAuto();
-//		camera1.setWhiteBalanceAuto();
-//
-//		vision = new Vision(camera);
-//		Thread visT = new Thread(vision);
-//		visT.start();
-//
-//		vision.setShouldRun(false);
+		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("intakeCam", 0);
+		camera.setExposureAuto();
+		camera.setWhiteBalanceAuto();
+
+		UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture("driveCam", 1);
+		camera1.setExposureAuto();
+		camera1.setWhiteBalanceAuto();
+
+		vision = new Vision(camera);
+		Thread visT = new Thread(vision);
+		visT.start();
+
+		vision.setShouldRun(false);
 
 		//
 		// vision.setShouldRun(false);
@@ -257,7 +261,7 @@ public class Robot extends IterativeRobot {
 		((Claw) Robot.getSubsystem(SubsystemNames.CLAW)).zeroEncoder();
 		((DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN)).setNeutralMode(NeutralMode.Brake);
 		// OI.buttonA.whenPressed(new DriveMotionMagik());
-		Robot.getSensors().reInitUltra();
+		//Robot.getSensors().reInitUltra();
 	}
 
 	/**
