@@ -44,19 +44,16 @@ public class DriveToBox extends Command {
 		if (Robot.getVision().hasProcessed == true) {
 			Robot.getVision().setHasProcessed(false);
 			center = Robot.getVision().getCenter();
-		}
-		if (center != null) {
 			running = true;
 			this.offset = center.x;
 			startTime = System.nanoTime();
-			center = null;
 		}
 
 		if (running) {
 			System.out.println(offset);
-			double normOffset = offset / 125d;
-			double sensitivty = 2;
-			drive.drive((.75 + normOffset / sensitivty) * -.5d, (.75 - normOffset / sensitivty) * -.5d);
+			double normOffset = offset / 160d;
+			double sensitivty = 8; //bigger is less
+			drive.drive((.6 + normOffset / sensitivty) * -.5d, (.6 - normOffset / sensitivty) * -.5d);
 			if ((System.nanoTime() - startTime) / 1E9d > .5) {
 				running = false;
 				drive.drive(0, 0);
@@ -67,7 +64,8 @@ public class DriveToBox extends Command {
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return Robot.getSensors().getUltraDistance() < 3;
+		return false;
+		//return Robot.getSensors().getUltraDistance() < 3;
 	}
 
 	// Called once after isFinished returns true

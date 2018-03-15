@@ -124,7 +124,7 @@ public class Vision implements Runnable {
 				SmartDashboard.putNumber("running", Math.random());
 				pipeLine.process(input);
 
-				ArrayList<MatOfPoint> contours = pipeLine.filterContoursOutput();
+				ArrayList<MatOfPoint> contours = pipeLine.findContoursOutput();
 				drawContours(contours, inputCopy);
 				outputStream1.putFrame(inputCopy);
 				if (!contours.isEmpty()) {
