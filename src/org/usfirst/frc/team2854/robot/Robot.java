@@ -19,7 +19,7 @@ import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 import org.usfirst.frc.team2854.vision.Vision;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.kauailabs.sf2.frc.navXSensor;
+//import com.kauailabs.sf2.frc.navXSensor;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -93,13 +93,13 @@ public class Robot extends IterativeRobot {
 		UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture("driveCam", 1);
 		camera1.setExposureAuto();
 		camera1.setWhiteBalanceAuto();
-
+		
 		vision = new Vision(camera);
 		Thread visT = new Thread(vision);
 		visT.start();
 
 		vision.setShouldRun(false);
-
+		
 		//
 		// vision.setShouldRun(false);
 		//
@@ -113,7 +113,7 @@ public class Robot extends IterativeRobot {
 		// new Thread(lidar).start();
 
 		sensors = new SensorBoard();
-		navXSensor navX = new navXSensor(sensors.getNavX(), "test navx");
+		//navXSensor navX = new navXSensor(sensors.getNavX(), "test navx");
 
 		for (Subsystem s : subsystems.values()) {
 			if (s instanceof Restartable) {

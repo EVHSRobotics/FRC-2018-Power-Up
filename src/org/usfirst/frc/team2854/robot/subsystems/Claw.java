@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2854.robot.subsystems;
 
+import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.RobotMap;
 import org.usfirst.frc.team2854.robot.commands.JoystickDriveClaw;
 
@@ -123,7 +124,13 @@ public class Claw extends Subsystem implements Restartable {
 		SmartDashboard.putNumber("claw output current left", leftIn.getOutputCurrent());
 		SmartDashboard.putNumber("claw output current right", rightIn.getOutputCurrent());
 
-		SmartDashboard.putBoolean("is claw closed", piston.get().equals(Value.kReverse));
+		SmartDashboard.putBoolean("Claw closed ", piston.get().equals(Value.kReverse));
+		SmartDashboard.putBoolean("Claw Open ", !piston.get().equals(Value.kReverse));
+		
+		SmartDashboard.putBoolean("Claw in",  Robot.getSensors().getUltraDistance() < 4);
+		SmartDashboard.putBoolean("Claw in",  Robot.getSensors().getUltraDistance() > 4);
+
+		
 	}
 
 	public void runIntake(double speed) {

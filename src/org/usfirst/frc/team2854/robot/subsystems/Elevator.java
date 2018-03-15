@@ -106,6 +106,10 @@ public class Elevator extends Subsystem implements Restartable {
 		SmartDashboard.putNumber("error", talon.getClosedLoopError(0));
 		// System.out.println("actual error: " + talon.getClosedLoopError(0));
 		SmartDashboard.putNumber("Throttle", talon.getMotorOutputPercent());
+		
+		SmartDashboard.putBoolean("Elavator at high", getPos() >= -1500);
+		SmartDashboard.putBoolean("Elavator at high", getPos() <= -1500 && getPos() >= -5400);
+		SmartDashboard.putBoolean("Elavator at high", getPos() <= -5400 && getPos() >= -23000);
 	}
 
 	
