@@ -90,10 +90,11 @@ public class Robot extends IterativeRobot {
 		camera.setExposureAuto();
 		camera.setWhiteBalanceAuto();
 
-		UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture("driveCam", 1);
-		camera1.setExposureAuto();
-		camera1.setWhiteBalanceAuto();
-		
+//		UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture("driveCam", 1);
+//		camera1.setExposureAuto();
+//		camera1.setWhiteBalanceAuto();
+
+
 		vision = new Vision(camera);
 		Thread visT = new Thread(vision);
 		visT.start();
