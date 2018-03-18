@@ -34,10 +34,10 @@ public class DriveFarFar extends CommandGroup {
 		addParallel(new Shift(GearState.SLOW));
 		addSequential(new DriveStraight(-.75, 215));
 		addSequential(new Delay(0.5));
-//		addSequential(new EncoderTurn(-90 * multiplier));
-//		addSequential(new Delay(1));
-//		addSequential(new DriveHeading(-.75, 175, -90 * multiplier));
-//		addSequential(new EncoderTurn(90 * multiplier));
+		addSequential(new EncoderTurn(-90 * multiplier));
+		addSequential(new Delay(.5d));
+		addSequential(new DriveHeading(-.75, 175, -90 * multiplier));
+		addSequential(new EncoderTurn(90 * multiplier));
 //		addSequential(new ClawSetpoint(-2000));
 //		addSequential(new Outtake(.5, .75));
 //

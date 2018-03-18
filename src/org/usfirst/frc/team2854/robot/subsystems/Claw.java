@@ -119,19 +119,19 @@ public class Claw extends Subsystem implements Restartable {
 
 	public void writeToDashboard() {
 		SmartDashboard.putNumber("Claw encoder", getClawPos());
-		SmartDashboard.putNumber("Claw output power", masterClaw.getMotorOutputPercent());
+		//SmartDashboard.putNumber("Claw output power", masterClaw.getMotorOutputPercent());
 		// SmartDashboard.putNumber("Claw target", masterClaw.getClosedLoopTarget(0));
-		SmartDashboard.putNumber("claw error", masterClaw.getClosedLoopError(0));
+		//SmartDashboard.putNumber("claw error", masterClaw.getClosedLoopError(0));
 
-		SmartDashboard.putNumber("intake output percent", leftIn.getMotorOutputPercent());
-		SmartDashboard.putNumber("claw output current left", leftIn.getOutputCurrent());
-		SmartDashboard.putNumber("claw output current right", rightIn.getOutputCurrent());
+		//SmartDashboard.putNumber("intake output percent", leftIn.getMotorOutputPercent());
+		//SmartDashboard.putNumber("claw output current left", leftIn.getOutputCurrent());
+		//SmartDashboard.putNumber("claw output current right", rightIn.getOutputCurrent());
 
 		SmartDashboard.putBoolean("Claw closed ", piston.get().equals(Value.kReverse));
-		SmartDashboard.putBoolean("Claw Open ", !piston.get().equals(Value.kReverse));
+		//SmartDashboard.putBoolean("Claw Open ", !piston.get().equals(Value.kReverse));
 		
-		SmartDashboard.putBoolean("Claw in",  Robot.getSensors().getUltraDistance() < 4);
-		SmartDashboard.putBoolean("Claw in",  Robot.getSensors().getUltraDistance() > 4);
+		SmartDashboard.putBoolean("Box in",  Robot.getSensors().getUltraDistance() < 4);
+		//SmartDashboard.putBoolean("Claw in",  Robot.getSensors().getUltraDistance() > 4);
 
 		
 	}

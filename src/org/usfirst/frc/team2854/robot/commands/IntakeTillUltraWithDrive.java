@@ -31,7 +31,7 @@ public class IntakeTillUltraWithDrive extends Command {
     	this.trigger = trigger;
     	this.speed = speed;
     	this.shouldTimeOut = shouldTimeout;
-    }
+    } 
     
 
     // Called just before this Command runs the first time

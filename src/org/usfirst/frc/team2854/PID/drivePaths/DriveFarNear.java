@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2854.PID.drivePaths;
 
 import org.usfirst.frc.team2854.robot.commands.AutoIntake;
+import org.usfirst.frc.team2854.robot.commands.AutoIntakeDrive;
 import org.usfirst.frc.team2854.robot.commands.ClawSetpoint;
 import org.usfirst.frc.team2854.robot.commands.Delay;
 import org.usfirst.frc.team2854.robot.commands.DriveHeading;
@@ -40,20 +41,21 @@ public class DriveFarNear extends CommandGroup {
 		addSequential(new ToggleClamp());	
 		addSequential(new DriveStraight(-.3, 40));
 		addSequential(new EncoderTurn(-50 * multiplier));
-		addSequential(new AutoIntake());
-		addSequential(new DriveStraight(-.3, 30));
+		//addSequential(new AutoIntake());
+		//addSequential(new DriveStraight(-.3, 30));
+		addSequential(new AutoIntakeDrive(-.3));
 		//Hopefully goes back to scale
 		addSequential(new DriveStraight(.3, 30));
 		addSequential(new EncoderTurn(50 * multiplier));
 		addSequential(new DriveStraight(.3, 40));
-		addSequential(new DriveStraight(.3, 40));
-		addSequential(new EncoderTurn((-42 - 15)*-1*multiplier));
-		addSequential(new EncoderTurn(180));
-		addSequential(new ElevatorSetPoint(-18500));
-		addSequential(new ClawSetpoint(-2000));
-		addSequential(new Outtake(1.5, .75));
-		addSequential(new ElevatorSetPoint(-1500));
-		
+ 		//addSequential(new DriveStraight(.3, 40));
+		//addSequential(new EncoderTurn((-42 - 15)*-1*multiplier));
+		//addSequential(new EncoderTurn(180));
+//		addSequential(new ElevatorSetPoint(-18500));
+//		addSequential(new ClawSetpoint(-2000));
+//		addSequential(new Outtake(1.5, .75));
+//		addSequential(new ElevatorSetPoint(-1500));
+//		
 
 
 		//stuff before VVVVVVVVVVVVVVVVVVVv

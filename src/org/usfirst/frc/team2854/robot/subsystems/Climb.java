@@ -47,7 +47,7 @@ public class Climb extends Subsystem {
     }
     
     public void writeToDashboard() {
-    	SmartDashboard.putBoolean("Climb Deployed", getSpeed() > 0);
+    	//SmartDashboard.putBoolean("Climb Deployed", getSpeed() > 0);
     }
 }
 

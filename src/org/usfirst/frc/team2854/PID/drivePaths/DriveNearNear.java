@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2854.PID.drivePaths;
 
 import org.usfirst.frc.team2854.robot.commands.AutoIntake;
+import org.usfirst.frc.team2854.robot.commands.AutoIntakeDrive;
 import org.usfirst.frc.team2854.robot.commands.ClawSetpoint;
 import org.usfirst.frc.team2854.robot.commands.Delay;
 import org.usfirst.frc.team2854.robot.commands.DriveHeading;
@@ -36,7 +37,7 @@ public class DriveNearNear extends CommandGroup {
 		addSequential(new DriveHeading(-.8, 215.47, 0 * multiplier));
 //		addSequential(new DriveHeading(-.2, 20, -47)); comp
 		addSequential(new DriveHeading(-.25, 25, -40 * multiplier));
-		addSequential(new ElevatorSetPoint(-2000));
+		addSequential(new ElevatorSetPoint(-20000));
 		addSequential(new ClawSetpoint(-2000));
 		addSequential(new Outtake(1.5, .75));
 		addSequential(new ElevatorSetPoint(-1500));
@@ -45,9 +46,12 @@ public class DriveNearNear extends CommandGroup {
 		addSequential(new ToggleClamp());	
 		addSequential(new DriveStraight(-.5, 40));
 		addSequential(new EncoderTurn(-50 * multiplier));
-		addSequential(new DriveStraight(-.3, 30));
-		addParallel(new AutoIntake());
-		addSequential(new DriveStraight(-.3, 30));
+		//addSequential(new DriveStraight(-.3, 30));
+		//addParallel(new AutoIntake());
+		//addSequential(new DriveStraight(-.3, 30));
+		
+		addSequential(new AutoIntakeDrive(-.3));
+		
 //		addSequential(new DriveStraight(-.3, 19));4
 //		addParallel(new Intake(1.5));
 //		addSequential(new ToggleClamp());
@@ -61,22 +65,22 @@ public class DriveNearNear extends CommandGroup {
 //		addSequential(new ElevatorSetPoint(-19000)); comp
 		addSequential(new ElevatorSetPoint(-10000));
 		addSequential(new DriveStraight(-.2, 15));
-		addSequential(new Outtake(1.5, .75d));
+		addSequential(new Outtake(1.5, .65d));
 		addSequential(new ElevatorSetPoint(-1500));
 		
-		addSequential(new DriveStraight(.2, 40));
-		addSequential(new EncoderTurn(90 * multiplier));
-		addSequential(new DriveStraight(.2, 13));
-		addSequential(new EncoderTurn(-90 * multiplier));
-		addSequential(new DriveStraight(-.2, 40));
-		addParallel(new AutoIntake());
-		addSequential(new DriveStraight(-.2, 20));
-		
-		addSequential(new DriveStraight(.2, 5));
-		addSequential(new ClawSetpoint(-2000));
-		addSequential(new EncoderTurn(5 * multiplier));
-		addSequential(new ElevatorSetPoint(-10000));
-		addSequential(new DriveStraight(-.2, 10));
+//		addSequential(new DriveStraight(.2, 40));
+//		addSequential(new EncoderTurn(90 * multiplier));
+//		addSequential(new DriveStraight(.2, 13));
+//		addSequential(new EncoderTurn(-90 * multiplier));
+//		addSequential(new DriveStraight(-.2, 40));
+//		addParallel(new AutoIntake());
+//		addSequential(new DriveStraight(-.2, 20));
+//		
+//		addSequential(new DriveStraight(.2, 5));
+//		addSequential(new ClawSetpoint(-2000));
+//		addSequential(new EncoderTurn(5 * multiplier));
+//		addSequential(new ElevatorSetPoint(-10000));
+//		addSequential(new DriveStraight(-.2, 10));
 		//addSequential(new Outtake(1.5, .75d));
 		//addSequential(new ElevatorSetPoint(-1500));
 		

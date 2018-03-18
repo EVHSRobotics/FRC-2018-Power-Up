@@ -168,8 +168,8 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 
 	public void writeToDashBoard() {
 
-		SmartDashboard.putNumber("Left Velocity", leftT2.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("Right Velocity", rightT2.getSelectedSensorVelocity(0));
+		//SmartDashboard.putNumber("Left Velocity", leftT2.getSelectedSensorVelocity(0));
+		//SmartDashboard.putNumber("Right Velocity", rightT2.getSelectedSensorVelocity(0));
 
 		// SmartDashboard.putNumber("Velocity Diff",
 		// rightT2.getSelectedSensorVelocity(0) - leftT2.getSelectedSensorVelocity(0));
@@ -177,9 +177,9 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 		// SmartDashboard.putBoolean("is enabled", turnController.isEnabled());
 		// SmartDashboard.putNumber("turn error", turnController.getError());
 
-		SmartDashboard.putNumber("Error Right", rightT2.getClosedLoopError(0));
-		SmartDashboard.putNumber("Error Left", leftT2.getClosedLoopError(0));
-		SmartDashboard.putNumber("Left Throttle", rightT2.getMotorOutputPercent());
+		//SmartDashboard.putNumber("Error Right", rightT2.getClosedLoopError(0));
+		//SmartDashboard.putNumber("Error Left", leftT2.getClosedLoopError(0));
+		//SmartDashboard.putNumber("Left Throttle", rightT2.getMotorOutputPercent());
 		// SmartDashboard.putNumber("Target", leftT2.getClosedLoopTarget(0));
 
 		// SmartDashboard.putBoolean("reset during en?", new
@@ -190,9 +190,9 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 
 		SmartDashboard.putString("Gear", gear.toString());
 
-		SmartDashboard.putNumber("average Pos", getAvgEncoder());
+		//SmartDashboard.putNumber("average Pos", getAvgEncoder());
 
-		SmartDashboard.putNumber("acumelatpr", leftT2.getIntegralAccumulator(0));
+		//SmartDashboard.putNumber("acumelatpr", leftT2.getIntegralAccumulator(0));
 
 	}
 

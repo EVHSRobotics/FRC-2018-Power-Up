@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutoIntakeDrive extends CommandGroup {
 
-    public AutoIntakeDrive() {
+    public AutoIntakeDrive(double driveSpeed) {
     	
     	
     	addSequential(new SetClamp(true));
     	addSequential(new ClawSetpoint(-4250));
-    	addSequential(new IntakeTillUltra(8.5, -.4, false));
+    	addSequential(new IntakeTillUltraWithDrive(8.5,  -.4, false, driveSpeed));
     	addSequential(new SetClamp(false));
     	addSequential(new IntakeTillUltra(2, -.9, true));
     	addSequential(new ClawSetpoint(-1250));
