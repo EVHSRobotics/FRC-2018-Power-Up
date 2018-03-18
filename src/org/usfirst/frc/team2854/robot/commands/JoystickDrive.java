@@ -40,9 +40,9 @@ public class JoystickDrive extends Command {
 	
 	public double cubeRoot(double val) {
 		if(val >= 0) {
-			return Math.pow(val,  3d);
+			return Math.pow(val,  3/2d);
 		} else {
-			return -Math.pow(-val, 3d);
+			return -Math.pow(-val, 3/2d);
 		}
 	}
 

@@ -14,18 +14,37 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class DriveNearFar extends CommandGroup {
 
-    public DriveNearFar() {
-    	//get to side of switch
-		addSequential(new DriveHeading(-.5, 135, 8));
-		addSequential(new Delay(0.5));
-		addSequential(new EncoderTurn(-90));
-		//shoot
-		addSequential(new DriveHeading(.5, 20, -90));
-		addSequential(new ElevatorSetPoint(-5800));
-		addSequential(new ClawSetpoint(2000));
-		addSequential(new Outtake(1.5, .75d));
-		//face forward
-		addSequential(new EncoderTurn(90));
-		
-    }
+	public DriveNearFar(boolean isRightSide) {
+		// get to side of switch
+		if (isRightSide) {
+			addSequential(new ClawSetpoint(-1000));
+			addSequential(new DriveHeading(-.5, 135, 8));
+			addSequential(new Delay(0.5));
+			addSequential(new EncoderTurn(-90));
+			// shoot
+			addSequential(new DriveHeading(-.5, 50, -90));
+			//addSequential(new DriveHeading(.25, 5, 90));
+			addSequential(new ElevatorSetPoint(-5800));
+			addSequential(new ClawSetpoint(-2000));
+			addSequential(new Outtake(1.5, .75d));
+			addSequential(new ElevatorSetPoint(-1500));
+			// face forward
+			addSequential(new EncoderTurn(90));
+		} else {
+			addSequential(new ClawSetpoint(-1000));
+			addSequential(new DriveHeading(-.5, 135, -8));
+			addSequential(new Delay(0.5));
+			addSequential(new EncoderTurn(90));
+			// shoot
+			addSequential(new DriveHeading(-.5, 50, 90));
+			//addSequential(new DriveHeading(.25, 5, 90));
+			addSequential(new ElevatorSetPoint(-5800));
+			addSequential(new ClawSetpoint(-2000));
+			addSequential(new Outtake(1.5, .75d));
+			addSequential(new ElevatorSetPoint(-1500));
+			// face forward
+			addSequential(new EncoderTurn(-90));
+		}
+
+	}
 }

@@ -12,10 +12,10 @@ public class AutoIntake extends CommandGroup {
     	
     	addSequential(new SetClamp(true));
     	addSequential(new ClawSetpoint(-4250));
-    	addSequential(new IntakeTillUltra(7, -.25, false));
+    	addSequential(new IntakeTillUltra(8.5, -.4, false));
     	addSequential(new SetClamp(false));
     	addSequential(new IntakeTillUltra(2, -.9, true));
-    	addSequential(new ClawSetpoint(-750));
+    	addSequential(new ClawSetpoint(-1250));
 
     	
     	

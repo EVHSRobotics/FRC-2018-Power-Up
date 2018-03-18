@@ -29,13 +29,16 @@ public class JoystickDriveClaw extends Command {
 	// 0,500,3750,4500
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		double value = (OI.secondaryJoystick.getRawAxis(5));
+		double value = -(OI.secondaryJoystick.getRawAxis(5));
 		value = Math.abs(value) < .05 ? 0 : value;
 		//if (claw.getClawPos() > Config.upperClawLimit && value < 0) {
 		//	value = 0;
 		//}
-		double holdValue = (Robot.getSensors().getUltraDistance() > 3 ? .04 : .08);
-		claw.driveClaw(value * .65 - holdValue, ControlMode.PercentOutput);
+		if(Math.abs(claw.getClawPos()) > 4500 && value < 0) {
+			value = 0;
+		}
+		double holdValue = (Robot.getSensors().getUltraDistance() > 3 ? 0 : -.05);
+		claw.driveClaw((value * .65 - holdValue), ControlMode.PercentOutput);
 		
 		double clawValue = OI.secondaryJoystick.getRawAxis(2) - OI.secondaryJoystick.getRawAxis(3);
 		clawValue = Math.abs(clawValue) < .05 ? claw.getIntakeSpeed() : clawValue * 1d;

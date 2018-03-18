@@ -16,10 +16,10 @@ public class RobotMap {
 	public static int elevator = 5; 
 
 	public static int leftIntake = 7; //inverted
-	public static int rightIntake = 9; 
+	public static int rightIntake = 6; 
 
 	public static int masterClaw = 8; //inverted
-	public static int slaveClaw = 6; //right intake
+	public static int slaveClaw = 9; //right intake
 	
 	public static int intakeUp = 0;
 	public static int intakeDown = 1;
@@ -29,8 +29,8 @@ public class RobotMap {
 
 	public static int led = 0;
 	
-	public static int climb1 = 0;
-	public static int climb2 = 1;
+	public static int climb1 = 10;
+	public static int climb2 = 11;
 
 	
 	

@@ -44,7 +44,7 @@ public class Claw extends Subsystem implements Restartable {
 		masterClaw.setInverted(true);
 		slaveClaw.setInverted(false);
 
-		slaveClaw.set(ControlMode.Follower, RobotMap.masterClaw);
+		//slaveClaw.set(ControlMode.Follower, RobotMap.masterClaw);
 
 		piston = new DoubleSolenoid(RobotMap.intakeUp, RobotMap.intakeDown);
 
@@ -96,11 +96,14 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public void driveClaw(double speed, ControlMode mode) {
-		if(speed <= 0 && getClawPos() > -400) {
-			speed = .75;
+		if(getClawPos() > -400) {
+			speed = -.75;
 		}
 		//System.out.println(speed);
+		System.out.println(getClawPos());
 		masterClaw.set(mode, speed);
+		slaveClaw.set(mode, speed);
+
 	}
 
 	public void zeroEncoder() {

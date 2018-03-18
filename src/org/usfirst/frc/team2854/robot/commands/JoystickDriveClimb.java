@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2854.robot.commands;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import org.usfirst.frc.team2854.robot.OI;
 import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.subsystems.Climb;
@@ -25,7 +27,10 @@ public class JoystickDriveClimb extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	climb.drive(-OI.secondaryJoystick.getRawAxis(1));
+    	//System.out.println("Running climb");
+    	double value = -OI.secondaryJoystick.getRawAxis(1);
+    	value = Math.abs(value) < .1d ? 0 : value;
+    	climb.drive(value);
     }
 
     // Make this return true when this Command no longer needs to run execute()

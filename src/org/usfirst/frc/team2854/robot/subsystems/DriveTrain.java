@@ -76,6 +76,7 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 		setDefaultCommand(new JoystickDrive());
 	}
 
+	
 	public DriveTrain() {
 		leftT2 = new TalonSRX(RobotMap.leftTalonID1);
 		leftT2.setInverted(side);

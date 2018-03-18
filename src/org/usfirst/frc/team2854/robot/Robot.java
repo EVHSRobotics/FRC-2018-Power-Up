@@ -8,6 +8,7 @@ import org.usfirst.frc.team2854.PID.drivePaths.DriveFarNear;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveNearFar;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveNearNear;
 import org.usfirst.frc.team2854.robot.commands.AutoIntake;
+import org.usfirst.frc.team2854.robot.commands.DriveStraight;
 import org.usfirst.frc.team2854.robot.commands.RecreateUltra;
 import org.usfirst.frc.team2854.robot.subsystems.Claw;
 import org.usfirst.frc.team2854.robot.subsystems.Climb;
@@ -79,6 +80,7 @@ public class Robot extends IterativeRobot {
 
 		sideChooser.addDefault("right", "right");
 		sideChooser.addObject("left", "left");
+		sideChooser.addObject("center", "center" );
 
 		advancedChooser.addDefault("advanced", "advanced");
 		advancedChooser.addObject("basic", "basic");
@@ -89,6 +91,7 @@ public class Robot extends IterativeRobot {
 		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("intakeCam", 0);
 		camera.setExposureAuto();
 		camera.setWhiteBalanceAuto();
+		camera.setResolution(320, 240);
 
 //		UsbCamera camera1 = CameraServer.getInstance().startAutomaticCapture("driveCam", 1);
 //		camera1.setExposureAuto();
@@ -191,51 +194,33 @@ public class Robot extends IterativeRobot {
 
 		System.out.println(advanced + " " + side + " " + switchChar + " " + scaleChar);
 
-		if (advanced.equals("advanced")) {
+		//if (advanced.equals("advanced")) {
 			if (game.length() > 0) {
 				if (side.equals("left") && switchChar == 'L' && scaleChar == 'L') {
-					// left near near
+					System.out.println("Running left near near");
+					(new DriveNearNear(false)).start();
 				} else if (side.equals("left") && switchChar == 'L' && scaleChar == 'R') {
-					// left near far
+					new DriveNearFar(false).start();
 				} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'L') {
-					// left far near
+					new DriveFarNear(false).start();
 				} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'R') {
-					// left far far
+					new DriveFarFar(false).start();
 				} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'L') {
-					new DriveFarFar().start();
+					new DriveFarFar(true).start();
 				} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'R') {
-					new DriveFarNear().start();
+					new DriveFarNear(true).start();
 				} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'L') {
-					new DriveNearFar().start();
+					new DriveNearFar(true).start();
 				} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'R') {
-					(new DriveNearNear()).start();
+					System.out.println("Running right near near");
+					(new DriveNearNear(true)).start();
 				} else {
-					// smt is wrong, run some deafult command
+					(new DriveStraight(.25, 125)).start();
 				}
+			} else {
+				(new DriveStraight(.25, 125)).start();
 			}
-		} else {
-			if (game.length() > 0) {
-				if (side.equals("left") && switchChar == 'L' && scaleChar == 'L') {
-					// left near near
-				} else if (side.equals("left") && switchChar == 'L' && scaleChar == 'R') {
-					// left near far
-				} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'L') {
-					// left far near
-				} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'R') {
-					// left far far
-				} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'L') {
-					new DriveFarFar().start();
-				} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'R') {
-					new DriveFarNear().start();
-				} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'L') {
-					new DriveNearFar().start();
-				} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'R') {
-					(new DriveNearNear()).start();
-				} else {
-					// smt is wrong, run some deafult command
-				}
-			}
-		}
+		//} 
 
 	}
 

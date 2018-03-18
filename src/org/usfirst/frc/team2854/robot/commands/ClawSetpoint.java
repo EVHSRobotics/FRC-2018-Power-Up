@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2854.robot.commands;
 
+import java.time.chrono.ThaiBuddhistEra;
+
 import org.usfirst.frc.team2854.robot.Config;
 import org.usfirst.frc.team2854.robot.Robot;
 import org.usfirst.frc.team2854.robot.subsystems.Claw;
@@ -34,7 +36,7 @@ public class ClawSetpoint extends Command {
 
 		System.out.println("targetPos " + target + " currentPos: "
 				+ ((Claw) Robot.getSubsystem(SubsystemNames.CLAW)).getClawPos());
-
+		//Thread.dumpStack();
 //		claw.driveClaw(target * 4096, ControlMode.Position);]\
 		//claw.driveClaw(target * 4096, ControlMode.Position);
 
@@ -45,10 +47,10 @@ public class ClawSetpoint extends Command {
 		System.out.println("running");
 		if(target > claw.getClawPos()) {
 			System.out.println("Driving claw up " + claw.getClawPos());
-			claw.driveClaw(-1 * Math.abs(target - claw.getClawPos()) / 2000, ControlMode.PercentOutput);
+			claw.driveClaw(1 * Math.abs(target - claw.getClawPos()) / 2000, ControlMode.PercentOutput);
 		} else {
 			System.out.println("Driving claw down " + claw.getClawPos());
-			claw.driveClaw(+.25, ControlMode.PercentOutput);
+			claw.driveClaw(-.35, ControlMode.PercentOutput);
 		}
 	}
 

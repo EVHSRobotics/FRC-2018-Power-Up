@@ -5,16 +5,24 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class Spit extends CommandGroup {
+public class AutoIntakeDrive extends CommandGroup {
 
-    public Spit() {
+    public AutoIntakeDrive() {
+    	
     	
     	addSequential(new SetClamp(true));
-    	addSequential(new Outtake(1, .3));
+    	addSequential(new ClawSetpoint(-4250));
+    	addSequential(new IntakeTillUltra(8.5, -.4, false));
+    	addSequential(new SetClamp(false));
+    	addSequential(new IntakeTillUltra(2, -.9, true));
+    	addSequential(new ClawSetpoint(-1250));
+
+    	
+    	
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
-        // these will run in order.cuc jk,,
+        // these will run in order.
 
         // To run multiple commands at the same time,
         // use addParallel()
