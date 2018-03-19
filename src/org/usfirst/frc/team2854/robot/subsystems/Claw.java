@@ -111,7 +111,7 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public boolean isIntakeStalling() {
-		double stallMax = 15;
+		double stallMax = 19;
 		System.out.println(
 				"checking motor stall, current: " + Math.abs(leftIn.getOutputCurrent()) + ", trigger at " + stallMax);
 		return Math.abs(leftIn.getOutputCurrent()) > stallMax;

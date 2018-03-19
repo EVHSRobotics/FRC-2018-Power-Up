@@ -102,7 +102,7 @@ public class Elevator extends Subsystem implements Restartable {
 
 	public void writeToDashboard() {
 		//SmartDashboard.putNumber("velocity", getVel());
-		SmartDashboard.putNumber("pos", getPos());
+		//SmartDashboard.putNumber("pos", getPos());
 		//SmartDashboard.putNumber("error", talon.getClosedLoopError(0));
 		// System.out.println("actual error: " + talon.getClosedLoopError(0));
 		//SmartDashboard.putNumber("Throttle", talon.getMotorOutputPercent());

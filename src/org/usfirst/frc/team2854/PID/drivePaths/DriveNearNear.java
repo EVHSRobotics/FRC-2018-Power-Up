@@ -58,7 +58,7 @@ public class DriveNearNear extends CommandGroup {
 //		addParallel(new Intake(1.5));
 		
 //		addSequential(new DriveStraight(.2, 20)); comp
-		addSequential(new DriveStraight(.2, 5));
+		addSequential(new DriveStraight(.25, 20));
 //		addSequential(new DriveHeading(.2, 20, -180 + 25));
 //		addSequential(new ClawSetpoint(2000)); comp
 		addSequential(new ClawSetpoint(-2000));

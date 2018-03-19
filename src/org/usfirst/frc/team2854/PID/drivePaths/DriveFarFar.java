@@ -29,16 +29,19 @@ public class DriveFarFar extends CommandGroup {
 //		addSequential(new ElevatorSetPoint(-21000));
 		
 		double multiplier = isRightSide ? 1 : -1;
+//		addSequential(new DriveStraight(-.25, 30));
+//		addSequential(new Delay(5));
 		addSequential(new ClawSetpoint(-1000));
 
 		addParallel(new Shift(GearState.SLOW));
 		addSequential(new DriveStraight(-.75, 215));
-		addSequential(new Delay(0.5));
+		addSequential(new Delay(0.25d));
 		addSequential(new EncoderTurn(-90 * multiplier));
-		addSequential(new Delay(.5d));
-		addSequential(new DriveHeading(-.75, 175, -90 * multiplier));
+		addSequential(new Delay(.25d));
+		addSequential(new DriveHeading(-.75, 225, -90 * multiplier));
 		addSequential(new EncoderTurn(90 * multiplier));
-//		addSequential(new ClawSetpoint(-2000));
+		addSequential(new ClawSetpoint(-2000));
+		addSequential(new ElevatorSetPoint(-20000));
 //		addSequential(new Outtake(.5, .75));
 //
 //		addSequential(new EncoderTurn(180));

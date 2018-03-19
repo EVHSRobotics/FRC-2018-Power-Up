@@ -260,8 +260,8 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 	public void drive(double left, double right, ControlMode mode) {
 		// System.out.println(mode.toString() + " " + ControlMode.Velocity + " " +
 		// mode.equals(ControlMode.Velocity));
-		SmartDashboard.putNumber("left output Init", left);
-		SmartDashboard.putNumber("right output Init", right);
+		//SmartDashboard.putNumber("left output Init", left);
+		//SmartDashboard.putNumber("right output Init", right);
 
 		if (mode.equals(ControlMode.PercentOutput) || mode.equals(ControlMode.Velocity)) {
 			left *= driveMultiplier;
@@ -281,12 +281,12 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 		// System.out.println("target left + " + left);
 		// System.out.println(left + " " + right);
 
-		SmartDashboard.putNumber("left output", left);
-		SmartDashboard.putNumber("right output", right);
+		//SmartDashboard.putNumber("left output", left);
+		//SmartDashboard.putNumber("right output", right);
 
-		SmartDashboard.putNumber("Ltrigger", OI.mainJoystick.getRawAxis(2));
-		SmartDashboard.putNumber("Rtrigger", OI.mainJoystick.getRawAxis(3));
-		SmartDashboard.putNumber("turn ", OI.mainJoystick.getRawAxis(0));
+		//SmartDashboard.putNumber("Ltrigger", OI.mainJoystick.getRawAxis(2));
+		//SmartDashboard.putNumber("Rtrigger", OI.mainJoystick.getRawAxis(3));
+		//SmartDashboard.putNumber("turn ", OI.mainJoystick.getRawAxis(0));
 
 		leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);
 		rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);
