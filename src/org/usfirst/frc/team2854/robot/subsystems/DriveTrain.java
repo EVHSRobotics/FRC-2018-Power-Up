@@ -76,6 +76,7 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 		setDefaultCommand(new JoystickDrive());
 	}
 
+	
 	public DriveTrain() {
 		leftT2 = new TalonSRX(RobotMap.leftTalonID1);
 		leftT2.setInverted(side);
@@ -167,8 +168,8 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 
 	public void writeToDashBoard() {
 
-		SmartDashboard.putNumber("Left Velocity", leftT2.getSelectedSensorVelocity(0));
-		SmartDashboard.putNumber("Right Velocity", rightT2.getSelectedSensorVelocity(0));
+		//SmartDashboard.putNumber("Left Velocity", leftT2.getSelectedSensorVelocity(0));
+		//SmartDashboard.putNumber("Right Velocity", rightT2.getSelectedSensorVelocity(0));
 
 		// SmartDashboard.putNumber("Velocity Diff",
 		// rightT2.getSelectedSensorVelocity(0) - leftT2.getSelectedSensorVelocity(0));
@@ -176,9 +177,9 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 		// SmartDashboard.putBoolean("is enabled", turnController.isEnabled());
 		// SmartDashboard.putNumber("turn error", turnController.getError());
 
-		SmartDashboard.putNumber("Error Right", rightT2.getClosedLoopError(0));
-		SmartDashboard.putNumber("Error Left", leftT2.getClosedLoopError(0));
-		SmartDashboard.putNumber("Left Throttle", rightT2.getMotorOutputPercent());
+		//SmartDashboard.putNumber("Error Right", rightT2.getClosedLoopError(0));
+		//SmartDashboard.putNumber("Error Left", leftT2.getClosedLoopError(0));
+		//SmartDashboard.putNumber("Left Throttle", rightT2.getMotorOutputPercent());
 		// SmartDashboard.putNumber("Target", leftT2.getClosedLoopTarget(0));
 
 		// SmartDashboard.putBoolean("reset during en?", new
@@ -189,9 +190,9 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 
 		SmartDashboard.putString("Gear", gear.toString());
 
-		SmartDashboard.putNumber("average Pos", getAvgEncoder());
+		//SmartDashboard.putNumber("average Pos", getAvgEncoder());
 
-		SmartDashboard.putNumber("acumelatpr", leftT2.getIntegralAccumulator(0));
+		//SmartDashboard.putNumber("acumelatpr", leftT2.getIntegralAccumulator(0));
 
 	}
 
@@ -259,8 +260,8 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 	public void drive(double left, double right, ControlMode mode) {
 		// System.out.println(mode.toString() + " " + ControlMode.Velocity + " " +
 		// mode.equals(ControlMode.Velocity));
-		SmartDashboard.putNumber("left output Init", left);
-		SmartDashboard.putNumber("right output Init", right);
+		//SmartDashboard.putNumber("left output Init", left);
+		//SmartDashboard.putNumber("right output Init", right);
 
 		if (mode.equals(ControlMode.PercentOutput) || mode.equals(ControlMode.Velocity)) {
 			left *= driveMultiplier;
@@ -280,12 +281,12 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 		// System.out.println("target left + " + left);
 		// System.out.println(left + " " + right);
 
-		SmartDashboard.putNumber("left output", left);
-		SmartDashboard.putNumber("right output", right);
+		//SmartDashboard.putNumber("left output", left);
+		//SmartDashboard.putNumber("right output", right);
 
-		SmartDashboard.putNumber("Ltrigger", OI.mainJoystick.getRawAxis(2));
-		SmartDashboard.putNumber("Rtrigger", OI.mainJoystick.getRawAxis(3));
-		SmartDashboard.putNumber("turn ", OI.mainJoystick.getRawAxis(0));
+		//SmartDashboard.putNumber("Ltrigger", OI.mainJoystick.getRawAxis(2));
+		//SmartDashboard.putNumber("Rtrigger", OI.mainJoystick.getRawAxis(3));
+		//SmartDashboard.putNumber("turn ", OI.mainJoystick.getRawAxis(0));
 
 		leftT2.set(mode, left * Config.totalDriveSpeedMultiplier);
 		rightT2.set(mode, right * Config.totalDriveSpeedMultiplier);

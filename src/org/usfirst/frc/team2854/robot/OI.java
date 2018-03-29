@@ -2,6 +2,7 @@ package org.usfirst.frc.team2854.robot;
 
 import org.usfirst.frc.team2854.robot.commands.AutoIntake;
 import org.usfirst.frc.team2854.robot.commands.ClawSetpoint;
+import org.usfirst.frc.team2854.robot.commands.DriveHeading;
 import org.usfirst.frc.team2854.robot.commands.DriveThottle;
 import org.usfirst.frc.team2854.robot.commands.DriveToBox;
 import org.usfirst.frc.team2854.robot.commands.ElevatorSetPoint;
@@ -52,53 +53,54 @@ public class OI {
 	// 5 claw up down
 
 	static {
-
+		buttonA1.whenPressed(new DriveHeading(.3, 5, 0));
+		buttonB1.whenPressed(new ToggleShift());
 		// Actual Robo code VVV
-
-//		buttonX2.whenPressed(new ToggleClamp());
 //
-//		buttonA1.whenPressed(new IntakeAquire());
-		rTrigger1.whenPressed(new ToggleShift());
+////		buttonX2.whenPressed(new ToggleClamp());
+////
+////		buttonA1.whenPressed(new IntakeAquire());
+//		rTrigger1.whenPressed(new ToggleShift());
+////
+////		 buttonA2.whenPressed(new FloorAngle());
+////		 buttonB2.whenPressed(new SwitchAngle());
+////		 buttonY2.whenPressed(new ScaleAngle());
+//		
+//		
+//		//buttonA1.whenPressed(new DriveToBox());
+//		//buttonX1.whenPressed(new DriveThottle(.5));
+//		//Practice bot robo code VVV
+//		
+//		buttonX2.whenPressed(new AutoIntake());
+//		
+//		//-4k,-2k,-750
+//		buttonA2.whenPressed(new FloorAngle());
+//		buttonB2.whenPressed(new SwitchAngle());
+//		buttonY2.whenPressed(new ScaleAngle());
+//		
+//		lTrigger2.whenPressed(new ToggleClamp());
+//		rTrigger2.whenPressed(new Spit());
+//		
+//		rightStickButton2.whenPressed(new ClawSetpoint(-2000));
+//		//buttonY1.whenPressed(new ElevatorSetPoint(-22000));
+//		//buttonA1.whenPressed(new ElevatorSetPoint(-5400));
+//		//buttonB1.whenPressed(new ElevatorSetPoint(-600));
 //
-//		 buttonA2.whenPressed(new FloorAngle());
-//		 buttonB2.whenPressed(new SwitchAngle());
-//		 buttonY2.whenPressed(new ScaleAngle());
-		
-		
-		buttonA1.whenPressed(new DriveToBox());
-		//buttonX1.whenPressed(new DriveThottle(.5));
-		//Practice bot robo code VVV
-		
-		buttonX2.whenPressed(new AutoIntake());
-		
-		//-4k,-2k,-750
-		buttonA2.whenPressed(new FloorAngle());
-		buttonB2.whenPressed(new SwitchAngle());
-		buttonY2.whenPressed(new ScaleAngle());
-		
-		lTrigger2.whenPressed(new ToggleClamp());
-		rTrigger2.whenPressed(new Spit());
-		
-		rightStickButton2.whenPressed(new ClawSetpoint(-2000));
-		//buttonY1.whenPressed(new ElevatorSetPoint(-22000));
-		//buttonA1.whenPressed(new ElevatorSetPoint(-5400));
-		//buttonB1.whenPressed(new ElevatorSetPoint(-600));
-
-		// Auto Code tsting stuff VVVVVVV
-
-//		 buttonA.whenPressed(new DriveToPos(0));
-//		 buttonB.whenPressed(new DriveToPos(-10000));
-//		 buttonY.whenPressed(new DriveToPos(-20000));
-		// OI.buttonX.whenPressed(new DriveThottle(.5));
-		// OI.rTrigger.whenPressed(new ToggleShift());
-		// OI.buttonB.whenPressed(new ChangeLed());
-		//
-		
-		
-		//OI.buttonA2.whenPressed(new DriveNearNear());
-		
-		
-		// OI.buttonY.whenPressed(new DriveFarNear());
+//		// Auto Code tsting stuff VVVVVVV
+//
+////		 buttonA.whenPressed(new DriveToPos(0));
+////		 buttonB.whenPressed(new DriveToPos(-10000));
+////		 buttonY.whenPressed(new DriveToPos(-20000));
+//		// OI.buttonX.whenPressed(new DriveThottle(.5));
+//		// OI.rTrigger.whenPressed(new ToggleShift());
+//		// OI.buttonB.whenPressed(new ChangeLed());
+//		//
+//		
+//		
+//		//OI.buttonA2.whenPressed(new DriveNearNear());
+//		
+//		
+//		// OI.buttonY.whenPressed(new DriveFarNear());
 
 	}
 

@@ -1,0 +1,9 @@
+API: 0.1
+Name: Tutorial plugin
+Description: Contains all the plugins from the tutorial
+Version: 1.0.0
+# Please generate your own unique UUID and replace it below
+Plugin ID: b673b0fe-716a-40ce-b446-70e34aafc509
+Controls:
+-
+  Class: CustomControl.src.xyLocation

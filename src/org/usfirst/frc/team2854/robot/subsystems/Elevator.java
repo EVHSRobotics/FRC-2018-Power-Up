@@ -81,7 +81,7 @@ public class Elevator extends Subsystem implements Restartable {
 	}
 
 	public void initDefaultCommand() {
-		setDefaultCommand(new JoystickDriveElevator());
+	//	setDefaultCommand(new JoystickDriveElevator());
 	}
 
 	public void drive(double value, ControlMode mode) {
@@ -101,15 +101,17 @@ public class Elevator extends Subsystem implements Restartable {
 	}
 
 	public void writeToDashboard() {
-		SmartDashboard.putNumber("velocity", getVel());
-		SmartDashboard.putNumber("pos", getPos());
-		SmartDashboard.putNumber("error", talon.getClosedLoopError(0));
+		//SmartDashboard.putNumber("velocity", getVel());
+		//SmartDashboard.putNumber("pos", getPos());
+		//SmartDashboard.putNumber("error", talon.getClosedLoopError(0));
 		// System.out.println("actual error: " + talon.getClosedLoopError(0));
-		SmartDashboard.putNumber("Throttle", talon.getMotorOutputPercent());
+		//SmartDashboard.putNumber("Throttle", talon.getMotorOutputPercent());
 		
-		SmartDashboard.putBoolean("Elavator at low", getPos() >= -1500);
-		SmartDashboard.putBoolean("Elavator at medium", getPos() <= -1500 && getPos() >= -5400);
-		SmartDashboard.putBoolean("Elavator at high", getPos() <= -5400 && getPos() >= -23000);
+
+		//SmartDashboard.putBoolean("Elavator at low", getPos() >= -1500);
+		//SmartDashboard.putBoolean("Elavator at medium", getPos() <= -1500 && getPos() >= -5400);
+		//SmartDashboard.putBoolean("Elavator at high", getPos() <= -5400 && getPos() >= -23000);
+
 	}
 
 	

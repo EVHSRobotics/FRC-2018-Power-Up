@@ -28,7 +28,7 @@ public class JoystickDrive extends Command {
 	protected void execute() {
 
 		double value = OI.mainJoystick.getRawAxis(3) - OI.mainJoystick.getRawAxis(2);
-		SmartDashboard.putNumber("joystick", value);
+		//SmartDashboard.putNumber("joystick", value);
 		value = Math.abs(value) < .1 ? 0 : value;
 
 		double turn = OI.mainJoystick.getRawAxis(0);
@@ -40,9 +40,9 @@ public class JoystickDrive extends Command {
 	
 	public double cubeRoot(double val) {
 		if(val >= 0) {
-			return Math.pow(val,  3d);
+			return Math.pow(val,  3/2d);
 		} else {
-			return -Math.pow(-val, 3d);
+			return -Math.pow(-val, 3/2d);
 		}
 	}
 

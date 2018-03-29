@@ -44,7 +44,7 @@ public class Claw extends Subsystem implements Restartable {
 		masterClaw.setInverted(true);
 		slaveClaw.setInverted(false);
 
-		slaveClaw.set(ControlMode.Follower, RobotMap.masterClaw);
+		//slaveClaw.set(ControlMode.Follower, RobotMap.masterClaw);
 
 		piston = new DoubleSolenoid(RobotMap.intakeUp, RobotMap.intakeDown);
 
@@ -92,15 +92,18 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public void initDefaultCommand() {
-		setDefaultCommand(new JoystickDriveClaw());
+		//setDefaultCommand(new JoystickDriveClaw());
 	}
 
 	public void driveClaw(double speed, ControlMode mode) {
-		if(speed <= 0 && getClawPos() > -400) {
-			speed = .75;
+		if(getClawPos() > -400) {
+			speed = -.75;
 		}
 		//System.out.println(speed);
+		System.out.println(getClawPos());
 		masterClaw.set(mode, speed);
+		slaveClaw.set(mode, speed);
+
 	}
 
 	public void zeroEncoder() {
@@ -108,7 +111,7 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public boolean isIntakeStalling() {
-		double stallMax = 15;
+		double stallMax = 19;
 		System.out.println(
 				"checking motor stall, current: " + Math.abs(leftIn.getOutputCurrent()) + ", trigger at " + stallMax);
 		return Math.abs(leftIn.getOutputCurrent()) > stallMax;
@@ -116,19 +119,19 @@ public class Claw extends Subsystem implements Restartable {
 
 	public void writeToDashboard() {
 		SmartDashboard.putNumber("Claw encoder", getClawPos());
-		SmartDashboard.putNumber("Claw output power", masterClaw.getMotorOutputPercent());
+		//SmartDashboard.putNumber("Claw output power", masterClaw.getMotorOutputPercent());
 		// SmartDashboard.putNumber("Claw target", masterClaw.getClosedLoopTarget(0));
-		SmartDashboard.putNumber("claw error", masterClaw.getClosedLoopError(0));
+		//SmartDashboard.putNumber("claw error", masterClaw.getClosedLoopError(0));
 
-		SmartDashboard.putNumber("intake output percent", leftIn.getMotorOutputPercent());
-		SmartDashboard.putNumber("claw output current left", leftIn.getOutputCurrent());
-		SmartDashboard.putNumber("claw output current right", rightIn.getOutputCurrent());
+		//SmartDashboard.putNumber("intake output percent", leftIn.getMotorOutputPercent());
+		//SmartDashboard.putNumber("claw output current left", leftIn.getOutputCurrent());
+		//SmartDashboard.putNumber("claw output current right", rightIn.getOutputCurrent());
 
 		SmartDashboard.putBoolean("Claw closed ", piston.get().equals(Value.kReverse));
-		SmartDashboard.putBoolean("Claw Open ", !piston.get().equals(Value.kReverse));
+		//SmartDashboard.putBoolean("Claw Open ", !piston.get().equals(Value.kReverse));
 		
-		SmartDashboard.putBoolean("Claw in",  Robot.getSensors().getUltraDistance() < 4);
-		SmartDashboard.putBoolean("Claw in",  Robot.getSensors().getUltraDistance() > 4);
+		SmartDashboard.putBoolean("Box in",  Robot.getSensors().getUltraDistance() < 4);
+		//SmartDashboard.putBoolean("Claw in",  Robot.getSensors().getUltraDistance() > 4);
 
 		
 	}
