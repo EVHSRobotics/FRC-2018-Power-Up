@@ -13,13 +13,13 @@ public class KalmanFilterSimpleExampleDriver {
     double pNoise =
         5; // process noise -- how much the state can fluctuate by due to uncontrollable factors
     // (e.g., turbulence)
-    int sensor_stddev = 5;
+    int sensor_stddev = 3;
 
     // Angles as expected by math model
     double[] perfectAngles = new double[numberOfTests];
 
     for (int i = 0; i < perfectAngles.length; i++) {
-      perfectAngles[i] = 360 * Math.pow(5.5 / 6.0, i);
+      perfectAngles[i] = 1000 * Math.pow(3.0 / 6.0, i);
     }
 
     // True angle values are different because of external factors--turbulence, motor
@@ -30,7 +30,7 @@ public class KalmanFilterSimpleExampleDriver {
       if (i == 0) {
         trueAngles[i] = perfectAngles[i] + generateProcessNoise(pNoise);
       } else {
-        trueAngles[i] = trueAngles[i - 1] * (5.0 / 6.0) + generateProcessNoise(pNoise);
+        trueAngles[i] = trueAngles[i - 1] * (3.0 / 6.0) + generateProcessNoise(pNoise);
       }
     }
 
@@ -42,19 +42,19 @@ public class KalmanFilterSimpleExampleDriver {
       sensorValuesInColFormat[1][i] = trueAngles[i] + generateNoise(sensor_stddev);
     }
 
-    double[][] tempF = {{5.5/6.0}}; // assume 1 state variable for now, hence 1x1 matrix
-    double[][] tempQ = {{pNoise * pNoise}}; // assume process noise covariance is 5?
+    double[][] tempF = {{3.0 / 6.0}}; // assume 1 state variable for now, hence 1x1 matrix
+    double[][] tempQ = {{81}}; // assume process noise covariance is 5? idk random rn
     double[][] tempH = {{1}, {1}}; // JUST ASSUME H IS 1
-    double[][] tempX = {{sensorValuesInColFormat[0][0]}};
+    double[][] tempX = {{trueAngles[0]}};
     double[][] tempP = {
-      {100000}
+      {100}
     }; // P is the average of the squared error of our predictions OR random large number to begin
     // with?
     double[][] tempR = {
-      {sensor_stddev * sensor_stddev, 0}, {0, sensor_stddev * sensor_stddev}
+      {sensor_stddev, 0}, {0, sensor_stddev}
     }; // stddev * stddev
 
-    filter.configure(new DMatrixRMaj(tempF), new DMatrixRMaj(tempQ), new DMatrixRMaj(tempH), 2);
+    filter.configure(new DMatrixRMaj(tempF), new DMatrixRMaj(tempQ), new DMatrixRMaj(tempH));
     filter.setState(new DMatrixRMaj(tempX), new DMatrixRMaj(tempP));
 
     int kalmanCount = 0;
@@ -62,11 +62,11 @@ public class KalmanFilterSimpleExampleDriver {
     int sensorsandModelCount = 0;
 
     for (int i = 0; i + 1 < trueAngles.length; i++) {
-      System.out.println("Trial: " + (i + 1) );
+      System.out.println("Trial: " + (i + 1));
       System.out.println("Reading 1: " + sensorValuesInColFormat[0][i + 1]);
       System.out.println("Reading 2: " + sensorValuesInColFormat[1][i + 1]);
       filter.predict();
-      double projectedValue = filter.getStateVar();
+      double pureMathValue = perfectAngles[i+1];
       //      System.out.println("Z: " + new DMatrixRMaj(returnRow(i, sensorValues)));
       ////      System.out.println("H: " + new DMatrixRMaj(tempH));
       ////      System.out.println("X: " + new DMatrixRMaj(tempX));
@@ -84,7 +84,7 @@ public class KalmanFilterSimpleExampleDriver {
               / trueAngles[i + 1]
               * 100);
       double sensorsAndModelError =
-          (((sensorValuesInColFormat[0][i + 1] + sensorValuesInColFormat[1][i + 1] + projectedValue)
+          (((sensorValuesInColFormat[0][i + 1] + sensorValuesInColFormat[1][i + 1] + pureMathValue)
                       / 3.0
                   - trueAngles[i + 1])
               / trueAngles[i + 1]
