@@ -92,7 +92,7 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public void initDefaultCommand() {
-		setDefaultCommand(new JoystickDriveClaw());
+		//setDefaultCommand(new JoystickDriveClaw());
 	}
 
 	public void driveClaw(double speed, ControlMode mode) {

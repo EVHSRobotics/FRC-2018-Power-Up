@@ -22,7 +22,13 @@ public class Shift extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	((DriveTrain)Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN)).shiftSlow();
+    	if(state.equals(GearState.SLOW) ) {
+        	((DriveTrain)Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN)).shiftSlow();
+    	} else if(state.equals(GearState.FAST)){
+        	((DriveTrain)Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN)).shiftFast();
+    	} else {
+    		System.out.println("Command has a weird input " + this.state);
+    	}
     }
 
     // Called repeatedly when this Command is scheduled to run

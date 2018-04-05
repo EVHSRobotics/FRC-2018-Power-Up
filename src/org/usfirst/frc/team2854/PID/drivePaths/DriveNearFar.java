@@ -17,39 +17,20 @@ public class DriveNearFar extends CommandGroup {
 
 	public DriveNearFar(boolean isRightSide) {
 		// get to side of switch
-		if (isRightSide) {
-			addSequential(new ClawSetpoint(-1000));
-			addSequential(new DriveHeading(-.65, 135, 8));
-			addSequential(new Delay(0.5));
-			addSequential(new EncoderTurn(-90));
-			// shoot
-			addSequential(new ElevatorSetPoint(-5800));
-			addSequential(new ClawSetpoint(-2000));
-			//addSequential(new DriveHeading(-.35, 50, -90));
-			addSequential(new DriveStraight(-.45, 50));
-			addSequential(new DriveStraight(-.25, 20));
-			//addSequential(new DriveHeading(.25, 5, 90)); 
-			addSequential(new Outtake(1.5, .75d));
-			//addSequential(new ClawSetpoint(-2000));
-			//addSequential(new DriveStraight(.35, 50));
-			//addSequential(new ElevatorSetPoint(-1500));
-			// face forward
-			//addSequential(new EncoderTurn(90));
-		} else {
-			addSequential(new ClawSetpoint(-1000));
-			addSequential(new DriveHeading(-.5, 135, -8));
-			addSequential(new Delay(0.5));
-			addSequential(new EncoderTurn(90));
-			// shoot
-			addSequential(new DriveHeading(-.5, 50, 90));
-			//addSequential(new DriveHeading(.25, 5, 90));
-			addSequential(new ElevatorSetPoint(-5800));
-			addSequential(new ClawSetpoint(-2000));
-			addSequential(new Outtake(1.5, .75d));
-			addSequential(new ElevatorSetPoint(-1500));
-			// face forward
-			addSequential(new EncoderTurn(-90));
-		}
+		int multiplier = isRightSide ? 1 : -1;
+		// addSequential(new ClawSetpoint(-1000));
+		addSequential(new DriveHeading(-.25, 135, 8 * multiplier));
+		addSequential(new EncoderTurn(-90 * multiplier));
+		// addSequential(new ElevatorSetPoint(-5800));
+		// addSequential(new ClawSetpoint(-2000));
+		addSequential(new DriveHeading(-.6, 35, -90 * multiplier));
+		// addSequential(new Outtake(1.5, .75d));
+		addSequential(new DriveStraight(.25, 10));
+		addSequential(new DriveHeading(.6, 70, (-180 - 10) * multiplier));
+		addSequential(new DriveHeading(.30, 20, (-180 + 45) * multiplier));
+		addSequential(new DriveHeading(-.30, 30, (-180 + 45) * multiplier));
+		addSequential(new DriveHeading(.30, 10, (-180 + 45) * multiplier));
+		addSequential(new DriveHeading(-.30, 20, (-180 + 45) * multiplier));
 
 	}
 }

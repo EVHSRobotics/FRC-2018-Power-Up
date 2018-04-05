@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -38,13 +39,14 @@ public class DriveHeading extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		double angle = Robot.getSensors().getNavX().getAngle();
-		double diff = (heading - angle) / 90;
+		double diff = (heading - angle) / 75;
+		SmartDashboard.putNumber("correction", diff);
 		drive.drive(speed - diff, speed + diff, ControlMode.Velocity);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		System.out.println(drive.getAvgEncoder() + " " + startingDistance + " " + distance);
+		//System.out.println(drive.getAvgEncoder() + " " + startingDistance + " " + distance);
 		return Math.abs(drive.getAvgEncoder() - startingDistance) > Math.abs(distance);
 	}
 

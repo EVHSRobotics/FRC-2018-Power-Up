@@ -26,7 +26,7 @@ public class Climb extends Subsystem {
 	}
 	
     public void initDefaultCommand() {
-       setDefaultCommand(new JoystickDriveClimb());
+       //setDefaultCommand(new JoystickDriveClimb());
     }
     
     public void drive(double speed) {

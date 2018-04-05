@@ -20,28 +20,31 @@ public class DriveFarFar extends CommandGroup {
 
 	public DriveFarFar(boolean isRightSide) {
 
-		// buttonA2.whenPressed(new ClawSetpoint(0));
-		// buttonB2.whenPressed(new ClawSetpoint(750));
-		// buttonY2.whenPressed(new ClawSetpoint(3000));
-
-		
-		//addSequential(new ClawSetpoint(1000));
-//		addSequential(new ElevatorSetPoint(-21000));
 		
 		double multiplier = isRightSide ? 1 : -1;
-//		addSequential(new DriveStraight(-.25, 30));
-//		addSequential(new Delay(5));
-		addSequential(new ClawSetpoint(-1000));
+
+		//addSequential(new ClawSetpoint(-1000));
 
 		addParallel(new Shift(GearState.SLOW));
-		addSequential(new DriveStraight(-.75, 215));
-		addSequential(new Delay(0.25d));
+		addSequential(new DriveHeading(-.75, 215, 5 * multiplier));
+		//addSequential(new Delay(0.25d));
 		addSequential(new EncoderTurn(-90 * multiplier));
-		addSequential(new Delay(.25d));
+		//addSequential(new Delay(.25d));
 		addSequential(new DriveHeading(-.75, 225, -90 * multiplier));
-		addSequential(new EncoderTurn(90 * multiplier));
-		addSequential(new ClawSetpoint(-2000));
-		addSequential(new ElevatorSetPoint(-20000));
+		//addSequential(new EncoderTurn(90 * multiplier));
+		addSequential(new DriveHeading(-.3, 30, 0 * multiplier));
+		addSequential(new DriveHeading(-.3, 25, 40 * multiplier));
+		
+		
+		addSequential(new EncoderTurn(-(-42 - 15) * multiplier));
+		addSequential(new DriveStraight(-.5, 40));
+		addSequential(new EncoderTurn(50 * multiplier));
+		
+		
+		//addSequential(new ClawSetpoint(-2000));
+		//addSequential(new ElevatorSetPoint(-20000));
+		
+		
 //		addSequential(new Outtake(.5, .75));
 //
 //		addSequential(new EncoderTurn(180));

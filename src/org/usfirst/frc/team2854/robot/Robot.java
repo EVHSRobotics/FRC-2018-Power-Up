@@ -10,6 +10,7 @@ import org.usfirst.frc.team2854.PID.drivePaths.DriveNearNear;
 import org.usfirst.frc.team2854.robot.commands.AutoIntake;
 import org.usfirst.frc.team2854.robot.commands.DriveStraight;
 import org.usfirst.frc.team2854.robot.commands.RecreateUltra;
+import org.usfirst.frc.team2854.robot.commands.Shift;
 import org.usfirst.frc.team2854.robot.subsystems.Claw;
 import org.usfirst.frc.team2854.robot.subsystems.Climb;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
@@ -17,6 +18,7 @@ import org.usfirst.frc.team2854.robot.subsystems.Elevator;
 import org.usfirst.frc.team2854.robot.subsystems.LED;
 import org.usfirst.frc.team2854.robot.subsystems.Restartable;
 import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
+import org.usfirst.frc.team2854.robot.subsystems.DriveTrain.GearState;
 import org.usfirst.frc.team2854.vision.Vision;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -78,11 +80,14 @@ public class Robot extends IterativeRobot {
 
 		sideChooser = new SendableChooser<String>();
 		advancedChooser = new SendableChooser<String>();
+		
+		sideChooser.addDefault("left", "left"); 
+		sideChooser.addObject("right", "right");
+		sideChooser.addObject("center", "center");
+		
+
 		SmartDashboard.putData("auto", sideChooser);
 
-		sideChooser.addDefault("right", "right");
-		sideChooser.addObject("left", "left");
-		sideChooser.addObject("center", "center");
 
 		advancedChooser.addDefault("advanced", "advanced");
 		advancedChooser.addObject("basic", "basic");
@@ -196,6 +201,13 @@ public class Robot extends IterativeRobot {
 
 		System.out.println(advanced + " " + side + " " + switchChar + " " + scaleChar);
 
+		if(game.equals("test!")) {
+			(new Shift(GearState.SLOW)).start();
+			(new DriveStraight(-.25, 60)).start();
+			return;
+		}
+		side = "right";
+		
 		// if (advanced.equals("advanced")) {
 		if (game.length() > 0) {
 			if (side.equals("left") && switchChar == 'L' && scaleChar == 'L') {
@@ -243,15 +255,11 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
-		// 0,500,3750,4500
-
-		// getSensors().getNavX().zeroYaw();
 		if (!hasRunAuto) {
 			((Claw) Robot.getSubsystem(SubsystemNames.CLAW)).zeroEncoder();
 		}
 		((DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN)).setNeutralMode(NeutralMode.Brake);
-		// OI.buttonA.whenPressed(new DriveMotionMagik());
-		// Robot.getSensors().reInitUltra();
+
 	}
 
 	/**

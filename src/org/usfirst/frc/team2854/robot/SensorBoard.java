@@ -1,19 +1,22 @@
 package org.usfirst.frc.team2854.robot;
 
-import java.io.SerializablePermission;
-
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team2854.robot.subsystems.SubsystemNames;
 
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.VideoMode;
+import edu.wpi.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Ultrasonic;
-import edu.wpi.first.wpilibj.SerialPort.Port;
 
 public class SensorBoard {
 
@@ -26,6 +29,9 @@ public class SensorBoard {
 	private double ultraRange = -1;
 	private boolean ultraShouldRun = true;
 	
+	private CvSource gyroOutput;
+	private boolean putGyroOutput = true;
+	private Mat arrow;
 	
 	public SensorBoard() {
 
@@ -77,6 +83,29 @@ public class SensorBoard {
 		ultra.setEnabled(true);
 		// ultra.setAutomaticMode(true);
 		ultra.ping();
+		gyroOutput = new CvSource("Gyro", new VideoMode(PixelFormat.kGray, 320, 480, 30));
+		arrow = Imgcodecs.imread("/res/arrow.png", Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+		new Thread(()  ->  {
+			while(true) {
+				if(putGyroOutput) {
+					Point center = new Point(arrow.width()/2d, arrow.height()/2d);
+					Size size = new Size(arrow.width(), arrow.height());
+					Mat m = Imgproc.getRotationMatrix2D(center, navX.getAngle(), 1);
+					Mat output = new Mat();
+					Imgproc.warpAffine(arrow, output, m, size);
+					gyroOutput.putFrame(output);
+					m.release();
+					output.release();
+				} else {
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
 		new Thread(() -> {
 			while (ultraShouldRun) {
 				try {

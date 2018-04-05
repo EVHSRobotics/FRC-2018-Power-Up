@@ -26,36 +26,25 @@ public class DriveFarNear extends CommandGroup {
 		
 		double multiplier = isRight ? 1 : -1;
 		
-		addSequential(new ClawSetpoint(-1000));
+		//addSequential(new ClawSetpoint(-1000));
 		addParallel(new Shift(GearState.SLOW));
-//		addSequential(new DriveHeading(-.25, 205.47, 0)); comp
 		addSequential(new DriveHeading(-.7, 215.47, 0 * multiplier));
-//		addSequential(new DriveHeading(-.2, 20, -47)); comp
-		addSequential(new DriveHeading(-.25, 25, -40 * multiplier));
-		addSequential(new ElevatorSetPoint(-20000));
-		addSequential(new ClawSetpoint(-2000));
-		addSequential(new Outtake(1.5, .75));
-		addSequential(new ElevatorSetPoint(-1500));
-//		addSequential(new EncoderTurn(-47 - 25)); comp
+		addSequential(new DriveHeading(-.4, 25, -40 * multiplier));
+		//addSequential(new ElevatorSetPoint(-20000));
+		//addSequential(new ClawSetpoint(-2000));
+		//addSequential(new Outtake(1.5, .75));
+		//addSequential(new ElevatorSetPoint(-1500));
 		addSequential(new EncoderTurn((-42 - 15)*multiplier));
-		addSequential(new ToggleClamp());	
-		addSequential(new DriveStraight(-.3, 40));
+		//addSequential(new ToggleClamp());	
+		addSequential(new DriveStraight(-.6, 40));
 		addSequential(new EncoderTurn(-50 * multiplier));
-		//addSequential(new AutoIntake());
-		//addSequential(new DriveStraight(-.3, 30));
-		addSequential(new AutoIntakeDrive(-.3));
-		//Hopefully goes back to scale
-		addSequential(new DriveStraight(.3, 30));
+		addSequential(new DriveHeading(-.6, 5, -180 * multiplier));
+		//addSequential(new AutoIntakeDrive(-.3));
+		//////addSequential(new EncoderTurn(50 * multiplier));
+		addSequential(new DriveHeading(.6, 95, (45 - 180)* multiplier)); 
 		addSequential(new EncoderTurn(50 * multiplier));
-		addSequential(new DriveStraight(.3, 40));
- 		//addSequential(new DriveStraight(.3, 40));
-		//addSequential(new EncoderTurn((-42 - 15)*-1*multiplier));
-		//addSequential(new EncoderTurn(180));
-//		addSequential(new ElevatorSetPoint(-18500));
-//		addSequential(new ClawSetpoint(-2000));
-//		addSequential(new Outtake(1.5, .75));
-//		addSequential(new ElevatorSetPoint(-1500));
-//		
+		addSequential(new DriveHeading(-.3, 5, (90 - 180)* multiplier));
+		//addSequential(new DriveStraight(.3, 40));
 
 
 		//stuff before VVVVVVVVVVVVVVVVVVVv
