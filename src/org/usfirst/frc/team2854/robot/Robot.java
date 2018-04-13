@@ -8,6 +8,7 @@ import org.usfirst.frc.team2854.PID.drivePaths.DriveFarNear;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveNearFar;
 import org.usfirst.frc.team2854.PID.drivePaths.DriveNearNear;
 import org.usfirst.frc.team2854.robot.commands.AutoIntake;
+import org.usfirst.frc.team2854.robot.commands.Center;
 import org.usfirst.frc.team2854.robot.commands.DriveStraight;
 import org.usfirst.frc.team2854.robot.commands.RecreateUltra;
 import org.usfirst.frc.team2854.robot.commands.Shift;
@@ -81,8 +82,8 @@ public class Robot extends IterativeRobot {
 		sideChooser = new SendableChooser<String>();
 		advancedChooser = new SendableChooser<String>();
 		
-		sideChooser.addDefault("left", "left"); 
-		sideChooser.addObject("right", "right");
+		sideChooser.addDefault("right", "right");
+		sideChooser.addObject("left", "left"); 
 		sideChooser.addObject("center", "center");
 		
 
@@ -99,17 +100,18 @@ public class Robot extends IterativeRobot {
 		camera.setExposureAuto();
 		camera.setWhiteBalanceAuto();
 		camera.setResolution(320, 240);
+		camera.setFPS(5);
 
 		// UsbCamera camera1 =
 		// CameraServer.getInstance().startAutomaticCapture("driveCam", 1);
 		// camera1.setExposureAuto();
 		// camera1.setWhiteBalanceAuto();
 
-		vision = new Vision(camera);
-		Thread visT = new Thread(vision);
-		visT.start();
-
-		vision.setShouldRun(false);
+//		vision = new Vision(camera);
+//		Thread visT = new Thread(vision);
+//		visT.start();
+//
+//		vision.setShouldRun(false);
 
 		//
 		// vision.setShouldRun(false);
@@ -206,36 +208,39 @@ public class Robot extends IterativeRobot {
 			(new DriveStraight(-.25, 60)).start();
 			return;
 		}
-		side = "right";
+		//side = "right";
 		
-		// if (advanced.equals("advanced")) {
-		if (game.length() > 0) {
-			if (side.equals("left") && switchChar == 'L' && scaleChar == 'L') {
-				System.out.println("Running left near near");
-				(new DriveNearNear(false)).start();
-			} else if (side.equals("left") && switchChar == 'L' && scaleChar == 'R') {
-				new DriveNearFar(false).start();
-			} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'L') {
-				new DriveFarNear(false).start();
-			} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'R') {
-				new DriveFarFar(false).start();
-			} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'L') {
-				new DriveFarFar(true).start();
-			} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'R') {
-				new DriveFarNear(true).start();
-			} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'L') {
-				new DriveNearFar(true).start();
-			} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'R') {
-				System.out.println("Running right near near");
-				(new DriveNearNear(true)).start();
-			} else {
-				(new DriveStraight(.25, 125)).start();
-			}
-		} else {
-			(new DriveStraight(.25, 125)).start();
-		}
+		(new Center()).start();
+		return;
+		
+//		// if (advanced.equals("advanced")) {
+//		if (game.length() > 0) {
+//			if (side.equals("left") && switchChar == 'L' && scaleChar == 'L') {
+//				System.out.println("Running left near near");
+//				(new DriveNearNear(false)).start();
+//			} else if (side.equals("left") && switchChar == 'L' && scaleChar == 'R') {
+//				new DriveNearFar(false).start();
+//			} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'L') {
+//				new DriveFarNear(false).start();
+//			} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'R') {
+//				new DriveFarFar(false).start();
+//			} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'L') {
+//				new DriveFarFar(true).start();
+//			} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'R') {
+//				new DriveFarNear(true).start();
+//			} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'L') {
+//				new DriveFarFar(true).start();
+//			} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'R') {
+//				System.out.println("Running right near near");
+//				(new DriveNearNear(true)).start();
+//			} else {
+//				(new DriveStraight(.25, 125)).start();
+//			}
+//		} else {
+//			(new DriveStraight(.25, 125)).start();
+//		}
 		// }
-		hasRunAuto = true;
+	//	hasRunAuto = true;
 
 	}
 
@@ -256,6 +261,7 @@ public class Robot extends IterativeRobot {
 		}
 
 		if (!hasRunAuto) {
+			System.out.println("Zeroing pos because auto was not run");
 			((Claw) Robot.getSubsystem(SubsystemNames.CLAW)).zeroEncoder();
 		}
 		((DriveTrain) Robot.getSubsystem(SubsystemNames.DRIVE_TRAIN)).setNeutralMode(NeutralMode.Brake);
@@ -278,6 +284,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Ultra Distance", sensors.getUltraDistance());
 		SmartDashboard.putBoolean("Ultra Death", sensors.getUltraDistance()  < 0);
 		// }
+		
 		//SmartDashboard.putBoolean("is range valid", sensors.getUltra().isRangeValid());
 		SmartDashboard.putBoolean("Is ultra enabled", sensors.getUltra().isEnabled());
 

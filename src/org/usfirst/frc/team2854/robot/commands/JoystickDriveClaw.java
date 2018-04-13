@@ -42,6 +42,7 @@ public class JoystickDriveClaw extends Command {
 		
 		double clawValue = OI.secondaryJoystick.getRawAxis(2) - OI.secondaryJoystick.getRawAxis(3);
 		clawValue = Math.abs(clawValue) < .05 ? claw.getIntakeSpeed() : clawValue * 1d;
+		clawValue = clawValue < 0 ? clawValue : clawValue * .75;
 		claw.runIntake(clawValue);
 		
 		

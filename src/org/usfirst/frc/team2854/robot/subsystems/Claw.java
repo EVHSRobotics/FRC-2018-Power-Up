@@ -24,7 +24,7 @@ public class Claw extends Subsystem implements Restartable {
 	private DoubleSolenoid piston;
 
 	private double startingPos;
-	
+
 	private int stallCounter = 0;
 
 	private double intakeSpeed = 0;
@@ -35,7 +35,7 @@ public class Claw extends Subsystem implements Restartable {
 
 		leftIn = new TalonSRX(RobotMap.leftIntake);
 		rightIn = new TalonSRX(RobotMap.rightIntake);
-		
+
 		leftIn.setNeutralMode(NeutralMode.Coast);
 		rightIn.setNeutralMode(NeutralMode.Coast);
 
@@ -44,7 +44,7 @@ public class Claw extends Subsystem implements Restartable {
 		masterClaw.setInverted(true);
 		slaveClaw.setInverted(false);
 
-		//slaveClaw.set(ControlMode.Follower, RobotMap.masterClaw);
+		// slaveClaw.set(ControlMode.Follower, RobotMap.masterClaw);
 
 		piston = new DoubleSolenoid(RobotMap.intakeUp, RobotMap.intakeDown);
 
@@ -96,10 +96,10 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public void driveClaw(double speed, ControlMode mode) {
-		if(getClawPos() > -400) {
+		if (getClawPos() > -400) {
 			speed = -.75;
 		}
-		//System.out.println(speed);
+		// System.out.println(speed);
 		System.out.println(getClawPos());
 		masterClaw.set(mode, speed);
 		slaveClaw.set(mode, speed);
@@ -119,45 +119,60 @@ public class Claw extends Subsystem implements Restartable {
 
 	public void writeToDashboard() {
 		SmartDashboard.putNumber("Claw encoder", getClawPos());
-		//SmartDashboard.putNumber("Claw output power", masterClaw.getMotorOutputPercent());
+		// SmartDashboard.putNumber("Claw output power",
+		// masterClaw.getMotorOutputPercent());
 		// SmartDashboard.putNumber("Claw target", masterClaw.getClosedLoopTarget(0));
-		//SmartDashboard.putNumber("claw error", masterClaw.getClosedLoopError(0));
+		// SmartDashboard.putNumber("claw error", masterClaw.getClosedLoopError(0));
 
-		//SmartDashboard.putNumber("intake output percent", leftIn.getMotorOutputPercent());
-		//SmartDashboard.putNumber("claw output current left", leftIn.getOutputCurrent());
-		//SmartDashboard.putNumber("claw output current right", rightIn.getOutputCurrent());
+		// SmartDashboard.putNumber("intake output percent",
+		// leftIn.getMotorOutputPercent());
+		// SmartDashboard.putNumber("claw output current left",
+		// leftIn.getOutputCurrent());
+		// SmartDashboard.putNumber("claw output current right",
+		// rightIn.getOutputCurrent());
 
 		SmartDashboard.putBoolean("Claw closed ", piston.get().equals(Value.kReverse));
-		//SmartDashboard.putBoolean("Claw Open ", !piston.get().equals(Value.kReverse));
-		
-		SmartDashboard.putBoolean("Box in",  Robot.getSensors().getUltraDistance() < 4);
-		//SmartDashboard.putBoolean("Claw in",  Robot.getSensors().getUltraDistance() > 4);
+		// SmartDashboard.putBoolean("Claw Open ",
+		// !piston.get().equals(Value.kReverse));
 
-		
+		SmartDashboard.putBoolean("Box in", Robot.getSensors().getUltraDistance() < 4);
+		// SmartDashboard.putBoolean("Claw in", Robot.getSensors().getUltraDistance() >
+		// 4);
+
 	}
 
 	public void runIntake(double speed) {
-		//System.out.println(leftIn.getOutputCurrent() + " " + rightIn.getOutputCurrent());
+		// System.out.println(leftIn.getOutputCurrent() + " " +
+		// rightIn.getOutputCurrent());
 		// SmartDashboard.putNumber(, value)
-		double multiplier = .75;
-		if(speed > 0) {
+		speed = -speed;
+		double multiplier = .85;
+		if (speed < 0) {
 			multiplier = 1;
 		}
 		if ((Math.abs((leftIn.getOutputCurrent() + rightIn.getOutputCurrent()) / 2d) > 15) || stallCounter > 0) {
-			
-			if(stallCounter > 0) {
+
+			if (stallCounter > 0) {
 				stallCounter--;
 			} else {
 				stallCounter = 2;
 			}
-			
-			
+
 			System.out.println("STALLING");
 			leftIn.set(ControlMode.Current, -Math.signum(speed) * .25);
 			rightIn.set(ControlMode.Current, -Math.signum(speed) * .25);
 		} else {
 			leftIn.set(ControlMode.PercentOutput, speed * multiplier);
 			rightIn.set(ControlMode.PercentOutput, speed * multiplier);
+		}
+	}
+
+	public void runIntakeSide(double speed, boolean side) {
+		if (side) {
+			rightIn.set(ControlMode.PercentOutput, speed);
+		} else {
+			leftIn.set(ControlMode.PercentOutput, speed);
+
 		}
 	}
 

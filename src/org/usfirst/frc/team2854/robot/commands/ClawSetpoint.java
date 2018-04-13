@@ -24,6 +24,7 @@ public class ClawSetpoint extends Command {
 	public ClawSetpoint(double target) {
 		requires(Robot.getSubsystem(SubsystemNames.CLAW));
 		this.target = target;//((Claw) Robot.getSubsystem(SubsystemNames.CLAW)).getClawPos();
+		setTimeout(3);
 	}
 
 	// Called just before this Command runs the first time
@@ -34,8 +35,8 @@ public class ClawSetpoint extends Command {
 		// error: " + error);
 		claw = (Claw) Robot.getSubsystem(SubsystemNames.CLAW);
 
-		System.out.println("targetPos " + target + " currentPos: "
-				+ ((Claw) Robot.getSubsystem(SubsystemNames.CLAW)).getClawPos());
+		//System.out.println("targetPos " + target + " currentPos: "
+		//		+ ((Claw) Robot.getSubsystem(SubsystemNames.CLAW)).getClawPos());
 		//Thread.dumpStack();
 //		claw.driveClaw(target * 4096, ControlMode.Position);]\
 		//claw.driveClaw(target * 4096, ControlMode.Position);
@@ -44,12 +45,12 @@ public class ClawSetpoint extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		System.out.println("running");
+		//System.out.println("running");
 		if(target > claw.getClawPos()) {
-			System.out.println("Driving claw up " + claw.getClawPos());
+			//System.out.println("Driving claw up " + claw.getClawPos());
 			claw.driveClaw(1 * Math.abs(target - claw.getClawPos()) / 2000, ControlMode.PercentOutput);
 		} else {
-			System.out.println("Driving claw down " + claw.getClawPos());
+			//System.out.println("Driving claw down " + claw.getClawPos());
 			claw.driveClaw(-.35, ControlMode.PercentOutput);
 		}
 	}

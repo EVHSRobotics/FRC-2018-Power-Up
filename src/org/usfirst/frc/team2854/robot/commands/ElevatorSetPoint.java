@@ -63,16 +63,16 @@ public class ElevatorSetPoint extends Command {
 		// System.out.println("Current Pos: " + Robot.elevator.getPos() + " target " +
 		// target + " error: " + Math.abs(Robot.elevator.getPos() - target) + " min
 		// error: " + error);
-		for (int i = 0; i < 10; i++) {
-			System.out.println("Ending setpoint " + i);
-		}
+
 		// Robot.elevator.stop();
+		 elevator.stop();
+
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
 		System.out.println("Intrupting");
-		// Robot.elevator.stop();
+		 elevator.stop();
 	}
 }

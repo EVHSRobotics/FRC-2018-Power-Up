@@ -15,11 +15,11 @@ public class RobotMap {
  
 	public static int elevator = 5; 
 
-//	public static int leftIntake = 7; //inverted
-//	public static int rightIntake = 6; 
+	public static int leftIntake = 7; //inverted
+	public static int rightIntake = 6; 
 
-	public static int leftIntake = 6; 
-	public static int rightIntake = 7; 
+//	public static int leftIntake = 6; //pracitce bot
+//	public static int rightIntake = 7; 
 	
 	public static int masterClaw = 8; //inverted
 	public static int slaveClaw = 9; //right intake

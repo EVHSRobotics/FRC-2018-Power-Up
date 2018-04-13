@@ -33,6 +33,9 @@ public class JoystickDriveElevator extends Command {
 		// OI.secondaryJoystick.getRawAxis(3));
 		double value = -OI.mainJoystick.getRawAxis(5);
 		value = Math.abs(value) < .05 ? 0 : value;
+//		if(elevator.getPos() > -1500 && value < 0) {
+//			value = 0;
+//		}
 		if (value == 0) {
 			Robot.compressor.start();
 		} else {

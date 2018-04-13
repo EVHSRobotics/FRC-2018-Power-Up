@@ -27,14 +27,16 @@ public class JoystickDrive extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 
-		double value = OI.mainJoystick.getRawAxis(3) - OI.mainJoystick.getRawAxis(2);
-		//double value = OI.mainJoystick.getRawAxis(1);
-		value = Math.abs(value) < .1 ? 0 : value;
+		//double throttle = OI.mainJoystick.getRawAxis(3) - OI.mainJoystick.getRawAxis(2);
+		double throttle = OI.throttle.get();
+		throttle = Math.abs(throttle) < .1 ? 0 : throttle;
 
-		double turn = OI.mainJoystick.getRawAxis(0);
-		turn = Math.abs(turn) < .2 ? 0 : turn;
-
-		drive.drive(sig(value - cubeRoot(turn)), sig(value + cubeRoot(turn)), ControlMode.PercentOutput);
+		//double turn = OI.mainJoystick.getRawAxis(0);
+		double turn = OI.turn.get() ;
+		turn = Math.abs(turn) < .05 ? 0 : turn;
+		turn = 1.5 * turn / (1.1 - throttle);
+		//turn *= -(1+Robot.getSensors().getNavX().getVelocityX());
+		drive.drive(sig(throttle - cubeRoot(turn)), sig(throttle + cubeRoot(turn)), ControlMode.PercentOutput);
 
 	}
 	

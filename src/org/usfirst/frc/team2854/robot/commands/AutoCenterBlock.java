@@ -5,16 +5,16 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class Spit extends CommandGroup {
+public class AutoCenterBlock extends CommandGroup {
 
-    public Spit() {
+    public AutoCenterBlock() {
     	
-    	addSequential(new SetClamp(true));
-    	addSequential(new Outtake(1, .35));
+    	addSequential(new CenterBlock(.1, -.3));
+    	addSequential(new Intake(.5));
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
-        // these will run in order.cuc jk,,
+        // these will run in order.
 
         // To run multiple commands at the same time,
         // use addParallel()

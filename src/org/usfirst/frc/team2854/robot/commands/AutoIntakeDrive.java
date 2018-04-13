@@ -15,7 +15,8 @@ public class AutoIntakeDrive extends CommandGroup {
     	addSequential(new IntakeTillUltraWithDrive(8.5,  -.4, false, driveSpeed));
     	addSequential(new SetClamp(false));
     	addSequential(new IntakeTillUltra(2, -.9, true));
-    	addSequential(new ClawSetpoint(-1250));
+    	addSequential(new DriveStraight(.45, 10));
+    	//addSequential(new ClawSetpoint(-1250));
 
     	
     	

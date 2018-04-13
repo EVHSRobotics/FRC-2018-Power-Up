@@ -27,32 +27,33 @@ public class DriveNearNear extends CommandGroup {
 
 		double multiplier = isRightSide ? 1 : -1;
 
-		//addSequential(new ClawSetpoint(-1000));
+		addSequential(new ClawSetpoint(-2000));// sets claw to downward position
 		addParallel(new Shift(GearState.SLOW));
-		// addSequential(new DriveHeading(-.25, 205.47, 0)); comp
-		addSequential(new DriveHeading(-.8, 215.47, 0 * multiplier)); //-.8
-		addSequential(new DriveHeading(-.25, 25, -40 * multiplier)); //-.25
+		addSequential(new DriveHeading(-.75, 208, 0 * multiplier)); // -.8
+		addSequential(new DriveHeading(-.25, 25, -40 * multiplier)); // -.25
 
-//		addSequential(new ElevatorSetPoint(-20000));
-//		addSequential(new ClawSetpoint(-2000));
-//		addSequential(new Outtake(1.5, .75));
-//		addSequential(new ElevatorSetPoint(-1500));
+		addSequential(new ElevatorSetPoint(-23000));
+		addSequential(new ClawSetpoint(-2000));
+		addSequential(new Outtake(.75, 1));
+		addSequential(new ElevatorSetPoint(-1500));
+		addSequential(new ToggleClamp());
+		addSequential(new ClawSetpoint(-4250));
 		addSequential(new EncoderTurn((-42 - 15) * multiplier));
-//		addSequential(new ToggleClamp());
-		addSequential(new DriveStraight(-.5, 40));
+		addSequential(new DriveStraight(-.5, 46));
 		addSequential(new EncoderTurn(-50 * multiplier));
-//
-//		addSequential(new AutoIntakeDrive(-.3));
-//
-//		addSequential(new DriveStraight(.25, 20));
-//
-//		addSequential(new ClawSetpoint(-2000));
-//		addSequential(new ElevatorSetPoint(-10000));
-//		addSequential(new DriveStraight(-.2, 15));
-//		addSequential(new Outtake(1.5, .65d));
-//		addSequential(new ElevatorSetPoint(-1500));
-//
-//		addParallel(new Shift(GearState.FAST));
+
+		addSequential(new AutoIntakeDrive(-.6));
+
+		// addSequential(new DriveStraight(.5, 20));
+
+		addSequential(new ElevatorSetPoint(-10000));
+		addSequential(new ClawSetpoint(-2500));
+		addSequential(new DriveStraight(-.5, 15));
+		addSequential(new Outtake(1.5, .55d));
+		addSequential(new DriveStraight(.5, 30));
+		addSequential(new ElevatorSetPoint(-1500));
+		//
+		// addParallel(new Shift(GearState.FAST));
 
 	}
 }

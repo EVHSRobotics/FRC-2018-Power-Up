@@ -9,7 +9,7 @@ public class FloorAngle extends CommandGroup {
 
     public FloorAngle() {
     	
-    	addSequential(new ElevatorSetPoint(-1500));
+    	addSequential(new ElevatorSetPoint(-1750));
     	addSequential(new ClawSetpoint(-750));
 
     		
