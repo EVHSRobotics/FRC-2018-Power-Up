@@ -50,6 +50,7 @@ public class IntakeTillUltraWithDrive extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+    	System.out.println("Running intake till ultra");
     	if((board.getUltraDistance() < trigger)) {
     		System.out.println("Finishing due to ultra trigger");
     	}

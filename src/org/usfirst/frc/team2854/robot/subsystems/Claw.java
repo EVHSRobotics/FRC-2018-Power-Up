@@ -39,10 +39,12 @@ public class Claw extends Subsystem implements Restartable {
 		leftIn.setNeutralMode(NeutralMode.Coast);
 		rightIn.setNeutralMode(NeutralMode.Coast);
 
-		rightIn.setInverted(true);
+		rightIn.setInverted(true);	
 
-		masterClaw.setInverted(true);
-		slaveClaw.setInverted(false);
+		boolean isPracticeBot = true;
+		
+		masterClaw.setInverted(!isPracticeBot);
+		slaveClaw.setInverted(isPracticeBot);
 
 		// slaveClaw.set(ControlMode.Follower, RobotMap.masterClaw);
 
@@ -92,15 +94,16 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public void initDefaultCommand() {
-		//setDefaultCommand(new JoystickDriveClaw());
+		setDefaultCommand(new JoystickDriveClaw());
 	}
 
 	public void driveClaw(double speed, ControlMode mode) {
-		if (getClawPos() > -400) {
+		System.out.println(getClawPos());
+		//getClawPos() > -400 COMP
+		if (getClawPos() < 400 && getClawPos() != 0) {
 			speed = -.75;
 		}
 		// System.out.println(speed);
-		System.out.println(getClawPos());
 		masterClaw.set(mode, speed);
 		slaveClaw.set(mode, speed);
 
@@ -142,10 +145,8 @@ public class Claw extends Subsystem implements Restartable {
 	}
 
 	public void runIntake(double speed) {
-		// System.out.println(leftIn.getOutputCurrent() + " " +
-		// rightIn.getOutputCurrent());
-		// SmartDashboard.putNumber(, value)
-		speed = -speed;
+		
+		//speed = -speed; COMP
 		double multiplier = .85;
 		if (speed < 0) {
 			multiplier = 1;

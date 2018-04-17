@@ -273,7 +273,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-
+		//System.out.println(Robot.getSensors().getNavX().getRawGyroY());
 		if (OI.mainJoystick.getRawButton(7)) {
 			Scheduler.getInstance().removeAll();
 		}
