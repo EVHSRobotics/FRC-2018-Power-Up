@@ -24,7 +24,7 @@ public class ClawSetpoint extends Command {
 	public ClawSetpoint(double target) {
 		requires(Robot.getSubsystem(SubsystemNames.CLAW));
 		this.target = target;// ((Claw) Robot.getSubsystem(SubsystemNames.CLAW)).getClawPos();
-		setTimeout(3);
+		setTimeout(2);
 	}
 
 	// Called just before this Command runs the first time
@@ -45,10 +45,10 @@ public class ClawSetpoint extends Command {
 		
 		
 		//was a less than sign
-		if(target > claw.getClawPos()) {
-			claw.driveClaw(-1 * Math.abs(target - claw.getClawPos()) / 3000, ControlMode.PercentOutput);
+		if(target < claw.getClawPos()) {
+			claw.driveClaw(-1 * Math.abs(target - claw.getClawPos()) / 2000, ControlMode.PercentOutput);
 		} else {												// was 2000 COMP
-			claw.driveClaw(.15, ControlMode.PercentOutput); //was .35 COMP
+			claw.driveClaw(.45, ControlMode.PercentOutput); //was .35 COMP
 		}
 
 	}

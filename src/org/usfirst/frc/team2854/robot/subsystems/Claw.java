@@ -41,7 +41,7 @@ public class Claw extends Subsystem implements Restartable {
 
 		rightIn.setInverted(true);	
 
-		boolean isPracticeBot = true;
+		boolean isPracticeBot = false;
 		
 		masterClaw.setInverted(!isPracticeBot);
 		slaveClaw.setInverted(isPracticeBot);
@@ -100,7 +100,7 @@ public class Claw extends Subsystem implements Restartable {
 	public void driveClaw(double speed, ControlMode mode) {
 		System.out.println(getClawPos());
 		//getClawPos() > -400 COMP
-		if (getClawPos() < 400 && getClawPos() != 0) {
+		if (getClawPos() > -400) {
 			speed = -.75;
 		}
 		// System.out.println(speed);
@@ -146,7 +146,7 @@ public class Claw extends Subsystem implements Restartable {
 
 	public void runIntake(double speed) {
 		
-		//speed = -speed; COMP
+		speed = -speed; //COMP
 		double multiplier = .85;
 		if (speed < 0) {
 			multiplier = 1;

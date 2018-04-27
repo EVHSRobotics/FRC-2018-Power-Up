@@ -14,6 +14,7 @@ import org.usfirst.frc.team2854.robot.commands.Intake;
 import org.usfirst.frc.team2854.robot.commands.Outtake;
 import org.usfirst.frc.team2854.robot.commands.Shift;
 import org.usfirst.frc.team2854.robot.commands.ToggleClamp;
+import org.usfirst.frc.team2854.robot.commands.VisionPickup;
 import org.usfirst.frc.team2854.robot.subsystems.DriveTrain.GearState;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -28,23 +29,28 @@ public class DriveNearNear extends CommandGroup {
 		double multiplier = isRightSide ? 1 : -1;
 
 		addSequential(new ClawSetpoint(-2000));// sets claw to downward position
-		addParallel(new Shift(GearState.SLOW));
-		addSequential(new DriveHeading(-.75, 208, 0 * multiplier)); // -.8
-		addSequential(new DriveHeading(-.25, 25, -40 * multiplier)); // -.25
-
+		addSequential(new Shift(GearState.SLOW));
+		addSequential(new DriveHeading(-.3, 5, 0 * multiplier)); // -.8
+		addSequential(new DriveHeading(-.8, 213, 0 * multiplier)); // -.8
+		addSequential(new DriveHeading(-.3, 13, -40 * multiplier)); // -.25
+		//addSequential(new Outtake(.25, -.5));
 		addSequential(new ElevatorSetPoint(-23000));
 		addSequential(new ClawSetpoint(-2000));
-		addSequential(new Outtake(.75, 1));
+		//addSequential(new Outtake(.25, -.5));
+		addSequential(new Outtake(.75, 2));
 		addSequential(new ElevatorSetPoint(-1500));
 		addSequential(new ToggleClamp());
-		addSequential(new ClawSetpoint(-4250));
-		addSequential(new EncoderTurn((-42 - 15) * multiplier));
-		addSequential(new DriveStraight(-.5, 46));
-		addSequential(new EncoderTurn(-50 * multiplier));
-
-		addSequential(new AutoIntakeDrive(-.6));
-
-		// addSequential(new DriveStraight(.5, 20));
+		addSequential(new ElevatorSetPoint(-1250));
+		addSequential(new ClawSetpoint(-4350));
+//-------------------------		
+		addSequential(new EncoderTurn((-42 - 5) * multiplier));
+		addSequential(new DriveStraight(-.3, 50));
+		addSequential(new EncoderTurn(-55 * multiplier));
+		//addSequential(new AutoIntakeDrive(-.6));
+//>>>>>>>>>>>>>
+//		addSequential(new EncoderTurn((-42 - 15 - 15) * multiplier));
+		addSequential(new VisionPickup());
+//-----------
 
 		addSequential(new ElevatorSetPoint(-10000));
 		addSequential(new ClawSetpoint(-2500));

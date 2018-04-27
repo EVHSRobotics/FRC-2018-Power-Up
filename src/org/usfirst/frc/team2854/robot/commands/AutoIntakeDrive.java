@@ -12,12 +12,12 @@ public class AutoIntakeDrive extends CommandGroup {
     	
     	addSequential(new SetClamp(true));
     	//-4250
-    	//addSequential(new ClawSetpoint(2250));
+    	addSequential(new ClawSetpoint(-4250));
     	addSequential(new IntakeTillUltraWithDrive(8.5,  -.4, false, driveSpeed));
     	addSequential(new SetClamp(false));
     	addSequential(new IntakeTillUltra(2, -.9, true));
-    	addSequential(new Outtake(.5, -.5));
-    	addSequential(new DriveStraight(.2, 10)); //was .45
+    	addSequential(new Outtake(.5, -.5)); //this should intake (even tho it says outake)
+    	addSequential(new DriveStraight(.45, 10)); //was .45
     	//addSequential(new ClawSetpoint(-1250));
 
     	

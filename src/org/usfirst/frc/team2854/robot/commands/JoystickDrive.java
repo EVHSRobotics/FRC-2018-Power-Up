@@ -32,9 +32,12 @@ public class JoystickDrive extends Command {
 		throttle = Math.abs(throttle) < .1 ? 0 : throttle;
 
 		//double turn = OI.mainJoystick.getRawAxis(0);
+		
 		double turn = OI.turn.get() ;
 		turn = Math.abs(turn) < .05 ? 0 : turn;
-		turn = 1.5 * turn / (1.1 - throttle);
+		if(OI.mainJoystick.getRawButton(3)) {
+			turn /= 2d;
+		}
 		//turn *= -(1+Robot.getSensors().getNavX().getVelocityX());
 		drive.drive(sig(throttle - cubeRoot(turn)), sig(throttle + cubeRoot(turn)), ControlMode.PercentOutput);
 

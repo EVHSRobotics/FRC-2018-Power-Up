@@ -10,7 +10,7 @@ public class VisionPickup extends CommandGroup {
     public VisionPickup() {
     	addSequential(new SetClamp(true));
     	//-4250
-    	addSequential(new ClawSetpoint(3250));
+    	addSequential(new ClawSetpoint(-4250));
     	addSequential(new VisionDrive());
     	addSequential(new AutoIntakeDrive(-.2));
         // Add Commands here:

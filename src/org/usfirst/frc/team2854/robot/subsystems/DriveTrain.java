@@ -111,12 +111,12 @@ public class DriveTrain extends Subsystem implements Restartable, PowerSaver {
 		rightT1.setNeutralMode(mode);
 		rightT2.setNeutralMode(mode);
 
-//		double smooth = .4;
-//		
-//		leftT1.configOpenloopRamp(smooth, 10);
-//		leftT2.configOpenloopRamp(smooth, 10);
-//		rightT1.configOpenloopRamp(smooth, 10);
-//		rightT2.configOpenloopRamp(smooth, 10);
+		double smooth = 0;
+		
+		leftT1.configOpenloopRamp(smooth, 10);
+		leftT2.configOpenloopRamp(smooth, 10);
+		rightT1.configOpenloopRamp(smooth, 10);
+		rightT2.configOpenloopRamp(smooth, 10);
 
 		
 		// PIDConstant.startSmartDashboardInput(PIDConstant.fastDrive, leftT2, rightT2);

@@ -81,7 +81,7 @@ public class Elevator extends Subsystem implements Restartable {
 	}
 
 	public void initDefaultCommand() {
-		//setDefaultCommand(new JoystickDriveElevator());
+		setDefaultCommand(new JoystickDriveElevator());
 	}
 
 	public void drive(double value, ControlMode mode) {

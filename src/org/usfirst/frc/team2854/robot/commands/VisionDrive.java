@@ -48,7 +48,7 @@ public class VisionDrive extends Command {
 		x /= max;
 		x -= .5;
 		//System.out.println("Driving at power: " + x);
-		drive.drive(-x / 1.5d -.25 , x / 1.5d -.25);
+		drive.drive(-x / 1.3d -.4 , x / 1.3d -.4);
 
 	}
 

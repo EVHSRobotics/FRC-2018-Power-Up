@@ -84,43 +84,18 @@ public class SensorBoard {
 		// ultra.setAutomaticMode(true);
 		ultra.ping();
 		gyroOutput = new CvSource("Gyro", new VideoMode(PixelFormat.kGray, 320, 480, 30));
-//		arrow = Imgcodecs.imread("/res/arrow.png", Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-//		new Thread(()  ->  {
-//			while(true) {
-//				if(putGyroOutput) {
-//					Point center = new Point(arrow.width()/2d, arrow.height()/2d);
-//					Size size = new Size(arrow.width(), arrow.height());
-//					Mat m = Imgproc.getRotationMatrix2D(center, navX.getAngle(), 1);
-//					Mat output = new Mat();
-//					Imgproc.warpAffine(arrow, output, m, size);
-//					gyroOutput.putFrame(output);
-//					m.release();
-//					output.release();
-//				} else {
-//					try {
-//						Thread.sleep(500);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//		});
+
 		new Thread(() -> {
 			while (ultraShouldRun) {
 				try {
+				//System.out.println("Attempting to ping ultra");
 				if(ultra.isRangeValid()) {
 					ultraRange = ultra.getRangeInches();
 					//System.out.println(ultraRange);
+					System.out.println("Pinging upltra " + ultraRange);
 					ultra.ping();
 				}
-//				if (ultra.isRangeValid()) {
-//					
-//					ultraRange = ultra.getRangeInches();
-//					System.out.println("Found range " + ultraRange);
-//					ultra.ping();
-//				}
-//				
+
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {

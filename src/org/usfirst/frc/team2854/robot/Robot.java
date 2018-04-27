@@ -81,14 +81,12 @@ public class Robot extends IterativeRobot {
 
 		sideChooser = new SendableChooser<String>();
 		advancedChooser = new SendableChooser<String>();
-		
+
 		sideChooser.addDefault("right", "right");
-		sideChooser.addObject("left", "left"); 
+		sideChooser.addObject("left", "left");
 		sideChooser.addObject("center", "center");
-		
 
 		SmartDashboard.putData("auto", sideChooser);
-
 
 		advancedChooser.addDefault("advanced", "advanced");
 		advancedChooser.addObject("basic", "basic");
@@ -96,22 +94,22 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("re-create ultra", new RecreateUltra());
 		SmartDashboard.putData("auto intake", new AutoIntake());
 
-		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("intakeCam", 0);
-		camera.setExposureAuto();
-		camera.setWhiteBalanceAuto();
-		camera.setResolution(320, 240);
-		camera.setFPS(5);
+		//UsbCamera camera = CameraServer.getInstance().startAutomaticCapture("intakeCam", 0);
+		//camera.setExposureAuto();
+		//camera.setWhiteBalanceAuto();
+		//camera.setResolution(320, 240);
+		//camera.setFPS(5);
 
 		// UsbCamera camera1 =
 		// CameraServer.getInstance().startAutomaticCapture("driveCam", 1);
 		// camera1.setExposureAuto();
 		// camera1.setWhiteBalanceAuto();
 
-//		vision = new Vision(camera);
-//		Thread visT = new Thread(vision);
-//		visT.start();
-//
-//		vision.setShouldRun(false);
+		// vision = new Vision(camera);
+		// Thread visT = new Thread(vision);
+		// visT.start();
+		//
+		// vision.setShouldRun(false);
 
 		//
 		// vision.setShouldRun(false);
@@ -203,44 +201,42 @@ public class Robot extends IterativeRobot {
 
 		System.out.println(advanced + " " + side + " " + switchChar + " " + scaleChar);
 
-		if(game.equals("test!")) {
+		if (game.equals("test!")) {
 			(new Shift(GearState.SLOW)).start();
 			(new DriveStraight(-.25, 60)).start();
 			return;
 		}
-		//side = "right";
-		
-		(new Center()).start();
-		return;
-		
-//		// if (advanced.equals("advanced")) {
-//		if (game.length() > 0) {
-//			if (side.equals("left") && switchChar == 'L' && scaleChar == 'L') {
-//				System.out.println("Running left near near");
-//				(new DriveNearNear(false)).start();
-//			} else if (side.equals("left") && switchChar == 'L' && scaleChar == 'R') {
-//				new DriveNearFar(false).start();
-//			} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'L') {
-//				new DriveFarNear(false).start();
-//			} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'R') {
-//				new DriveFarFar(false).start();
-//			} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'L') {
-//				new DriveFarFar(true).start();
-//			} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'R') {
-//				new DriveFarNear(true).start();
-//			} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'L') {
-//				new DriveFarFar(true).start();
-//			} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'R') {
-//				System.out.println("Running right near near");
-//				(new DriveNearNear(true)).start();
-//			} else {
-//				(new DriveStraight(.25, 125)).start();
-//			}
-//		} else {
-//			(new DriveStraight(.25, 125)).start();
-//		}
-		// }
-	//	hasRunAuto = true;
+		// side = "right";
+
+
+		// if (advanced.equals("advanced")) {
+		if (game.length() > 0) {
+			if (side.equals("left") && switchChar == 'L' && scaleChar == 'L') {
+				System.out.println("Running left near near");
+				(new DriveNearNear(false)).start();
+			} else if (side.equals("left") && switchChar == 'L' && scaleChar == 'R') {
+				new DriveNearFar(false).start();
+			} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'L') {
+				new DriveFarNear(false).start();
+			} else if (side.equals("left") && switchChar == 'R' && scaleChar == 'R') {
+				new DriveFarFar(false).start();
+			} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'L') {
+				new DriveFarFar(true).start();
+			} else if (side.equals("right") && switchChar == 'L' && scaleChar == 'R') {
+				new DriveFarNear(true).start();
+			} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'L') {
+				new DriveNearFar(true).start();
+			} else if (side.equals("right") && switchChar == 'R' && scaleChar == 'R') {
+				System.out.println("Running right near near");
+				(new DriveNearNear(true)).start();
+			} else {
+				(new DriveStraight(.25, 125)).start();
+			}
+		} else {
+			(new DriveStraight(.25, 125)).start();
+		}
+
+		hasRunAuto = true;
 
 	}
 
@@ -273,27 +269,30 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		//System.out.println(Robot.getSensors().getNavX().getRawGyroY());
+		// System.out.println(Robot.getSensors().getNavX().getRawGyroY());
 		if (OI.mainJoystick.getRawButton(7)) {
 			Scheduler.getInstance().removeAll();
 		}
 
-		//SmartDashboard.putBoolean("NavX is Connected", sensors.getNavX().isConnected());
-		//SmartDashboard.putBoolean("NavX is Calibrating", sensors.getNavX().isCalibrating());
+		// SmartDashboard.putBoolean("NavX is Connected",
+		// sensors.getNavX().isConnected());
+		// SmartDashboard.putBoolean("NavX is Calibrating",
+		// sensors.getNavX().isCalibrating());
 		// if(sensors.getUltra().isRangeValid()) {
 		SmartDashboard.putNumber("Ultra Distance", sensors.getUltraDistance());
-		SmartDashboard.putBoolean("Ultra Death", sensors.getUltraDistance()  < 0);
+		SmartDashboard.putBoolean("Ultra Death", sensors.getUltraDistance() < 0);
 		// }
-		
-		//SmartDashboard.putBoolean("is range valid", sensors.getUltra().isRangeValid());
+
+		// SmartDashboard.putBoolean("is range valid",
+		// sensors.getUltra().isRangeValid());
 		SmartDashboard.putBoolean("Is ultra enabled", sensors.getUltra().isEnabled());
 
 		((DriveTrain) getSubsystem(SubsystemNames.DRIVE_TRAIN)).writeToDashBoard();
 		((Claw) getSubsystem(SubsystemNames.CLAW)).writeToDashboard();
 		((Elevator) getSubsystem(SubsystemNames.ELEVATOR)).writeToDashboard();
 
-		//double angle = sensors.getNavX().getAngle();
-		//SmartDashboard.putNumber("Gyro", angle);
+		// double angle = sensors.getNavX().getAngle();
+		// SmartDashboard.putNumber("Gyro", angle);
 
 		Scheduler.getInstance().run();
 

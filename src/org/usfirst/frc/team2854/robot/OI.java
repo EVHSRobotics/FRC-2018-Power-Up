@@ -34,7 +34,7 @@ public class OI {
 
 	public static Joystick mainJoystick = new Joystick(0);
 	public static Joystick secondaryJoystick = new Joystick(1);
-	public static Joystick thirdJoystick = new Joystick(2);
+	//public static Joystick thirdJoystick = new Joystick(2);
 	// 0,500,3750,4500
 	public static JoystickButton buttonA1 = new JoystickButton(mainJoystick, 1);
 	public static JoystickButton buttonB1 = new JoystickButton(mainJoystick, 2);
@@ -59,11 +59,11 @@ public class OI {
 		
 		buttonA1.whenPressed(new VisionPickup());
 		
-		button7_1.whenPressed(new ToggleClamp());
-		(new JoystickButton(thirdJoystick, 6)).whenPressed(new ToggleClamp());
-		buttonA2.whenPressed(new AutoIntake());
-		// buttonY1.whenPressed(new ToggleShift());
-		// rTrigger1.whenPressed(new ToggleShift());
+		//button7_1.whenPressed(new ToggleClamp());
+		//(new JoystickButton(thirdJoystick, 6)).whenPressed(new ToggleClamp());
+		//buttonA2.whenPressed(new AutoIntake());
+		buttonY1.whenPressed(new ToggleShift());
+		rTrigger1.whenPressed(new ToggleShift());
 
 		// buttonX1.whenPressed(new Shift(GearState.FAST));
 		// buttonY1.whenPressed(new Shift(GearState.SLOW));
@@ -72,18 +72,18 @@ public class OI {
 
 		// buttonX2.whenPressed(new EncoderTurn(150));
 		// buttonY2.whenPressed(new EncoderTurn(-150));
-		// buttonX2.whenPressed(new AutoIntake());
+		buttonX2.whenPressed(new AutoIntake());
 
-		// buttonA2.whenPressed(new FloorAngle());
-		// buttonB2.whenPressed(new SwitchAngle());
-		// buttonY2.whenPressed(new ScaleAngle());
+		buttonA2.whenPressed(new FloorAngle());
+		buttonB2.whenPressed(new SwitchAngle());
+		buttonY2.whenPressed(new ScaleAngle());
 
-		// lTrigger2.whenPressed(new ToggleClamp());
-		// rTrigger2.whenPressed(new Spit());
+		lTrigger2.whenPressed(new ToggleClamp());
+		rTrigger2.whenPressed(new Spit());
 
-		// rightStickButton2.whenPressed(new ClawSetpoint(-2000));
+		 rightStickButton2.whenPressed(new ClawSetpoint(-2000));
 
-		throttle = () -> secondaryJoystick.getRawAxis(1);
+		throttle = () -> (mainJoystick.getRawAxis(3) - mainJoystick.getRawAxis(2));
 		turn = () -> mainJoystick.getRawAxis(0);
 
 	}
